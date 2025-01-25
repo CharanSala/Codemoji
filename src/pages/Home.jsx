@@ -1,11 +1,14 @@
-import React from 'react'
-import Signin from '../components/Signin'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 const Home = () => {
   return (
     <div>
-        <Signin/>
-    </div>
-  )
-}
+ <Navbar/>
 
-export default Home
+    </div>
+   
+  );
+};
+
+export default Home;
