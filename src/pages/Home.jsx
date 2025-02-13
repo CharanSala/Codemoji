@@ -31,7 +31,7 @@ const Home = () => {
   }, []);
 
   const handleStartClick = () => {
-    navigate("/Events");  // Navigate to the new page
+    navigate("/signin");  // Navigate to the new page
   };
 
   return (
