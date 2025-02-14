@@ -7,9 +7,14 @@ import Participant from './Mongo.js';
 import crypto from "crypto";
 
 
+import * as dotenv from "dotenv";
+
+dotenv.config(); // Load environment variables
+
 
 const app = express();
 const port = 5000;
+
 
 // Initialize compilex
 const options = { stats: true };
@@ -21,27 +26,32 @@ app.use(cors());
 app.use(express.json());
 let currentUserEmail = "";
 
-mongoose.connect('mongodb://localhost:27017/tech_event')
+const uri = "mongodb+srv://salacharan6:Charan%40081@cluster0.uxrd6.mongodb.net/tech_event?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => console.log("MongoDB Connected"))
-    .catch(err => console.log("MongoDB Connection Error:", err));
+    .catch(err => console.error("MongoDB Connection Error:", err));
 
 
 
-const printParticipants = async () => {
-    try {
-        // Use findOne and correct case for email
-        const participant = await Participant.findOne({ email: "Charansala@gmail.com" });
-        if (participant) {
-            console.log("Participant Data:", participant.password);
-        } else {
-            console.log("No participant found with this email.");
-        }
-    } catch (err) {
-        console.error("Error Fetching Participant:", err);
-    }
-};
+// const printParticipants = async () => {
+//     try {
+//         // Use findOne and correct case for email
+//         const participant = await Participant.findOne({ email: "Charansala@gmail.com" });
+//         if (participant) {
+//             console.log("Participant Data:", participant.password);
+//         } else {
+//             console.log("No participant found with this email.");
+//         }
+//     } catch (err) {
+//         console.error("Error Fetching Participant:", err);
+//     }
+// };
 
-printParticipants();
+// printParticipants();
 
 
 app.post('/getSubmittedCode', async (req, res) => {
@@ -87,22 +97,28 @@ app.post('/saveCode', async (req, res) => {
 app.post("/participantverify", async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(email);
+        console.log(password)
 
         if (!email || !password) {
             return res.status(400).json({ message: "Email and password are required" });
         }
 
-        const participant = await Participant.findOne({ email });
+        const participant = await Participant.findOne({ email: email});
+        console.log("email:",participant.email);
+
 
         if (!participant) {
             return res.status(404).json({ message: "Participant not found" });
         }
 
-        // 🔹 Hash the entered password to compare
-        const hashedparticipantPassword = crypto.createHash("sha256").update(participant.password).digest("hex");
-        const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
+        console.log("Entered Password:", password);
+        console.log("Stored Password:", participant.password);
 
-        if (hashedPassword !== hashedparticipantPassword) {
+
+
+        // Compare passwords
+        if (String(password) !== String(participant.password)) {
             return res.status(401).json({ message: "Invalid password" });
         }
         currentUserEmail = email;
@@ -154,9 +170,6 @@ app.post('/outputverify', (req, res) => {
     }
 });
 
-
-
-
 // POST endpoint for compiling and running code
 app.post('/compile', async (req, res) => {
     const { language, code, input, action, testcases, withInput } = req.body;
@@ -169,63 +182,87 @@ app.post('/compile', async (req, res) => {
         if (language === "python") {
             let envData = { OS: "windows" };
 
-            // Check if withInput is true and execute accordingly
-
             if (input) {
-                // Execute Python code with input
                 compiler.compilePythonWithInput(envData, code, input, (data) => {
+                    if (data.error) {
+                        return res.send({ status: "error", message: data.error });
+                    }
                     res.send(data);
                 });
             } else {
-                // Execute Python code without input
                 compiler.compilePython(envData, code, (data) => {
+                    if (data.error) {
+                        return res.send({ status: "error", message: data.error });
+                    }
                     res.send(data);
                 });
             }
-        }
-        else if (language === "cpp" || language==="c" ) {
+        } else if (language === "cpp" || language === "c") {
             let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } };
 
-            console.log("chars");
             if (input) {
                 compiler.compileCPPWithInput(envData, code, input, (data) => {
                     if (data.error) {
-                        console.log("C++ Compilation Error:", data.error);
-                        res.send({ error: "Compilation failed. Ensure g++ is installed and added to PATH." });
-                    } else {
-                        console.log("C++ Output:", data.output);
-                        res.send({ output: data.output || "No output" });
+                        return res.send({ status: "error", message: "Compilation failed: " + data.error });
                     }
+                    res.send({ output: data.output || "No output" });
                 });
             } else {
                 compiler.compileCPP(envData, code, (data) => {
                     if (data.error) {
-                        console.log("C++ Compilation Error:", data.error);
-                        res.send({ error: "Compilation failed. Ensure g++ is installed and added to PATH." });
-                    } else {
-                        console.log("C++ Output:", data.output);
-                        res.send({ output: data.output || "No output" });
+                        return res.send({ status: "error", message: "Compilation failed: " + data.error });
                     }
+                    res.send({ output: data.output || "No output" });
                 });
             }
         }
-        
-          // Handle other languages here (C++, Java, etc.)
-        
-    }
-
-    else {
-
-        let failedCases = []; // To store unsatisfied test cases
+    } else {
+        let failedCases = [];
+        let passedCases = [];
+        let failedCount = 0;
         let promises = [];
 
-         if (language === "python") {
+        if (language === "python") {
             let envData = { OS: "windows" };
+
             promises = testcases.map((testcase) => {
                 return new Promise((resolve) => {
-                    compiler.compilePythonWithInput(envData, code, testcase.input, function (data) {
-                        if (data.output.trim() !== testcase.expectedOutput.trim()) {
-                            failedCases.push({ input: testcase.input, expected: testcase.expectedOutput, got: data.output.trim() });
+                    compiler.compilePythonWithInput(envData, code, testcase.input, (data) => {
+                        if (data.error) {
+                            return res.send({ status: "error", message: "Compilation failed: " + data.error });
+                        }
+
+                        let actualOutput = data.output.trim();
+                        let expectedOutput = testcase.expectedOutput.trim();
+
+                        if (actualOutput === expectedOutput) {
+                            passedCases.push({ input: testcase.input, expected: expectedOutput, got: actualOutput });
+                        } else {
+                            failedCases.push({ input: testcase.input, expected: expectedOutput, got: actualOutput });
+                            failedCount++;
+                        }
+                        resolve();
+                    });
+                });
+            });
+        } else if (language === "cpp" || language === "c") {
+            let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } };
+
+            promises = testcases.map((testcase) => {
+                return new Promise((resolve) => {
+                    compiler.compileCPPWithInput(envData, code, testcase.input, (data) => {
+                        if (data.error) {
+                            return res.send({ status: "error", message: "Compilation failed: " + data.error });
+                        }
+
+                        let actualOutput = data.output.trim();
+                        let expectedOutput = testcase.expectedOutput.trim();
+
+                        if (actualOutput === expectedOutput) {
+                            passedCases.push({ input: testcase.input, expected: expectedOutput, got: actualOutput });
+                        } else {
+                            failedCases.push({ input: testcase.input, expected: expectedOutput, got: actualOutput });
+                            failedCount++;
                         }
                         resolve();
                     });
@@ -233,42 +270,26 @@ app.post('/compile', async (req, res) => {
             });
         }
 
-        else if (language === "cpp" || language === "c") {
-            let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } };
-            promises = testcases.map((testcase) => {
-                return new Promise((resolve) => {
-                    compiler.compileCPPWithInput(envData, code, testcase.input, function (data) {
-                        if (data.output.trim() !== testcase.expectedOutput.trim()) {
-                            failedCases.push({ input: testcase.input, expected: testcase.expectedOutput, got: data.output.trim() });
-                        }
-                        resolve();
-                    });
-                });
-            });
-        }
-            // Wait for all test cases to complete
-            await Promise.all(promises);
+
+        await Promise.all(promises);
 
         if (failedCases.length === 0) {
-            const now = new Date();
-            const formattedTime = now.toLocaleString("en-US", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-                hour12: true
-            }) + `.${now.getMilliseconds()} ms`; // Append milliseconds
-
+            console.log("all are passed")
+            console.log("pass", passedCases);
             res.send({
                 status: "success",
                 message: "All test cases passed!",
-                submissionTime: formattedTime
+                passedTestCases: passedCases,
             });
-        }
-        else {
-            res.send({ status: "failed", unsatisfiedTestCases: failedCases });
+
+        } else {
+            console.log("all are transfered");
+            res.send({
+                status: "failed",
+                failedCount: failedCount,
+                passedTestCases: passedCases,
+                failedTestCases: failedCases,
+            });
         }
     }
 });

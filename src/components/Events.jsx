@@ -10,7 +10,10 @@ const Round1 = ({ setAllPassed }) => {
 
     const location = useLocation();
     const participant = location.state?.participant; // Get participant object
-    const randomNumber = participant?.randomNumber || 1;
+    const randomNumber = participant.randomnumber || 1;
+
+    console.log("randomNum",randomNumber);
+
     const problemSets = {
         1: {
             Emojicode: `
@@ -39,6 +42,9 @@ const Round1 = ({ setAllPassed }) => {
             testCases: [
                 { input: "10", expectedOutput: "20" },
                 { input: "20", expectedOutput: "40" },
+                { input: "30", expectedOutput: "60" },
+                { input: "70", expectedOutput: "140" },
+                { input: "120", expectedOutput: "240" },
             ]
         },
         2: {
@@ -125,12 +131,19 @@ const Round1 = ({ setAllPassed }) => {
 
     const [code, setCode] = useState("");
     const [output, setOutput] = useState("");
-    const [testResults, setTestResults] = useState([]);
+    const [testResults, setTestResults] = useState({
+        failedCount: 0,
+        oneFailedTest: [],
+        satisfiedTestCases: [],
+    });
+
     const [withInput, setWithInput] = useState(true);
     const [Round1sub, setRound1Time] = useState("");
 
+    const getRandomNumber = () => {
+        return Math.floor(Math.random() * 5) + 1;
+    };
 
-    
 
     const handleLanguageChange = (e) => {
         setSelectedLanguage(e.target.value);
@@ -154,17 +167,15 @@ const Round1 = ({ setAllPassed }) => {
             });
 
             const result = await response.json();
-            setOutput(result.output || 'No output received.');
+            setOutput(result.output || result.message);
         } catch (error) {
             setOutput('Error running the code: ' + error.message);
         }
     };
 
-
     const handleSubmit = async () => {
         let allPassed = true;
         try {
-
             const response = await fetch('http://localhost:5000/compile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -172,48 +183,86 @@ const Round1 = ({ setAllPassed }) => {
                     language: selectedLanguage,
                     code: code,
                     action: "submit",
-                    testcases: testCases
+                    testcases: testCases,
                 }),
             });
 
             const result = await response.json();
+            console.log(result.status);
 
             if (result.status === "success") {
-                // If all test cases pass, include the example test cases with success status
-                setTestResults(exampleTestCases.map(tc => ({
-                    input: tc.input,
-                    expected: tc.output,
-                    got: tc.output, // Assume got is the same as expected in this case
-                    status: "success"
-                })));
-
-                setRound1Time(result.submissionTime);
-                const participantResponse = await fetch('http://localhost:5000/saveCode', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        submittedCode: code,            // Store the submitted code
-                    }),
-                });
-
-                if (participantResponse.ok) {
-                    console.log('Code saved successfully!');
-                } else {
-                    console.error('Error saving code to the database');
-                }
-            } else {
-                allPassed = false;
-                setTestResults(result.unsatisfiedTestCases.map(tc => ({
+                // Check test results to update the state
+                const passedTestCases = result.passedTestCases.map(tc => ({
                     input: tc.input,
                     expected: tc.expected,
                     got: tc.got,
-                    status: "failed"
-                })));
+                    status: "passed"
+                })) || [];
+
+                // Determine if all test cases passed
+                allPassed = passedTestCases.length === testCases.length;
+                console.log("charan", passedTestCases);
+
+                // Update test results
+                setTestResults({
+                    failedCount: 0,
+                    oneFailedTest: null,
+                    satisfiedTestCases : [passedTestCases[0], passedTestCases[1]],
+                });
+                const currentTime = new Date().toLocaleString(); // This will give you the current time in a readable format
+                setRound1Time(currentTime);
+
+
+            } else {
+                if (result.failedTestCases.length > 0) {
+                    let failedCount = result.failedTestCases.length;
+                    let oneFailedTest = result.failedTestCases[0];
+
+                    let passedTestCases = result.passedTestCases?.map(tc => ({
+                        input: tc.input,
+                        expected: tc.expected,
+                        got: tc.got,
+                        status: "passed"
+                    })) || [];
+
+                    setTestResults({
+                        failedCount,
+                        oneFailedTest: {
+                            input: oneFailedTest.input,
+                            expected: oneFailedTest.expected,
+                            got: oneFailedTest.got,
+                            status: "failed"
+                        },
+                        satisfiedTestCases: passedTestCases,
+                    });
+                } else if (result.error) {
+                    setTestResults({
+                        failedCount: 0,
+                        oneFailedTest: {
+                            input: "N/A",
+                            expected: "N/A",
+                            got: result.error,
+                            status: "error"
+                        },
+                        satisfiedTestCases: [],
+                    });
+                }
             }
         } catch (error) {
-            setTestResults([{ status: "error", message: 'Error running the code: ' + error.message }]);
+            setTestResults({
+                failedCount: 0,
+                oneFailedTest: {
+                    input: "N/A",
+                    expected: "N/A",
+                    got: `Error running the code: ${error.message}`,
+                    status: "error"
+                },
+                satisfiedTestCases: [],
+            });
         }
+
         setAllPassed(allPassed);
+        console.log(testCases)
     };
 
 
@@ -303,34 +352,58 @@ const Round1 = ({ setAllPassed }) => {
 
                 <div className="mt-4">
                     <h4 className="text-lg font-semibold">Test Case Results</h4>
-                    {testResults.length > 0 ? (
-                        <ul className="list-disc pl-5">
-                            {testResults.map((testResult, index) => (
-                                <li
-                                    key={index}
-                                    className={testResult.status === "success" ? 'text-green-600' : 'text-red-600'}
-                                >
-                                    {testResult.status === "success" ? (
-                                        <span>
-                                            <strong>Input:</strong> {testResult.input} <br />
-                                            <strong>Expected:</strong> {testResult.expected} <br />
-                                            <strong>Got:</strong> {testResult.got} <br />
-                                            <strong>Status:</strong> ✅ Passed
-                                        </span>
-                                    ) : (
-                                        <>
-                                            <strong>Input:</strong> {testResult.input} <br />
-                                            <strong>Expected:</strong> {testResult.expected} <br />
-                                            <strong>Got:</strong> {testResult.got} <br />
-                                            <strong>Status:</strong> ❌ Failed
-                                        </>
-                                    )}
+                    <ul>
+                        {console.log(testResults)}
+                        {testResults.failedCount === 0 && testResults.satisfiedTestCases.length > 0 ? (
+                            // ✅ All test cases passed
+                            <>
+                                <li className="text-green-600">
+                                    <strong>✅ All Test Cases Passed!</strong>
                                 </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No test results yet.</p>
-                    )}
+                                {testResults.satisfiedTestCases.map((tc, index) => (
+                                    <li key={index} className="text-green-600">
+                                        <strong>Input:</strong> {tc.input} <br />
+                                        <strong>Expected:</strong> {tc.expected} <br />
+                                        <strong>Got:</strong> {tc.got} <br />
+                                        <strong>Status:</strong> ✅ Success
+                                    </li>
+                                ))}
+                            </>
+                        ) : (
+                            // ❌ Some test cases failed
+                            <>
+
+                                {testResults.satisfiedTestCases?.length > 0 && (
+                                    <>
+                                        <li className="text-green-600">
+                                            <strong>✅ Passed Test Cases: {testResults.satisfiedTestCases.length}</strong>
+                                        </li>
+                                    </>
+                                )}
+                                {testResults.failedCount > 0 && (
+                                    <li className="text-red-600">
+                                        <strong>❌ Failed Test Cases:</strong> {testResults.failedCount}
+                                    </li>
+                                )}
+
+                                {/* {testResults.oneFailedTest && testResults.failedCount > 0 && (
+                                    <li className="text-red-600">
+                                        <strong>❌ One Failed Test Case:</strong> <br />
+                                        <strong>Input:</strong> {testResults.oneFailedTest.input} <br />
+                                        <strong>Expected:</strong> {testResults.oneFailedTest.expected} <br />
+                                        <strong>Got:</strong> {testResults.oneFailedTest.got} <br />
+                                        <strong>Status:</strong> ❌ Failed
+                                    </li>
+                                )} */}
+
+                                {/* Only show passed test cases if they exist */}
+
+                            </>
+                        )}
+                    </ul>
+
+
+
                 </div>
 
             </div>
@@ -341,12 +414,77 @@ const Round1 = ({ setAllPassed }) => {
 // Round 2 Component (your new round)
 const Round2 = ({ setAllPassed2 }) => {
     const incompleteCode = `
-    📌 fact(🔢) {
+            📌 fact(🔢) {
         🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-        ↩️ 🔢 ✖️ fact(🔢 ➖ 1)
+            ↩️ 🔢 ✖️ fact(🔢 ➖ 1)
     }
-    `;
+            `;
 
+
+    const location = useLocation();
+    const participant = location.state?.participant; // Get participant object
+    const randomNumber = participant?.randomNumber || 1;
+
+    const problemSets = {
+        1: {
+            Emojicode: `
+            📌 fact(🔢, 💡) {
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+            🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+            ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+}
+            fact(5, 3)
+            `,
+            output: 120,
+        },
+        2: {
+            Emojicode: `
+            📌 sumPower(🔢, ⚡) {
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+            🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+            ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+}
+            sumPower(4, 3)
+            `,
+            output: 364,
+        },
+        3: {
+            Emojicode: `
+            📌 calc(🔢, 💡, ⚡) {
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+            🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
+            ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
+}
+            calc(4, 2, 3)
+            `,
+            output: 40,
+        },
+        4: {
+            Emojicode: `
+            📌 expSum(🔢, ⚡, 💡) {
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+            🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+            ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+}
+            expSum(3, 3, 2)
+            `,
+            output: 147,
+        },
+        5: {
+            Emojicode: `
+            📌 fibMulAdd(🔢, 💡, ⚡) {
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+            🤔(💡 ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ✖️ 2
+            🤔(⚡ ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+            ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ 1, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+}
+            fibMulAdd(7, 3, 5)
+            `,
+            output: 9,
+        }
+    };
+
+    const { Emojicode, output } = problemSets[randomNumber] || problemSets[1];
     const predefinedValues = [1, 2];
     const [inputValues, setInputValues] = useState(new Array(predefinedValues.length).fill(''));
     const [resultMessage, setResultMessage] = useState('');
@@ -402,8 +540,8 @@ const Round2 = ({ setAllPassed2 }) => {
                 )}
                 <div className="bg-gray-100 p-4 rounded-md">
                     <p><strong>Task:</strong> Identify and provide the missing values in the incomplete code.</p>
-                    <pre>{incompleteCode}</pre>
-
+                    <pre>{Emojicode}</pre>
+                    <p className=''>Output:{output}</p>
                     <div className="mt-4">
                         <h4 className="font-semibold text-lg">Input Values</h4>
                         {predefinedValues.map((_, index) => (
@@ -442,7 +580,6 @@ const Round2 = ({ setAllPassed2 }) => {
 };
 
 
-
 const Round3 = () => {
     const [userOutput, setUserOutput] = useState('');
     const [submissionTime, setSubmissionTime] = useState(null);
@@ -451,18 +588,18 @@ const Round3 = () => {
 
     // Complex emoji-based code snippet
     const emojiCode = `
-🔢 = 12345  
-🔡 = 0  
+            🔢 = 12345
+            🔡 = 0  
 🔁(🔢 > 0) {  
-    📍 = 🔢 % 10  
-    🔢 ➗= 10  
-    🤔(📍 ⚖️ 6) 👉 🔡 ➕= 5  
-    🤔(📍 ⚖️ 5) 👉 🔡 ➕= 4  
-    🤔(📍 ⚖️ 4) 👉 🔡 ➕= 3  
-    🤔(📍 ⚖️ 3) 👉 🔡 ➕= 2  
+    📍 = 🔢 % 10
+            🔢 ➗= 10
+            🤔(📍 ⚖️ 6) 👉 🔡 ➕= 5
+            🤔(📍 ⚖️ 5) 👉 🔡 ➕= 4
+            🤔(📍 ⚖️ 4) 👉 🔡 ➕= 3
+            🤔(📍 ⚖️ 3) 👉 🔡 ➕= 2  
 }  
-🤔(🔡 > 15) 👉 ✍️("Greater") ❌ ✍️("Smaller")  
-    `;
+🤔(🔡 > 15) 👉 ✍️("Greater") ❌ ✍️("Smaller")
+            `;
 
     const handleSubmit = async () => {
         try {

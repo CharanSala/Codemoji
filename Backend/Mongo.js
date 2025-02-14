@@ -1,33 +1,42 @@
-import mongoose from 'mongoose';
-// Connect to MongoDB (Use your MongoDB URL for production)
-mongoose.connect('mongodb://localhost:27017/tech_event', { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true 
-})
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-// Define Schema
+dotenv.config(); // Load environment variables
+
+// ✅ FIX: Encode '@' in the password in the URI
+const uri = "mongodb+srv://salacharan6:Charan%40081@cluster0.uxrd6.mongodb.net/tech_event?retryWrites=true&w=majority&appName=Cluster0";
+
+// ✅ FIX: Use async/await for connection handling
+const connectDB = async () => {
+    try {
+        await mongoose.connect(uri);
+        console.log("✅ MongoDB Connected");
+    } catch (err) {
+        console.error("❌ MongoDB Connection Error:", err);
+        process.exit(1); // Exit if connection fails
+    }
+};
+
+// ✅ FIX: Improved Schema Design
 const participantSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    college: { type: String, required: true },
-    branch: { type: String, required: true },
-    studyingYear: { type: Number, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    round1submissiontime: { type: Date, default: null },
+    name: { type: String, required: true, trim: true },  // ✅ Name field added
+    email: { type: String, required: true, unique: true, trim: true },  // ✅ Email field added
+    password: { type: String, required: true, trim: true },  // ✅ Password field added
+    
+    round1submissiontime: { type: Date, default: null },  
     round2submissiontime: { type: Date, default: null },
     round3submissiontime: { type: Date, default: null },
-    randomNumber: { type: Number, required: true },
-    submittedCode: { type: String, default: "" },  // Stores submitted code
-    value1: { type: Number, default: 0 },  // Custom value 1
-    value2: { type: Number, default: 0 },  // Custom value 2
-    value3: { type: Number, default: 0 },  // Custom value 3
-    output: { type: String, default: "" }  // Expected/actual output
+    submittedCode: { type: String, default: "", trim: true },  
+    randomnumber: { type: Number, default: 0 },
+    value1: { type: Number, default: 0 },
+    value2: { type: Number, default: 0 },
+    value3: { type: Number, default: 0 },
+    output: { type: String, default: "", trim: true }
 });
+connectDB();
 
 // Create Model
 const Participant = mongoose.model('Participant', participantSchema);
 
-// Export Model
 export default Participant;
+
