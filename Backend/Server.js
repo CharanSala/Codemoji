@@ -5,16 +5,17 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import Participant from './Mongo.js';
 import crypto from "crypto";
+import connectDB from './db.js';
+
+import dotenv from "dotenv";
 
 
-import * as dotenv from "dotenv";
-
-dotenv.config(); // Load environment variables
-
+dotenv.config();
 
 const app = express();
 const port = 5000;
 
+app.use(express.urlencoded({ extended: true }));
 
 // Initialize compilex
 const options = { stats: true };
@@ -25,15 +26,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 let currentUserEmail = "";
-
-const uri = "mongodb+srv://salacharan6:Charan%40081@cluster0.uxrd6.mongodb.net/tech_event?retryWrites=true&w=majority&appName=Cluster0";
-
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => console.log("MongoDB Connected"))
-    .catch(err => console.error("MongoDB Connection Error:", err));
 
 
 
@@ -93,40 +85,47 @@ app.post('/saveCode', async (req, res) => {
     }
 });
 
+app.use(express.json());
+import bcrypt from "bcrypt";
+
 
 app.post("/participantverify", async (req, res) => {
     try {
+        console.log("🔍 Request Body:", req.body); // Debugging output
+
+        if (!req.body) {
+            return res.status(400).json({ message: "Invalid request! No request body received." });
+        }
+
         const { email, password } = req.body;
-        console.log(email);
-        console.log(password)
 
         if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
+            return res.status(400).json({ message: "Email and password are required!" });
         }
 
-        const participant = await Participant.findOne({ email: email});
-        console.log("email:",participant.email);
+        console.log("📧 Email:", email, "🔑 Password:", password);
 
+        const participant = await Participant.findOne({ email });
 
         if (!participant) {
-            return res.status(404).json({ message: "Participant not found" });
+            return res.status(404).json({ message: "Participant not found!" });
         }
 
-        console.log("Entered Password:", password);
-        console.log("Stored Password:", participant.password);
-
-
-
-        // Compare passwords
-        if (String(password) !== String(participant.password)) {
-            return res.status(401).json({ message: "Invalid password" });
+        if (participant.password != password) {
+            return res.status(401).json({ message: "Incorrect password!" });
         }
+
+        // Check if passwords match
+
+
+        console.log("✅ Participant Verified:", participant.email);
         currentUserEmail = email;
-        res.status(200).json({ message: "Participant verified", participant });
+
+        res.json({ message: "Participant verified successfully!", participant });
 
     } catch (error) {
-        console.error("Error verifying participant:", error);
-        res.status(500).json({ message: "Server error" });
+        console.error("❌ Error verifying participant:", error.message);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
@@ -169,6 +168,68 @@ app.post('/outputverify', (req, res) => {
         res.json({ success: false });
     }
 });
+
+
+app.get("/getsubmittedcode", async (req, res) => {
+    const { email } = req.query; // Get email from query parameters
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    try {
+        const participant = await Participant.findOne({ email });
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        res.json({ submittedCode: participant.submittedCode });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+app.get("/getlanguage", async (req, res) => {
+    const { email } = req.query; // Get email from query parameters
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    try {
+        const participant = await Participant.findOne({ email });
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        res.json({ language: participant.language });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+app.get("/getsubmissiontime", async (req, res) => {
+    const { email } = req.query; // Get email from query parameters
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
+    try {
+        const participant = await Participant.findOne({ email });
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        res.json({ subtime: participant.round1submissiontime });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
 
 // POST endpoint for compiling and running code
 app.post('/compile', async (req, res) => {
@@ -276,10 +337,42 @@ app.post('/compile', async (req, res) => {
         if (failedCases.length === 0) {
             console.log("all are passed")
             console.log("pass", passedCases);
-            res.send({
+           
+            console.log("Myemail", currentUserEmail);
+            const participant = await Participant.findOne({ email: currentUserEmail });
+
+           console.log(code);
+            participant.submittedCode = code;
+            await participant.save();
+
+            participant.language = language; 
+            await participant.save();
+
+
+
+            const time = new Date().toLocaleString("en-US", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false, // 24-hour format
+            });
+            
+            
+            participant.round1submissiontime = time; // Store time as a string
+            await participant.save();
+
+
+
+
+        
+            return res.json({
                 status: "success",
-                message: "All test cases passed!",
+                message: "✅ All test cases passed!",
                 passedTestCases: passedCases,
+                subtime:time,
             });
 
         } else {

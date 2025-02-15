@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import Navbar from './Navbar';  // Assuming you have Navbar component
 import MonacoEditor from '@monaco-editor/react';  // Monaco editor for code writing
 import { useLocation } from "react-router-dom";
@@ -8,11 +8,15 @@ import { useLocation } from "react-router-dom";
 // Round 1 Component
 const Round1 = ({ setAllPassed }) => {
 
+
     const location = useLocation();
-    const participant = location.state?.participant; // Get participant object
+
+    const participant = location.state?.participant || {}; // Ensure it's an object
     const randomNumber = participant.randomnumber || 1;
 
-    console.log("randomNum",randomNumber);
+    console.log("participant", participant);
+    console.log("Participant Data:", participant.name);
+    console.log("Participant Data:", participant.round1submissiontime);
 
     const problemSets = {
         1: {
@@ -126,10 +130,58 @@ const Round1 = ({ setAllPassed }) => {
         }
     };
 
-    const [selectedLanguage, setSelectedLanguage] = useState("python");
+    const [selectedLanguage, setSelectedLanguage] = useState(
+        participant?.language && participant.language.trim() !== "" ? participant.language : "c"
+    );
+
+    useEffect(() => {
+        const fetchlanguage = async () => {
+            if (!participant.email) return; // Ensure email exists before making request
+
+            try {
+                const response = await fetch(`http://localhost:5000/getlanguage?email=${encodeURIComponent(participant.email)}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.language)
+                        setSelectedLanguage(data.language); // Set the submitted code if available
+                } else {
+                    console.error("Error fetching code:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching code:", error);
+            }
+        };
+
+        fetchlanguage();
+    }, [participant.email]);
 
 
-    const [code, setCode] = useState("");
+    const [code, setCode] = useState(participant?.submittedCode || "");
+
+    useEffect(() => {
+        const fetchCode = async () => {
+            if (!participant.email) return; // Ensure email exists before making request
+
+            try {
+                const response = await fetch(`http://localhost:5000/getsubmittedcode?email=${encodeURIComponent(participant.email)}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setCode(data.submittedCode || ""); // Set the submitted code if available
+                } else {
+                    console.error("Error fetching code:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching code:", error);
+            }
+        };
+
+        fetchCode();
+    }, [participant.email]);
+
+
+
     const [output, setOutput] = useState("");
     const [testResults, setTestResults] = useState({
         failedCount: 0,
@@ -138,7 +190,36 @@ const Round1 = ({ setAllPassed }) => {
     });
 
     const [withInput, setWithInput] = useState(true);
-    const [Round1sub, setRound1Time] = useState("");
+    const [Round1sub, setRound1Time] = useState(participant.round1submissiontime || "");
+
+    useEffect(() => {
+        const fetchTime = async () => {
+            if (!participant.email) return; // Ensure email exists before making request
+
+            try {
+                const response = await fetch(`http://localhost:5000/getsubmissiontime?email=${encodeURIComponent(participant.email)}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setRound1Time(data.subtime || ""); // Set the submitted code if available
+
+                } else {
+                    console.error("Error fetching code:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching code:", error);
+            }
+        };
+
+        fetchTime();
+    }, [participant.email]);
+
+
+    useEffect(() => {
+        if (Round1sub) {
+            setAllPassed(true);  // If submission time exists, mark Round 1 as passed
+        }
+    }, [Round1sub]);
 
     const getRandomNumber = () => {
         return Math.floor(Math.random() * 5) + 1;
@@ -149,7 +230,10 @@ const Round1 = ({ setAllPassed }) => {
         setSelectedLanguage(e.target.value);
     };
 
-    const { Emojicode, exampleTestCases, testCases, Input } = problemSets[randomNumber] || problemSets[1];
+
+
+    const { Emojicode, exampleTestCases = [], testCases = [], Input = "" } = problemSets[randomNumber] || problemSets[1] || {};
+
     const handleRunCode = async () => {
         try {
             const input = withInput ? Input : "";  // Only send input if 'withInput' is true
@@ -173,8 +257,9 @@ const Round1 = ({ setAllPassed }) => {
         }
     };
 
+
     const handleSubmit = async () => {
-        let allPassed = true;
+        // let allPassed = false;
         try {
             const response = await fetch('http://localhost:5000/compile', {
                 method: 'POST',
@@ -191,7 +276,9 @@ const Round1 = ({ setAllPassed }) => {
             console.log(result.status);
 
             if (result.status === "success") {
-                // Check test results to update the state
+                // Check test results to update 
+                // the state
+                setRound1Time(result.subtime);
                 const passedTestCases = result.passedTestCases.map(tc => ({
                     input: tc.input,
                     expected: tc.expected,
@@ -200,17 +287,17 @@ const Round1 = ({ setAllPassed }) => {
                 })) || [];
 
                 // Determine if all test cases passed
-                allPassed = passedTestCases.length === testCases.length;
+
                 console.log("charan", passedTestCases);
 
                 // Update test results
                 setTestResults({
                     failedCount: 0,
                     oneFailedTest: null,
-                    satisfiedTestCases : [passedTestCases[0], passedTestCases[1]],
+                    satisfiedTestCases: [passedTestCases[0], passedTestCases[1]],
                 });
-                const currentTime = new Date().toLocaleString(); // This will give you the current time in a readable format
-                setRound1Time(currentTime);
+
+
 
 
             } else {
@@ -261,16 +348,20 @@ const Round1 = ({ setAllPassed }) => {
             });
         }
 
-        setAllPassed(allPassed);
+        // setAllPassed(allPassed);
         console.log(testCases)
     };
-
+    const languages = ["python", "cpp", "c", "java"];
 
     return (
         <div className="flex justify-between p-6 space-x-3">
             <div className="w-1/2">
                 <h3 className="text-2xl font-semibold mb-4">Emoji Code</h3>
-                <h3 className="text-green-500 font-bold text-lg mb-5">{Round1sub}</h3>
+                {Round1sub && (
+                    <h3 className="text-green-500 font-bold text-lg mb-5">
+                        Submission Time: {Round1sub}
+                    </h3>
+                )}
 
                 <div className="bg-gray-100 p-4 rounded-md">
                     <p>🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
@@ -295,16 +386,21 @@ const Round1 = ({ setAllPassed }) => {
             <div className="w-1/2">
                 <h3 className="text-2xl font-semibold mb-4">Write Your Code</h3>
 
-                <div className="mb-4">
+                <div className="mb-4 flex items-center space-x-4">
+
                     <select
                         value={selectedLanguage}
-                        onChange={handleLanguageChange}
+                        onChange={(e) => setSelectedLanguage(e.target.value)}
                         className="p-2 border rounded-md"
                     >
-                        <option value="python">Python</option>
-                        <option value="cpp">C++</option>
-                        <option value="c">C</option>
-                        <option value="java">Java</option>
+                        <option value={selectedLanguage}>{selectedLanguage}</option>
+                        {languages
+                            .filter((lang) => lang !== selectedLanguage) // Exclude the selected language
+                            .map((lang) => (
+                                <option key={lang} value={lang}>
+                                    {lang.charAt(0).toUpperCase() + lang.slice(1)} {/* Capitalize first letter */}
+                                </option>
+                            ))}
                     </select>
                 </div>
 
@@ -326,6 +422,7 @@ const Round1 = ({ setAllPassed }) => {
                     value={code}
                     onChange={(value) => setCode(value)}
                 />
+
 
                 <button
                     onClick={handleRunCode}
@@ -680,6 +777,12 @@ const Events = () => {
     const [allPassed, setAllPassed] = useState(false); // Track if Round 1 is passed
     const [allPassed2, setAllPassed2] = useState(false); // Track if Round 2 is passed
 
+    useEffect(() => {
+        console.log("useEffect triggered, allPassed:", allPassed);
+        if (allPassed === true) {
+            setSelectedRound(2);
+        }
+    }, [allPassed]);
     const showRound1 = () => setSelectedRound(1);
     const showRound2 = () => setSelectedRound(2);
     const showRound3 = () => setSelectedRound(3);

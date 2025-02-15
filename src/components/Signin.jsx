@@ -34,29 +34,29 @@ const Signin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/participantverify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+        const response = await fetch("http://localhost:5000/participantverify", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
 
-      const result = await response.json();
-      console.log(result.participant)
+        const result = await response.json();
+        console.log("Server Response:", result);
 
-      if (response.ok) {
-        
-        navigate("events", { state: { participant: result.participant } });
-      } else {
-        console.error("Verification failed:", result.message);
-        setMessage(result.message);
-      }
+        if (response.ok) {
+            setMessage(result.message); // Show success message
+            navigate("events", { state: { participant: result.participant } });
+        } else {
+            setMessage(result.message); // Show error message
+        }
     } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred. Please try again.");
+        console.error("Error:", error);
+        setMessage("An error occurred. Please try again.");
     }
-  };
+};
+
 
   return (
     <UserContext.Provider value={user}> {/* Provide user context */}

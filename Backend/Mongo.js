@@ -23,14 +23,15 @@ const participantSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, trim: true },  // ✅ Email field added
     password: { type: String, required: true, trim: true },  // ✅ Password field added
     
-    round1submissiontime: { type: Date, default: null },  
-    round2submissiontime: { type: Date, default: null },
-    round3submissiontime: { type: Date, default: null },
-    submittedCode: { type: String, default: "", trim: true },  
+    round1submissiontime: { type: String, default: null },  
+    round2submissiontime: { type: String, default: null },
+    round3submissiontime: { type: String, default: null },
+    submittedCode: { type: String, default: null, trim: true },  
     randomnumber: { type: Number, default: 0 },
     value1: { type: Number, default: 0 },
     value2: { type: Number, default: 0 },
     value3: { type: Number, default: 0 },
+    language: { type: String, default: null, trim: true },
     output: { type: String, default: "", trim: true }
 });
 connectDB();
