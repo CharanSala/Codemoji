@@ -32,7 +32,8 @@ const participantSchema = new mongoose.Schema({
     value2: { type: Number, default: 0 },
     value3: { type: Number, default: 0 },
     language: { type: String, default: null, trim: true },
-    output: { type: String, default: "", trim: true }
+    output: { type: String, default: "", trim: true },
+    points: { type: Number, default: 100 }
 });
 connectDB();
 

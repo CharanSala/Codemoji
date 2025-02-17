@@ -5,16 +5,16 @@ import { UserContext } from "../components/Signin";
 import Events from "../components/Events";
 
 const Home = () => {
-  const username = useContext(UserContext); // Get the username from context
-  const eventDate = new Date("2025-03-13T00:00:00"); // Target date for countdown
+  const username = useContext(UserContext);
+  const eventDate = new Date("2025-03-13T00:00:00");
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       const difference = eventDate - now;
-      
+
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -26,48 +26,72 @@ const Home = () => {
         clearInterval(timer);
       }
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, []);
 
   const handleStartClick = () => {
-    navigate("/signin");  // Navigate to the new page
+    navigate("/signin");
   };
 
   return (
-    <div className="bg-light-blue-50 h-screen overflow-hidden text-gray-800">
+    <div>
       <Navbar />
-      <div className="p-8 text-center">
-        <h2 className="text-4xl font-bold text-gray-900 drop-shadow-md">
-          Welcome{username ? `, ${username}` : ""}! 🎉
-        </h2>
-        
-        <p className="mt-6 text-xl text-gray-700">
-          🚀 <span className="text-blue-500 font-semibold">CodeMoji</span> is an exciting tech event that blends coding and emojis! 😃💻
-        </p>
+      <div 
+  className="min-h-screen flex flex-col items-center bg-white bg-no-repeat bg-top text-white"
+  style={{ backgroundImage: "url('../public/images/blue.jpg')", backgroundSize: "100% 50vh" }}
+>
 
-        <div className="mt-6 text-left max-w-4xl mx-auto text-gray-800">
-          <p className="font-semibold text-2xl mt-6">🔹 Round 1: Emoji to Code</p>
-          <p>Participants receive an emoji-based program 🤔. They must interpret the emojis and convert them into a valid programming language (C, C++, Java, Python) ensuring all test cases pass. ✅</p>
-          
-          <p className="font-semibold text-2xl mt-6">🔹 Round 2: Logic Patch</p>
-          <p>Participants receive a partially completed emoji code with missing logic (❓). They must identify the missing parts and complete the code correctly. 🛠️</p>
-          
-          <p className="font-semibold text-2xl mt-6">🔹 Round 3: Track and Output</p>
-          <p>Participants receive a correctly written emoji code 👀. Their task is to analyze the execution step by step and write the exact output without any errors. 📝</p>
+
+    
+        <div className="text-center pt-16 px-6">
+          <h1 className="text-6xl font-bold drop-shadow-lg text-white">
+            Code<span className="text-blue-400">Moji</span>😝
+          </h1>
+          <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+           CodeMoji is where coding meets creativity and fun through emojis!
+          </p>
+          <button className="mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-lg font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"
+            onClick={handleStartClick}>
+            Let's Start
+          </button>
         </div>
 
-        <div className="mt-8 text-xl font-semibold text-gray-900">
+        {/* Wrapping the boxes in a container to control their positioning better */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 px-8 max-w-6xl mx-auto z-10 relative">
+          {[
+            {
+              title: "Logic Patch",
+              description: "Participants analyze an incomplete emoji code, identify missing logic, and complete it correctly.",
+              
+              icon: "🧩",
+            },
+            {
+              title: "Emoji Decription",
+              description: "Participants translate an emoji program into C, C++, Java, or Python, ensuring all test cases pass.",
+              icon: "👨‍💻",
+            },
+            {
+              title: "Code Reveal",
+              description: "participants analyze an emoji program step by step to determine its output.",
+              icon: "🔍",
+            },
+          ].map((item, index) => (
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg text-center text-gray-900">
+              <div className="text-6xl mb-4">{item.icon}</div>
+              <h3 className="text-xl font-semibold">{item.title}</h3>
+              <p className="text-gray-600 mt-2">{item.description}</p>
+            </div>
+          ))}
+        </div>
+
+
+        <div className="mt-12 text-center text-xl font-semibold text-gray-900">
           ⏳ Countdown to the Big Day:
-          <div className="text-4xl font-extrabold text-blue-600 mt-4 drop-shadow-lg">
+          <div className="text-4xl font-extrabold text-yellow-500 mt-4 drop-shadow-lg">
             {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
           </div>
         </div>
-        
-        <button className="mt-8 px-8 py-3 text-white bg-blue-500 text-lg font-semibold rounded-full shadow-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105"
-         onClick={handleStartClick} >
-          🚀 Let's Start!
-        </button>
       </div>
     </div>
   );

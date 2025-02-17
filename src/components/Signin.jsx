@@ -7,15 +7,15 @@ export const UserContext = createContext();
 
 const Signin = () => {
   const navigate = useNavigate();
-  
+
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-  
+
   const [message, setMessage] = useState(""); // State to store message
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  
+
   const { email, password } = data;
   const [user, setUser] = useState(null);
 
@@ -34,36 +34,43 @@ const Signin = () => {
     e.preventDefault();
 
     try {
-        const response = await fetch("http://localhost:5000/participantverify", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
+      const response = await fetch("http://localhost:5000/participantverify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-        const result = await response.json();
-        console.log("Server Response:", result);
+      const result = await response.json();
+      console.log("Server Response:", result);
 
-        if (response.ok) {
-            setMessage(result.message); // Show success message
-            navigate("events", { state: { participant: result.participant } });
-        } else {
-            setMessage(result.message); // Show error message
-        }
+      if (response.ok) {
+        setMessage(result.message); // Show success message
+        navigate("events", { state: { participant: result.participant } });
+      } else {
+        setMessage(result.message); // Show error message
+      }
     } catch (error) {
-        console.error("Error:", error);
-        setMessage("An error occurred. Please try again.");
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again.");
     }
-};
+  };
 
 
   return (
     <UserContext.Provider value={user}> {/* Provide user context */}
       <div className="min-h-screen flex flex-col bg-gray-50">
         <Navbar />
+
         <div className="flex-grow flex justify-center items-center p-4">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+
+          <div
+            className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border-2 border-[#01052A]"
+            style={{ boxShadow: "0 4px 15px 0 #01052A" }} // Blue box-shadow
+          >
+
+
             <form onSubmit={display}>
               <div className="space-y-6">
                 <h2 className="text-gray-800 text-3xl font-semibold mb-6 text-center">
@@ -87,7 +94,7 @@ const Signin = () => {
                     value={email}
                     onChange={handler}
                     placeholder="Enter your email"
-                    className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="p-3 border-2 border-[#01052A] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
 
@@ -102,7 +109,7 @@ const Signin = () => {
                     value={password}
                     onChange={handler}
                     placeholder="Enter your password"
-                    className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                    className="p-3 border-2 border-[#01052A] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
                     type="button"
@@ -115,7 +122,7 @@ const Signin = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-[#01052A] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Login
                 </button>
@@ -128,7 +135,7 @@ const Signin = () => {
 
                 <div className="flex justify-center mt-2">
                   <p className="text-gray-600 text-sm">
-                    Don't have an account? 
+                    Don't have an account?
                     <a href="/signup" className="text-blue-600 hover:underline">
                       Sign Up
                     </a>
@@ -139,8 +146,13 @@ const Signin = () => {
           </div>
         </div>
       </div>
+
     </UserContext.Provider>
   );
-};
+}
 
 export default Signin;
+
+
+
+

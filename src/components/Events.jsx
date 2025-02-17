@@ -53,42 +53,85 @@ const Round1 = ({ setAllPassed }) => {
         },
         2: {
             Emojicode: `
-    🔢 = 246810  
-    🔡 = 🔢 * 2  
-    🔁(🔡 📏 > 1) {  
-        📜 = 🔡 / 2  
-        ✍️(📜)  
-    }
+📌 mystory_one(🔢) {  
+    🎈 = 0;  
+    🔁(🔢 ▶️ 0) 
+    {  
+      🎈 = 🎈 * 10 ➕ (🔢 % 10);  
+       🔢 /= 10; 
+    }  
+    ↩️ 🎈 ;  
+}
+📌 mystory_two(🔢) {  
+    📜 = 0; 
+    🔁(🔢 ▶️ 0) {  
+        🔤 = 🔢 % 10;  
+        📜 ➕= 🔤 * 🔤; 
+        🔢 /= 10;  
+    }  
+    ↩️ 📜;   
+}
+📌 mystory_final(🔢) {  
+    🔑 = mystory_one(🔢);  
+    ↩️ mystory_two(🔑);  
+}
+
+✍️ Mystory_final(🔢)
+
             `,
             exampleTestCases: [
-                { input: "5", output: "10" },
-                { input: "6", output: "12" },
+                { input: "123", output: "14" },
+                { input: "103", output: "10" },
             ],
-            Input: "5",
+            Input: "123",
             testCases: [
-                { input: "5", expectedOutput: "10" },
-                { input: "6", expectedOutput: "12" },
+                { input: "123", expectedOutput: "14" },
+                { input: "103", expectedOutput: "10" },
+                { input: "789", expectedOutput: "194" },
+                { input: "100", expectedOutput: "1" },
             ]
         },
         3: {
             Emojicode: `
-    🔢 = 3579  
-    🔡 = [🔢]  
-    🔁(🔢 > 0) {  
-        📜 = 🔢 % 10  
-        🤔(📜 ⚖️ 3) 👉 🔡 ➕= 📜  
-        🔢 ➗= 10  
-    }
-    ✍️(🔡)
+    📌 mystory_one(🔢, 🎁) {  
+    🎁 [0] = 0, 
+    🎁 [1] = 1;  
+    🔁 (🔤 = 2; 🔤 ▶️ 🔢; 🔤⏩)  
+        🎁 [🔤] = 🎁 [🔤 ➖ 1] ➕ 🎁 [🔤 ➖ 2];  
+}
+
+📌 mystory_two(🔢) {  
+    🎁 [🔢];  
+    mystory_one(🔢, 🎁);  
+
+    🍬 ,📍 = 0;  
+    🔁 (🔤 = 0 ; 🔤 ▶️ 🔢; 🔤⏩) {  
+        🤔 (🎁 [🔤] % 2 🟰 0) 👉 
+            📍 ➕= 🎁 [🔤];  
+        ❌  
+            🍬 ➕= 🎁 [🔤];  
+    }  
+    ↩️  🍬 ➖ 📍 ;   
+}
+
+📌 mystory_final(🔢) {  
+    🍟= mystory_two(🔢)
+    ↩️ 🍟;
+    
+}
+✍️ Mystory_final(🔢)
+
             `,
             exampleTestCases: [
-                { input: "3", output: "9" },
-                { input: "5", output: "15" },
+                { input: "5", output: "3" },
+                { input: "6", output: "8" },
             ],
-            Input: "3",
+            Input: "5",
             testCases: [
-                { input: "3", expectedOutput: "9" },
-                { input: "5", expectedOutput: "15" },
+                { input: "5", expectedOutput: "3" },
+                { input: "6", expectedOutput: "8" },
+                { input: "7", expectedOutput: "0" },
+                { input: "8", expectedOutput: "13" },
             ]
         },
         4: {
@@ -678,25 +721,211 @@ const Round2 = ({ setAllPassed2 }) => {
 
 
 const Round3 = () => {
+
+const emojiCode = `
+🔢 = 12345
+🔡 = 0  
+🔁(🔢 > 0) {  
+📍 = 🔢 % 10
+    🔢 ➗= 10
+    🤔(📍 ⚖️ 6) 👉 🔡 ➕= 5
+    🤔(📍 ⚖️ 5) 👉 🔡 ➕= 4
+    🤔(📍 ⚖️ 4) 👉 🔡 ➕= 3
+    🤔(📍 ⚖️ 3) 👉 🔡 ➕= 2  
+}  
+🤔(🔡 > 15) 👉 ✍️("Greater") ❌ ✍️("Smaller")
+    `;
+
+    const location = useLocation();
+
+    const participant = location.state?.participant || {}; // Ensure it's an object
+    const randomNumber = participant.randomnumber || 1;
+
     const [userOutput, setUserOutput] = useState('');
     const [submissionTime, setSubmissionTime] = useState(null);
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [hintNumber, setHintNumber] = useState(null);
 
+    const [hint, setHint] = useState(""); // Track the revealed hint
+    const [displayhint, setdisplayHint] = useState(""); 
+    const [points, setPoints] = useState(participant.points); // Track points
+    const [hint1Revealed, setHint1Revealed] = useState(false);
+    const [hint2Revealed, setHint2Revealed] = useState(false);
+    const [hint3Revealed, setHint3Revealed] = useState(false);
+
+    const [mathQuestion, setMathQuestion] = useState("");
+    const [mathAnswer, setMathAnswer] = useState("");
+    const [userAnswer, setUserAnswer] = useState("");
+    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+    const [isAnswerCorrect2, setIsAnswerCorrect2] = useState(null);
+
+
+
+    const mathQuestions = {
+        1: { question: "What is (15 × 2) + (30 ÷ 5)?", answer: 36 },
+        2: { question: "What is (8 × 9) - (25 ÷ 5)?", answer: 67 },
+        3: { question: "What is (20 ÷ 4) + (6 × 3)?", answer: 23 },
+        4: { question: "What is (12 × 3) - (8 ÷ 4)?", answer: 34 },
+        5: { question: "What is (50 ÷ 5) + (9 × 4)?", answer: 46 }
+    };
+
+    const logicPuzzles = {
+        1: { question: "What comes next in this sequence? 3, 6, 11, 18, 27, _?", answer: 38 },
+        // Pattern: n = previous + (increasing odd numbers: 3, 5, 7, 9, 11)
+
+        2: { question: "What is the missing number? 2, 4, 8, 16, _?", answer: 32 },
+        // Pattern: Each number is multiplied by 2.
+
+        3: { question: "Find the next number: 1, 1, 2, 3, 5, _?", answer: 8 },
+        // Fibonacci series: n = (n-1) + (n-2)
+
+        4: { question: "What comes next? 10, 20, 30, 50, 80, _?", answer: 130 },
+        // Pattern: Sum of previous two numbers (10+20=30, 20+30=50, etc.)
+
+        5: { question: "Identify the missing number: 100, 96, 92, 88, _?", answer: 84 }
+        // Pattern: Decreasing by 4 each time.
+    };
+
+    const generateMathQuestion = () => {
+        const randomIndex = Math.floor(Math.random() * 5) + 1; // Generate a random number between 1 and 5
+        const { question, answer } = mathQuestions[randomIndex]; // Get the corresponding question and answer
+
+        setMathQuestion(question);
+        setMathAnswer(answer);
+    };
+    const generalKnowledgeQuestions = {
+        1: { question: "Which planet is known as the Red Planet?", answer: "Mars" },
+        2: { question: "How many continents are there on Earth?", answer: "Seven" },
+        3: { question: "Which is the largest ocean on Earth?", answer: "Pacific" },
+        4: { question: "Who wrote India's national anthem?", answer: "Tagore" },
+        5: { question: "What is the capital of Japan?", answer: "Tokyo" },
+        6: { question: "Which is the smallest country?", answer: "Vatican" },
+        7: { question: "How many colors are in a rainbow?", answer: "Seven" },
+        8: { question: "Who was first to walk on the moon?", answer: "Armstrong" },
+        9: { question: "What is India's national sport?", answer: "Hockey" },
+        10: { question: "Which is the longest river?", answer: "Nile" }
+    };
+
+
+    const verifyAnswer = () => {
+        let isCorrect = false;
+        if (hintNumber === 3) {
+            // Convert both user input and answer to lowercase and trim spaces for comparison
+            isCorrect = userAnswer.trim().toLowerCase() === mathAnswer.toLowerCase();
+        } else {
+            // Compare as numbers for Hint 1 and Hint 2
+            isCorrect = parseInt(userAnswer) === mathAnswer;
+        }
+    
+        if (isCorrect) {
+            switch (hintNumber) {
+                case 1:
+                    setdisplayHint("✅ Correct! Hint 1: 'Think about breaking it down into smaller parts...'");
+                    break;
+                case 2:
+                    setdisplayHint("✅ Correct! Hint 2: 'Try approaching it from a different perspective...'");
+                    setIsAnswerCorrect2(true);
+                    break;
+                case 3:
+                    setdisplayHint("✅ Correct! Hint 3: 'Use logical reasoning to find the best solution!'");
+                    break;
+                default:
+                    setdisplayHint("✅ Correct! Great job!");
+            }
+            setIsAnswerCorrect(true);
+        } else {
+            setHint("❌ Wrong answer! Try again.");
+            setIsAnswerCorrect(false);
+        }
+    };
+    
+    const generateLogicPuzzle = () => {
+        const randomIndex = Math.floor(Math.random() * 5) + 1; // Generate a number between 1 and 5
+        const selectedPuzzle = logicPuzzles[randomIndex]; // Get the corresponding puzzle
+
+        setMathQuestion(selectedPuzzle.question);
+        setMathAnswer(selectedPuzzle.answer);
+    };
+
+    const generateGeneralKnowledgeQuestion = () => {
+        const randomNumber = Math.floor(Math.random() * Object.keys(generalKnowledgeQuestions).length) + 1;
+        const selectedQuestion = generalKnowledgeQuestions[randomNumber];
+    
+        setMathQuestion(selectedQuestion.question);
+        setMathAnswer(selectedQuestion.answer);
+    };
+    
+    const revealHint = async (hintnumber) => {
+        if (hintnumber === 1) {
+            setHint("🔍 Solve this to reveal Hint 1:");
+            generateMathQuestion(); // Generate a math question
+
+            try {
+                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
+        
+                const data = await response.json();
+        
+                if (response.ok) {
+                    if (data.points !== undefined) {
+                        setPoints(data.points); // Update the points state
+                    }
+                } else {
+                    console.error("Error fetching points:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching points:", error);
+            }
+
+            setHint1Revealed(true);
+            setHintNumber(1);
+        } else if (hintnumber === 2) {
+            generateLogicPuzzle();
+            try {
+                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
+        
+                const data = await response.json();
+        
+                if (response.ok) {
+                    if (data.points !== undefined) {
+                        setPoints(data.points); // Update the points state
+                    }
+                } else {
+                    console.error("Error fetching points:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching points:", error);
+            }
+            setHint("🔍 Hint 2 is revealed! Solve the pattern puzzle.");
+            setHint2Revealed(true);
+            setHintNumber(2);
+            setUserAnswer(""); // Clear the input box
+        } else if (hintnumber === 3) {
+            generateGeneralKnowledgeQuestion();
+            try {
+                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
+        
+                const data = await response.json();
+        
+                if (response.ok) {
+                    if (data.points !== undefined) {
+                        setPoints(data.points); // Update the points state
+                    }
+                } else {
+                    console.error("Error fetching points:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching points:", error);
+            }
+            setHint("🔍 Hint 3 is revealed!");
+            setHint3Revealed(true);
+            setHintNumber(3);
+            setUserAnswer("");
+        }
+
+    };
     // Complex emoji-based code snippet
-    const emojiCode = `
-            🔢 = 12345
-            🔡 = 0  
-🔁(🔢 > 0) {  
-    📍 = 🔢 % 10
-            🔢 ➗= 10
-            🤔(📍 ⚖️ 6) 👉 🔡 ➕= 5
-            🤔(📍 ⚖️ 5) 👉 🔡 ➕= 4
-            🤔(📍 ⚖️ 4) 👉 🔡 ➕= 3
-            🤔(📍 ⚖️ 3) 👉 🔡 ➕= 2  
-}  
-🤔(🔡 > 15) 👉 ✍️("Greater") ❌ ✍️("Smaller")
-            `;
+
 
     const handleSubmit = async () => {
         try {
@@ -722,47 +951,112 @@ const Round3 = () => {
     };
 
     return (
-        <div className="flex justify-start p-6"> {/* Add flex and justify-start for left alignment */}
-            <div className="w-1/2"> {/* Set width to half the container */}
-                <h2 className="text-2xl font-semibold mb-4">Round 3: Code Unravel</h2>
 
-                {/* Display submission time if available */}
-                {submissionTime && (
-                    <div className="mb-4 text-lg font-bold text-green-600">
-                        Submission Time: {submissionTime}
-                    </div>
-                )}
+        <div className="flex justify-between p-10 space-x-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
+    {/* Left Side: Main Code Section */}
+    <div className="w-1/2">
+        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-6 flex items-center">
+                🚀 Round 3: <span className="text-blue-600 ml-2">Code Unravel</span>
+            </h2>
+            <p className="text-xl font-semibold text-gray-700">🔍 Analyze the Emoji Code:</p>
+            <pre className="bg-gray-100 p-5 rounded-lg mt-4 text-gray-900 font-mono border border-gray-300 shadow-sm">
+                {emojiCode}
+            </pre>
 
-                <div className="bg-gray-100 p-4 rounded-md">
-                    <p className="font-semibold text-lg">🔍 Analyze the Emoji Code:</p>
-                    <pre className=" p-3 rounded-md mt-2">{emojiCode}</pre>
+            {/* Output Input Field */}
+            <div className="mt-6">
+                <label className="block font-semibold text-gray-700 text-lg">Enter the exact output:</label>
+                <input
+                    type="text"
+                    value={userOutput}
+                    onChange={(e) => setUserOutput(e.target.value)}
+                    className="w-full p-3 mt-3 border-2 border-gray-300 rounded-xl focus:ring focus:ring-blue-400 shadow-sm"
+                    disabled={isSubmitted}
+                />
+            </div>
 
+            {/* Submit Button */}
+            <button
+                onClick={handleSubmit}
+                className={`mt-6 px-6 py-3 text-lg font-bold rounded-xl transition duration-300 ${
+                    isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600 text-white shadow-md"
+                }`}
+                disabled={isSubmitted}
+            >
+                ✅ Submit
+            </button>
 
-                    {/* Output Input Field */}
-                    <div className="mt-4">
-                        <label className="block font-semibold">Enter the exact output:</label>
-                        <input
-                            type="text"
-                            value={userOutput}
-                            onChange={(e) => setUserOutput(e.target.value)}
-                            className=" p-2 mt-2 border rounded-md"
-                            disabled={isSubmitted}
-                        />
-                    </div>
+            {/* Display Message */}
+            {message && <p className="mt-5 text-lg font-semibold text-green-600">{message}</p>}
+        </div>
+    </div>
 
-                    {/* Submit Button */}
+    {/* Right Side: Hint System */}
+    <div className="w-1/2 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+        {/* Points Display */}
+        <div className="text-xl flex justify-end items-center font-extrabold text-gray-900 mb-6">
+            🏆 Points: <span className="text-blue-600 ml-2">{points}</span>
+        </div>
+
+        {/* Hint Buttons */}
+        <div className="flex justify-end space-x-4">
+            <button
+                onClick={() => revealHint(1)}
+                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
+                    hint1Revealed ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600 text-white shadow-md"
+                }`}
+                disabled={hint1Revealed}
+            >
+                💡 Hint 1
+            </button>
+            <button
+                onClick={() => revealHint(2)}
+                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
+                    hint2Revealed || !isAnswerCorrect ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
+                }`}
+                disabled={hint2Revealed || !isAnswerCorrect}
+            >
+                🧩 Hint 2
+            </button>
+            <button
+                onClick={() => revealHint(3)}
+                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
+                    hint3Revealed || !isAnswerCorrect2 ? "bg-gray-400 cursor-not-allowed" : "bg-purple-500 hover:bg-purple-600 text-white shadow-md"
+                }`}
+                disabled={hint3Revealed || !isAnswerCorrect2}
+            >
+                🔥 Hint 3
+            </button>
+        </div>
+
+        {/* Display the Revealed Hint */}
+        {hint1Revealed && (
+            <div className="mt-6 p-5 bg-gray-100 rounded-lg shadow-md border border-gray-300">
+                <p className="text-lg font-semibold text-gray-800">{hint}</p>
+                <div className="mt-4">
+                    <p className="font-semibold text-gray-700">{mathQuestion}</p>
+                    <input
+                        type={hintNumber === 3 ? "text" : "number"} 
+                        value={userAnswer}
+                        onChange={(e) => setUserAnswer(e.target.value)}
+                        className="w-full p-3 border-2 border-gray-300 rounded-xl mt-3 focus:ring focus:ring-blue-400"
+                    />
+
                     <button
-                        onClick={handleSubmit}
-                        className={`mt-5 mb-7 px-6 py-2 rounded-md text-white ${isSubmitted ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500'}`}
-                        disabled={isSubmitted}
+                        onClick={verifyAnswer}
+                        className="mt-4 px-5 py-3 text-lg font-bold rounded-xl bg-green-500 hover:bg-green-600 text-white shadow-md transition duration-300"
                     >
-                        Submit
+                        ✅ Verify
                     </button>
                 </div>
-                {/* Display Message */}
-                {message && <p className="mt-4 font-semibold text-lg">{message}</p>}
+                <p className="mt-4 font-semibold text-gray-700">{displayhint}</p>
             </div>
-        </div>
+        )}
+    </div>
+</div>
+
+    
     );
 };
 
@@ -800,15 +1094,16 @@ const Events = () => {
                     onClick={showRound1}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
                         ${selectedRound === 1 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                >
+                > 
+    
                     Round 1
                 </button>
 
                 <button
                     onClick={showRound2}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                        ${selectedRound === 2 && allPassed ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                    disabled={!allPassed} // Disable button until Round 1 is passed
+                        ${selectedRound === 2 && allPassed2 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                    disabled={!allPassed2} // Disable button until Round 1 is passed
                 >
                     Round 2
                 </button>
@@ -816,17 +1111,17 @@ const Events = () => {
                 <button
                     onClick={showRound3}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                        ${selectedRound === 3 && allPassed2 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                    disabled={!allPassed2} // Disable button until Round 2 is passed
+                        ${selectedRound === 3 && allPassed ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                    disabled={!allPassed} // Disable button until Round 2 is passed
                 >
                     Round 3
                 </button>
             </div>
 
             <div className="mt-10">
-                {selectedRound === 1 && <Round1 setAllPassed={setAllPassed} />}
-                {selectedRound === 2 && allPassed && <Round2 setAllPassed2={setAllPassed2} />}
-                {selectedRound === 3 && allPassed2 && <Round3 />}
+                {selectedRound === 1 && <Round2 setAllPassed2={setAllPassed2} />}
+                {selectedRound === 2 && allPassed2 && <Round1 setAllPassed={setAllPassed} />}
+                {selectedRound === 3  && <Round3 />}
             </div>
         </div>
     );

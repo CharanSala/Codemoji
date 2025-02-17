@@ -209,6 +209,44 @@ app.get("/getlanguage", async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+app.get("/getpoints", async (req, res) => {
+    const { email, hintnumber } = req.query; // Get email and hintNumber from query parameters
+
+    if (!email || !hintnumber) {
+        return res.status(400).json({ message: "Email and hintNumber are required" });
+    }
+
+    try {
+        const participant = await Participant.findOne({ email });
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        // Convert hintNumber to an integer and determine points deduction
+        const hintnum = parseInt(hintnumber);
+        if (![1, 2, 3].includes(hintnum)) {
+            return res.status(400).json({ message: "Invalid hintNumber. Must be 1, 2, or 3." });
+        }
+
+        // Deduct points based on the hint number
+        const pointsDeduction = hintnum * 10; // 1 → -10, 2 → -20, 3 → -30
+        participant.points -= pointsDeduction;
+
+        // Ensure points don't go below zero
+        if (participant.points < 0) participant.points = 0;
+
+        await participant.save();
+        console.log("mydata",participant);
+
+        res.json({ message: "Points updated successfully", points: participant.points });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+
 
 app.get("/getsubmissiontime", async (req, res) => {
     const { email } = req.query; // Get email from query parameters

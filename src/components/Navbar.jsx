@@ -7,12 +7,12 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className="bg-white shadow-md">
+    <div className="bg-[#01052A] shadow-md">
       {/* Navbar Container */}
       <div className="flex items-center justify-between px-6 py-4 relative">
         {/* Unique Title Design with Emojis */}
         <h2 className="text-3xl font-bold text-gray-800 relative z-10 flex items-center">
-          <span className="mr-2">🚀</span>Code
+          <span className="mr-2">🚀</span><span className='text-gray-200'>Code</span>
           <span className="text-blue-500 font-light">Moji</span>
           <span className="ml-2">😜</span>
         </h2>
@@ -47,7 +47,7 @@ const Navbar = () => {
           <li>
             <Link
               to="/"
-              className="text-gray-600 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
             >
               🏠 Home
             </Link>
@@ -55,7 +55,7 @@ const Navbar = () => {
           <li>
             <Link
               to="/signin"
-              className="text-gray-600 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
             >
               🔑 Sign In
             </Link>
@@ -63,7 +63,7 @@ const Navbar = () => {
           <li>
             <Link
               to="/about"
-              className="text-gray-600 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
             >
               ℹ️ About
             </Link>
