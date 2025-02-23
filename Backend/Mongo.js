@@ -22,7 +22,9 @@ const participantSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },  // ✅ Name field added
     email: { type: String, required: true, unique: true, trim: true },  // ✅ Email field added
     password: { type: String, required: true, trim: true },  // ✅ Password field added
-    
+    hint1: { type: Boolean, default: true },  // ✅ Add hint states
+    hint2: { type: Boolean, default: false },
+    hint3: { type: Boolean, default: false },
     round1submissiontime: { type: String, default: null },  
     round2submissiontime: { type: String, default: null },
     round3submissiontime: { type: String, default: null },
@@ -39,6 +41,24 @@ connectDB();
 
 // Create Model
 const Participant = mongoose.model('Participant', participantSchema);
+const insertParticipant = async () => {
+    try {
+      const newParticipant = new Participant({
+        name: "John Doe", 
+        email: "user@example.com",
+        password: "securepassword"
+      });
+  
+      const savedParticipant = await newParticipant.save();
+      console.log("Inserted Successfully:", savedParticipant);
+    } catch (error) {
+      console.error("Error inserting participant:", error);
+    } finally {
+      mongoose.connection.close();
+    }
+  };
+  
+ 
 
 export default Participant;
 

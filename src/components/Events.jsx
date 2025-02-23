@@ -397,157 +397,128 @@ const Round1 = ({ setAllPassed }) => {
     const languages = ["python", "cpp", "c", "java"];
 
     return (
-        <div className="flex justify-between p-6 space-x-3">
-            <div className="w-1/2">
-                <h3 className="text-2xl font-semibold mb-4">Emoji Code</h3>
-                {Round1sub && (
-                    <h3 className="text-green-500 font-bold text-lg mb-5">
-                        Submission Time: {Round1sub}
-                    </h3>
-                )}
 
-                <div className="bg-gray-100 p-4 rounded-md">
-                    <p>🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
-                    <pre>{Emojicode}</pre>
-                    <div className="">
-                        <h4 className="font-semibold text-lg">Test Cases</h4>
-                        {exampleTestCases.map((testCase, index) => (
-                            <div
-                                key={index}
-                                className={`mt-2 p-2 rounded-md ${index === 0 ? 'text-red-700' : 'bg-gray-100'}`}
-                            >
-                                {index === 0 && <p className="font-bold text-yellow-700">🔰 Initial Predefined Input</p>}
-                                <p><strong>Input:</strong> {testCase.input}</p>
-                                <p><strong>Output:</strong> {testCase.output}</p>
-                            </div>
-                        ))}
-                    </div>
+        <div>
+       <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+    Emoji Decription
+</h3>
 
+        {Round1sub && (
+            <h3 className="text-green-700 font-bold text-lg mb-5 text-center">
+                Submission Time: {Round1sub}
+            </h3>
+        )}
+        <div className="flex flex-col md:flex-row justify-center items-center md:items-start p-6 space-y-6 md:space-y-0 md:space-x-6 bg-white text-gray-900 min-h-screen">
+        {/* Emoji Code Section */}
+        <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg shadow-lg border border-gray-300">
+           
+            <div className="p-4 rounded-lg bg-navy-100 shadow-md">
+                <p className="text-navy-700 mb-5 font-bold text-lg text-start">🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
+                <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-sm border border-navy-300">{Emojicode}</pre>
+                <div className="mt-4">
+                    <h4 className="font-semibold text-lg text-navy-600 text-start pl-3">Test Cases</h4>
+                    {exampleTestCases.map((testCase, index) => (
+                        <div key={index} className="mt-2 p-3 rounded-md bg-navy-50 border border-gray-300">
+                            {index === 0 && <p className="font-bold text-navy-500">Initial Predefined Input</p>}
+                            <p><strong>Input:</strong> {testCase.input}</p>
+                            <p><strong>Output:</strong> {testCase.output}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
+        </div>
+    
+        {/* Write Your Code Section */}
+        <div className="w-full md:w-1/2 flex flex-col bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+            <h3 className="text-3xl font-bold mb-4 text-navy-600 text-start">Write Your Code</h3>
+           <div className="flex  space-x-6">
+            <div className="mb-4 flex justify-center">
+                <select
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
+                >
+                    <option value={selectedLanguage}>{selectedLanguage}</option>
+                    {languages.filter((lang) => lang !== selectedLanguage).map((lang) => (
+                        <option key={lang} value={lang} className="text-navy-900">
+                            {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
-            <div className="w-1/2">
-                <h3 className="text-2xl font-semibold mb-4">Write Your Code</h3>
+            {/* <div className="mb-4 flex justify-center">
+                <label className="flex items-center text-navy-700">
+                    <input
+                        type="checkbox"
+                        checked={!withInput}
+                        onChange={() => setWithInput(!withInput)}
+                        className="mr-2"
+                    />
+                    <span>Run without input</span>
+                </label>
+            </div> */}
+            </div>
 
-                <div className="mb-4 flex items-center space-x-4">
-
-                    <select
-                        value={selectedLanguage}
-                        onChange={(e) => setSelectedLanguage(e.target.value)}
-                        className="p-2 border rounded-md"
-                    >
-                        <option value={selectedLanguage}>{selectedLanguage}</option>
-                        {languages
-                            .filter((lang) => lang !== selectedLanguage) // Exclude the selected language
-                            .map((lang) => (
-                                <option key={lang} value={lang}>
-                                    {lang.charAt(0).toUpperCase() + lang.slice(1)} {/* Capitalize first letter */}
-                                </option>
-                            ))}
-                    </select>
-                </div>
-
-                <div className="mb-4">
-                    <label className="flex items-center">
-                        <input
-                            type="checkbox"
-                            checked={!withInput}
-                            onChange={() => setWithInput(!withInput)}
-                            className="mr-2"
-                        />
-                        <span>Run without input</span>
-                    </label>
-                </div>
+            <div className="p-5 bg-navy-50 rounded-lg shadow-md border border-gray-300">
                 <MonacoEditor
                     height="400px"
-                    language={selectedLanguage === "python" ? "python" : selectedLanguage === "cpp" ? "cpp" : selectedLanguage === "java" ? "java" : "c"}
-                    theme="vs-light"
+                    language={selectedLanguage}
+                    theme="light"
                     value={code}
                     onChange={(value) => setCode(value)}
                 />
-
-
+            </div>
+            <div className="flex justify-start space-x-4 mt-4">
                 <button
                     onClick={handleRunCode}
-                    className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md"
+                    className="px-6 py-2 bg-navy-600 hover:bg-navy-500 text-black rounded-md shadow-md"
                 >
                     Run Code
                 </button>
-
                 <button
                     onClick={handleSubmit}
-                    disabled={Round1sub} // Disables button when Round1sub has a value
-                    className={`mt-4 px-8 ml-3 py-2 rounded-md ${Round1sub ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 text-white"
-                        }`}
+                    disabled={Round1sub}
+                    className={`px-8 py-2 rounded-md shadow-md ${Round1sub ? "bg-gray-400 cursor-not-allowed" : "bg-navy-700 hover:bg-navy-600 text-black"}`}
                 >
                     Submit
                 </button>
-
-
-
-                <div className="mt-4">
-                    <h4 className="text-lg font-semibold">Output</h4>
-                    <pre className="bg-gray-100 p-4 rounded-md">{output || 'No output yet.'}</pre>
-                </div>
-
-                <div className="mt-4">
-                    <h4 className="text-lg font-semibold">Test Case Results</h4>
-                    <ul>
-                        {console.log(testResults)}
-                        {testResults.failedCount === 0 && testResults.satisfiedTestCases.length > 0 ? (
-                            // ✅ All test cases passed
-                            <>
-                                <li className="text-green-600">
-                                    <strong>✅ All Test Cases Passed!</strong>
+            </div>
+            <div className="mt-4">
+                <h4 className="text-lg font-semibold text-navy-600 text-start pl-2">Output</h4>
+                <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-sm border border-gray-300">{output || 'No output yet.'}</pre>
+            </div>
+            <div className="mt-4">
+                <h4 className="text-lg font-semibold text-navy-600 text-start">Test Case Results</h4>
+                <ul>
+                    {testResults.failedCount === 0 && testResults.satisfiedTestCases.length > 0 ? (
+                        <>
+                            <li className="text-green-600 font-bold text-center">✅ All Test Cases Passed!</li>
+                            {testResults.satisfiedTestCases.map((tc, index) => (
+                                <li key={index} className="text-green-600 text-center">
+                                    <strong>Input:</strong> {tc.input} <br />
+                                    <strong>Expected:</strong> {tc.expected} <br />
+                                    <strong>Got:</strong> {tc.got} <br />
+                                    <strong>Status:</strong> ✅ Success
                                 </li>
-                                {testResults.satisfiedTestCases.map((tc, index) => (
-                                    <li key={index} className="text-green-600">
-                                        <strong>Input:</strong> {tc.input} <br />
-                                        <strong>Expected:</strong> {tc.expected} <br />
-                                        <strong>Got:</strong> {tc.got} <br />
-                                        <strong>Status:</strong> ✅ Success
-                                    </li>
-                                ))}
-                            </>
-                        ) : (
-                            // ❌ Some test cases failed
-                            <>
-
-                                {testResults.satisfiedTestCases?.length > 0 && (
-                                    <>
-                                        <li className="text-green-600">
-                                            <strong>✅ Passed Test Cases: {testResults.satisfiedTestCases.length}</strong>
-                                        </li>
-                                    </>
-                                )}
-                                {testResults.failedCount > 0 && (
-                                    <li className="text-red-600">
-                                        <strong>❌ Failed Test Cases:</strong> {testResults.failedCount}
-                                    </li>
-                                )}
-
-                                {/* {testResults.oneFailedTest && testResults.failedCount > 0 && (
-                                    <li className="text-red-600">
-                                        <strong>❌ One Failed Test Case:</strong> <br />
-                                        <strong>Input:</strong> {testResults.oneFailedTest.input} <br />
-                                        <strong>Expected:</strong> {testResults.oneFailedTest.expected} <br />
-                                        <strong>Got:</strong> {testResults.oneFailedTest.got} <br />
-                                        <strong>Status:</strong> ❌ Failed
-                                    </li>
-                                )} */}
-
-                                {/* Only show passed test cases if they exist */}
-
-                            </>
-                        )}
-                    </ul>
-
-
-
-                </div>
-
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {testResults.satisfiedTestCases?.length > 0 && (
+                                <li className="text-green-600 text-center">✅ Passed Test Cases: {testResults.satisfiedTestCases.length}</li>
+                            )}
+                            {testResults.failedCount > 0 && (
+                                <li className="text-red-500 text-center">❌ Failed Test Cases: {testResults.failedCount}</li>
+                            )}
+                        </>
+                    )}
+                </ul>
             </div>
         </div>
+        </div>
+    </div>
+    
     );
 };
 
@@ -562,42 +533,340 @@ const Round2 = ({ setAllPassed2 }) => {
 
 
     const location = useLocation();
-    const participant = location.state?.participant; // Get participant object
-    const randomNumber = participant?.randomNumber || 1;
+    const participant = location.state?.participant; // Get participant object safely
+    const randomNumber1 = participant?.randomNumber ?? 1; // Default to 1 if undefined
+    const randomNumber2 = randomNumber1 + 1; // Increment for second random number
+
 
     const problemSets = {
         1: {
             Emojicode: `
-            📌 fact(🔢, 💡) {
+📌 fact(🔢, 💡) 
+{
     🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-            🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
-            ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+    ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
 }
-            fact(5, 3)
+fact(5, 3)
             `,
             output: 120,
+            result: [1, 2],
         },
         2: {
             Emojicode: `
-            📌 sumPower(🔢, ⚡) {
+📌 sumPower(🔢, ⚡) 
+{
     🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-            🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
-            ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+    ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
 }
-            sumPower(4, 3)
+sumPower(4, 3)
             `,
             output: 364,
+            result: [1, 2],
         },
         3: {
             Emojicode: `
-            📌 calc(🔢, 💡, ⚡) {
+📌 calc(🔢, 💡, ⚡) 
+{
     🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-            🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
-            ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
+    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
+    ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
 }
-            calc(4, 2, 3)
+calc(4, 2, 3)
             `,
             output: 40,
+            result: [1, 2],
+        },
+        4: {
+            Emojicode: `
+📌 expSum(🔢, ⚡, 💡) 
+{
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+    ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+}
+expSum(3, 3, 2)
+            `,
+            output: 147,
+            result: [1, 2],
+        },
+        5: {
+            Emojicode: `
+📌 fibMulAdd(🔢, 💡, ⚡) 
+{
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+    🤔(💡 ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ✖️ 2
+    🤔(⚡ ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+    ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ 1, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+}
+fibMulAdd(7, 3, 5)
+            `,
+            output: 9,
+            result: [1, 2],
+        }
+    };
+
+    const { Emojicode: Emojicode1, output: output1, result: result1 } = problemSets[randomNumber1];
+    const { Emojicode: Emojicode2, output: output2, result: result2 } = problemSets[randomNumber2];
+
+
+    const predefinedValues = [1, 2];
+    const [inputValues1, setInputValues1] = useState(new Array(predefinedValues.length).fill(''));
+    const [inputValues2, setInputValues2] = useState(new Array(predefinedValues.length).fill(''));
+
+    const [resultMessage1, setResultMessage1] = useState('');
+    const [resultMessage, setResultMessage] = useState('');
+    const [resultMessage2, setResultMessage2] = useState('');
+
+    const [subtime1, setSubtime1] = useState('');
+    const [subtime2, setSubtime2] = useState(participant.round2submissiontime);
+
+
+    const handleInputChange1 = (index, value) => {
+        const newValues = [...inputValues1];
+        newValues[index] = value;
+        setInputValues1(newValues);
+    };
+
+    const fetchRound2SubTime = async (setSubtime2) => {
+        try {
+            const response = await fetch("http://localhost:5000/getround2submissiontime", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log("Fetched Round 2 submission time successfully:", data.subtime2);
+                setSubtime2(data.subtime2); // Update state with fetched submission time
+            } else {
+                console.error("Error fetching Round 2 submission time:", data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching Round 2 submission time:", error);
+        }
+    };
+
+    // Usage example
+    useEffect(() => {
+        fetchRound2SubTime(setSubtime2);
+    }, []); // Fetch when component mounts
+
+    const handleInputChange2 = (index, value) => {
+        const newValues = [...inputValues2];
+        newValues[index] = value;
+        setInputValues2(newValues);
+    };
+    const handleSubmit1 = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/verify1', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inputValues: inputValues1.map(Number), result: result1 }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error verifying inputs');
+            }
+
+            const result = await response.json();
+            setResultMessage1(result.message);
+            setSubtime1(result.submissionTime);
+
+        } catch (error) {
+            console.error('Error:', error);
+            setResultMessage1('Error verifying inputs: ' + error.message);
+        }
+    };
+
+
+
+
+    const handleSubmit2 = async () => {
+        try {
+            if (!subtime1) {
+                setResultMessage('❌ Please complete the first submission before submitting this one.');
+                return;
+            }
+            const response = await fetch('http://localhost:5000/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ inputValues: inputValues2.map(Number), result: result2 }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error verifying inputs');
+            }
+
+            const result = await response.json();
+
+            console.log(result);
+
+            if (result.status) {
+                setAllPassed2(true); // Immediately mark as passed
+            }
+            else {
+                setAllPassed2(false); // Mark as failed if not successful
+            }
+
+
+            setResultMessage2(result.message);
+
+
+
+        } catch (error) {
+            console.error('Error:', error);
+            setResultMessage('Error verifying inputs: ' + error.message);
+            setAllPassed2(false);
+        }
+    };
+    useEffect(() => {
+        if (subtime1) {
+            setResultMessage(""); // Clear result message when subtime1 is set
+        }
+    }, [subtime1]);
+
+    useEffect(() => {
+        if (subtime2) {
+            setAllPassed2(true);  // If submission time exists, mark Round 1 as passed
+        }
+    }, [subtime2]);
+
+
+
+    return (
+        <div className="min-h-screen bg-white text-white ">
+            <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                Logic Patch
+            </h3>
+
+
+
+            {resultMessage && (
+                <div className="mb-4 text-lg font-bold text-center px-4 py-2 rounded-md bg-red-900 text-red-300 border border-red-500 shadow-lg">
+                    {resultMessage}
+                </div>
+            )}
+
+            {subtime2 && (
+                <div className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-green-700  shadow-lg">
+                    Submission Time: {subtime2}
+                </div>
+            )}
+
+            <div className="flex justify-between p-6 space-x-6">
+                <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                    <p className="text-cyan-400 font-semibold mb-5">Task: Identify and provide the missing values in the incomplete code.</p>
+                    <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto">{Emojicode1}</pre>
+                    <p className="mt-2 text-gray-400">Output: {output1}</p>
+                    <div className="mt-4">
+                        <h4 className="font-semibold text-lg text-blue-400">Input Values</h4>
+                        {predefinedValues.map((_, index) => (
+                            <div key={index} className="mt-2">
+                                <label className="text-gray-300">Value {index + 1}: </label>
+                                <input
+                                    type="text"
+                                    value={inputValues1[index]}
+                                    onChange={(e) => handleInputChange1(index, e.target.value)}
+                                    className="p-2 ml-3 border rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        onClick={handleSubmit1}
+                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out ${subtime1 || subtime2 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
+                        disabled={subtime1 || subtime2}
+                    >
+                        Submit
+                    </button>
+                    <h2>{resultMessage1}</h2>
+                </div>
+
+                <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
+                    <p className="text-cyan-400 font-semibold mb-5">Task: Identify and provide the missing values in the incomplete code.</p>
+                    <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto">{Emojicode2}</pre>
+                    <p className="mt-2 text-gray-400">Output: {output2}</p>
+                    <div className="mt-4">
+                        <h4 className="font-semibold text-lg text-blue-400">Input Values</h4>
+                        {predefinedValues.map((_, index) => (
+                            <div key={index} className="mt-2">
+                                <label className="text-gray-300">Value {index + 1}: </label>
+                                <input
+                                    type="text"
+                                    value={inputValues2[index]}
+                                    onChange={(e) => handleInputChange2(index, e.target.value)}
+                                    className="p-2 ml-3 border rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button onClick={handleSubmit2}
+                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out ${subtime2 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
+                        disabled={subtime2}
+                    >
+                        Submit
+                    </button>
+                    <h2>{resultMessage2}</h2>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const Round3 = ( {setAllPassed3} ) => {
+
+    const problemSets = {
+        1: {
+            Emojicode: `
+📌 fact(🔢, 💡) 
+{
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+    ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+}
+fact(5, 3)
+            `,
+            output: 120,
+
+        },
+        2: {
+            Emojicode: `
+📌 sumPower(🔢, ⚡) 
+{
+    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
+    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+    ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+}
+sumPower(4, 3)
+            `,
+            output: 364,
+
+        },
+        3: {
+            Emojicode: `
+📌 secret_mystery(📦, 🔢, 🔡, 🔠) 
+{  
+    🤔(🔠 ⚖️ len(📦️)) 👉 ↩️ 🔡  
+    🤔(🔡 ⚖️ 📦[🔠] ➖ 📦[🔢]) 👉 🔡 = 📦[🔠] ➖ 📦[🔢]  
+    🔠 ➕= 1  
+    📌 secret_mystery(📦, 🔢, 🔡, 🔠)  
+}  
+📌 hidden_difference(📦, 🔢) 
+{  
+    🔡 = -10000  
+    🔠 = 1  
+    📌 secret_mystery(📦, 0, 🔡, 🔠)  
+    ↩️ 🔡  
+
+`,
+            output: "40",
+
         },
         4: {
             Emojicode: `
@@ -609,6 +878,7 @@ const Round2 = ({ setAllPassed2 }) => {
             expSum(3, 3, 2)
             `,
             output: 147,
+
         },
         5: {
             Emojicode: `
@@ -621,134 +891,27 @@ const Round2 = ({ setAllPassed2 }) => {
             fibMulAdd(7, 3, 5)
             `,
             output: 9,
+
         }
     };
 
-    const { Emojicode, output } = problemSets[randomNumber] || problemSets[1];
-    const predefinedValues = [1, 2];
-    const [inputValues, setInputValues] = useState(new Array(predefinedValues.length).fill(''));
-    const [resultMessage, setResultMessage] = useState('');
-    const [subtime, setSubtime] = useState('');
-
-    const handleInputChange = (index, value) => {
-        const newInputValues = [...inputValues];
-        newInputValues[index] = value;
-        setInputValues(newInputValues);
-    };
-
-    const handleSubmit = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ inputValues }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Error verifying inputs');
-            }
-
-            const result = await response.json();
-
-            console.log(result)
-            if (result.status) {
-                setAllPassed2(true);
-            } else {
-                setAllPassed2(false); // Mark it as failed if not successful
-            }
-
-            setResultMessage(result.message);
-            setSubtime(result.submissionTime);
-
-
-        } catch (error) {
-            console.error('Error:', error);
-            setResultMessage('Error verifying inputs: ' + error.message);
-            setAllPassed2(false);
-        }
-    };
-
-    return (
-        <div className="flex justify-between p-6">
-
-            <div className="w-1/2">
-                <h3 className="text-2xl font-semibold mb-4">Identify the Missing Values</h3>
-                {subtime && (
-                    <div className="mb-4 text-lg font-bold text-green-600">
-                        Submission Time: {subtime}
-                    </div>
-                )}
-                <div className="bg-gray-100 p-4 rounded-md">
-                    <p><strong>Task:</strong> Identify and provide the missing values in the incomplete code.</p>
-                    <pre>{Emojicode}</pre>
-                    <p className=''>Output:{output}</p>
-                    <div className="mt-4">
-                        <h4 className="font-semibold text-lg">Input Values</h4>
-                        {predefinedValues.map((_, index) => (
-                            <div key={index} className="mt-2">
-                                <label>Value {index + 1}: </label>
-                                <input
-                                    type="text"
-                                    value={inputValues[index]}
-                                    onChange={(e) => handleInputChange(index, e.target.value)}
-                                    className="p-2 border rounded-md"
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                    <button onClick={handleSubmit} className={`mt-4 px-6 py-2 rounded-md text-white ${subtime ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500'}`}
-                        disabled={subtime}
-                    >
-                        Submit
-                    </button>
-
-                    <div className='flex space-x-10'>
-                        {resultMessage && (
-                            <div className="mt-4">
-                                <h4 className="text-lg font-semibold">Result</h4>
-                                <p>{resultMessage}</p>
-                            </div>
-                        )}
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
-const Round3 = () => {
-
-const emojiCode = `
-🔢 = 12345
-🔡 = 0  
-🔁(🔢 > 0) {  
-📍 = 🔢 % 10
-    🔢 ➗= 10
-    🤔(📍 ⚖️ 6) 👉 🔡 ➕= 5
-    🤔(📍 ⚖️ 5) 👉 🔡 ➕= 4
-    🤔(📍 ⚖️ 4) 👉 🔡 ➕= 3
-    🤔(📍 ⚖️ 3) 👉 🔡 ➕= 2  
-}  
-🤔(🔡 > 15) 👉 ✍️("Greater") ❌ ✍️("Smaller")
-    `;
 
     const location = useLocation();
 
     const participant = location.state?.participant || {}; // Ensure it's an object
     const randomNumber = participant.randomnumber || 1;
 
+    const { Emojicode: Emoji, output } = problemSets[randomNumber] || problemSets[1];
+
+    console.log(output);
     const [userOutput, setUserOutput] = useState('');
-    const [submissionTime, setSubmissionTime] = useState(null);
+    const [submissionTime, setSubmissionTime] = useState(participant.round3submissiontime);
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [hintNumber, setHintNumber] = useState(null);
 
     const [hint, setHint] = useState(""); // Track the revealed hint
-    const [displayhint, setdisplayHint] = useState(""); 
+    const [displayhint, setdisplayHint] = useState("");
     const [points, setPoints] = useState(participant.points); // Track points
     const [hint1Revealed, setHint1Revealed] = useState(false);
     const [hint2Revealed, setHint2Revealed] = useState(false);
@@ -762,185 +925,47 @@ const emojiCode = `
 
 
 
-    const mathQuestions = {
-        1: { question: "What is (15 × 2) + (30 ÷ 5)?", answer: 36 },
-        2: { question: "What is (8 × 9) - (25 ÷ 5)?", answer: 67 },
-        3: { question: "What is (20 ÷ 4) + (6 × 3)?", answer: 23 },
-        4: { question: "What is (12 × 3) - (8 ÷ 4)?", answer: 34 },
-        5: { question: "What is (50 ÷ 5) + (9 × 4)?", answer: 46 }
-    };
+    const fetchRound3SubTime = async (setSubmissionTime) => {
+        try {
+            const response = await fetch("http://localhost:5000/getround3submissiontime", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
-    const logicPuzzles = {
-        1: { question: "What comes next in this sequence? 3, 6, 11, 18, 27, _?", answer: 38 },
-        // Pattern: n = previous + (increasing odd numbers: 3, 5, 7, 9, 11)
+            const data = await response.json();
 
-        2: { question: "What is the missing number? 2, 4, 8, 16, _?", answer: 32 },
-        // Pattern: Each number is multiplied by 2.
-
-        3: { question: "Find the next number: 1, 1, 2, 3, 5, _?", answer: 8 },
-        // Fibonacci series: n = (n-1) + (n-2)
-
-        4: { question: "What comes next? 10, 20, 30, 50, 80, _?", answer: 130 },
-        // Pattern: Sum of previous two numbers (10+20=30, 20+30=50, etc.)
-
-        5: { question: "Identify the missing number: 100, 96, 92, 88, _?", answer: 84 }
-        // Pattern: Decreasing by 4 each time.
-    };
-
-    const generateMathQuestion = () => {
-        const randomIndex = Math.floor(Math.random() * 5) + 1; // Generate a random number between 1 and 5
-        const { question, answer } = mathQuestions[randomIndex]; // Get the corresponding question and answer
-
-        setMathQuestion(question);
-        setMathAnswer(answer);
-    };
-    const generalKnowledgeQuestions = {
-        1: { question: "Which planet is known as the Red Planet?", answer: "Mars" },
-        2: { question: "How many continents are there on Earth?", answer: "Seven" },
-        3: { question: "Which is the largest ocean on Earth?", answer: "Pacific" },
-        4: { question: "Who wrote India's national anthem?", answer: "Tagore" },
-        5: { question: "What is the capital of Japan?", answer: "Tokyo" },
-        6: { question: "Which is the smallest country?", answer: "Vatican" },
-        7: { question: "How many colors are in a rainbow?", answer: "Seven" },
-        8: { question: "Who was first to walk on the moon?", answer: "Armstrong" },
-        9: { question: "What is India's national sport?", answer: "Hockey" },
-        10: { question: "Which is the longest river?", answer: "Nile" }
-    };
-
-
-    const verifyAnswer = () => {
-        let isCorrect = false;
-        if (hintNumber === 3) {
-            // Convert both user input and answer to lowercase and trim spaces for comparison
-            isCorrect = userAnswer.trim().toLowerCase() === mathAnswer.toLowerCase();
-        } else {
-            // Compare as numbers for Hint 1 and Hint 2
-            isCorrect = parseInt(userAnswer) === mathAnswer;
-        }
-    
-        if (isCorrect) {
-            switch (hintNumber) {
-                case 1:
-                    setdisplayHint("✅ Correct! Hint 1: 'Think about breaking it down into smaller parts...'");
-                    break;
-                case 2:
-                    setdisplayHint("✅ Correct! Hint 2: 'Try approaching it from a different perspective...'");
-                    setIsAnswerCorrect2(true);
-                    break;
-                case 3:
-                    setdisplayHint("✅ Correct! Hint 3: 'Use logical reasoning to find the best solution!'");
-                    break;
-                default:
-                    setdisplayHint("✅ Correct! Great job!");
+            if (response.ok) {
+                console.log("Fetched Round 2 submission time successfully:", data.subtime2);
+                setSubmissionTime(data.subtime3); // Update state with fetched submission time
+            } else {
+                console.error("Error fetching Round 2 submission time:", data.message);
             }
-            setIsAnswerCorrect(true);
-        } else {
-            setHint("❌ Wrong answer! Try again.");
-            setIsAnswerCorrect(false);
+        } catch (error) {
+            console.error("Error fetching Round 2 submission time:", error);
         }
     };
-    
-    const generateLogicPuzzle = () => {
-        const randomIndex = Math.floor(Math.random() * 5) + 1; // Generate a number between 1 and 5
-        const selectedPuzzle = logicPuzzles[randomIndex]; // Get the corresponding puzzle
 
-        setMathQuestion(selectedPuzzle.question);
-        setMathAnswer(selectedPuzzle.answer);
-    };
-
-    const generateGeneralKnowledgeQuestion = () => {
-        const randomNumber = Math.floor(Math.random() * Object.keys(generalKnowledgeQuestions).length) + 1;
-        const selectedQuestion = generalKnowledgeQuestions[randomNumber];
-    
-        setMathQuestion(selectedQuestion.question);
-        setMathAnswer(selectedQuestion.answer);
-    };
-    
-    const revealHint = async (hintnumber) => {
-        if (hintnumber === 1) {
-            setHint("🔍 Solve this to reveal Hint 1:");
-            generateMathQuestion(); // Generate a math question
-
-            try {
-                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
-        
-                const data = await response.json();
-        
-                if (response.ok) {
-                    if (data.points !== undefined) {
-                        setPoints(data.points); // Update the points state
-                    }
-                } else {
-                    console.error("Error fetching points:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching points:", error);
-            }
-
-            setHint1Revealed(true);
-            setHintNumber(1);
-        } else if (hintnumber === 2) {
-            generateLogicPuzzle();
-            try {
-                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
-        
-                const data = await response.json();
-        
-                if (response.ok) {
-                    if (data.points !== undefined) {
-                        setPoints(data.points); // Update the points state
-                    }
-                } else {
-                    console.error("Error fetching points:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching points:", error);
-            }
-            setHint("🔍 Hint 2 is revealed! Solve the pattern puzzle.");
-            setHint2Revealed(true);
-            setHintNumber(2);
-            setUserAnswer(""); // Clear the input box
-        } else if (hintnumber === 3) {
-            generateGeneralKnowledgeQuestion();
-            try {
-                const response = await fetch(`http://localhost:5000/getpoints?email=${encodeURIComponent(participant.email)}&hintnumber=${hintnumber}`);
-        
-                const data = await response.json();
-        
-                if (response.ok) {
-                    if (data.points !== undefined) {
-                        setPoints(data.points); // Update the points state
-                    }
-                } else {
-                    console.error("Error fetching points:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching points:", error);
-            }
-            setHint("🔍 Hint 3 is revealed!");
-            setHint3Revealed(true);
-            setHintNumber(3);
-            setUserAnswer("");
-        }
-
-    };
-    // Complex emoji-based code snippet
-
+    // Usage example
+    useEffect(() => {
+        fetchRound3SubTime(setSubmissionTime);
+    }, []); // Fetch when component mounts
 
     const handleSubmit = async () => {
         try {
             const response = await fetch('http://localhost:5000/outputverify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userOutput }),
+                body: JSON.stringify({ userOutput, output }),
             });
 
             const result = await response.json();
             if (result.success) {
-                const currentTime = new Date().toLocaleTimeString();
-                setSubmissionTime(currentTime);
+                setSubmissionTime(result.submissionTime);
                 setIsSubmitted(true);
                 setMessage('✅ Success! Your output is correct.');
+                
             } else {
                 setMessage('❌ Incorrect output. Please enter the correct answer.');
             }
@@ -949,161 +974,397 @@ const emojiCode = `
             setMessage('⚠️ Error occurred. Please try again later.');
         }
     };
+    const handleHintClick = async (hintSetter, nextHintSetter,points) => {
+        try {
+            const response = await fetch("http://localhost:5000/updatepoints", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ points }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update points");
+            }
+
+            const data = await response.json();
+            setPoints(data.points); // Update frontend with new points
+
+            // Disable current hint and enable the next one
+            hintSetter(false);
+            nextHintSetter(true);
+        } catch (error) {
+            console.error("Error updating points:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (submissionTime) {
+            setAllPassed3(true);  // If submission time exists, mark Round 1 as passed
+        }
+    }, [submissionTime]);
+    const handleHintClick1 = async (hintSetter, nextHintSetter,points) => {
+        try {
+            const response = await fetch("http://localhost:5000/updatepoints1", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ points }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update points");
+            }
+
+            const data = await response.json();
+            setPoints(data.points); // Update frontend with new points
+
+            // Disable current hint and enable the next one
+            hintSetter(false);
+            nextHintSetter(true);
+        } catch (error) {
+            console.error("Error updating points:", error);
+        }
+    };
+
+    const handleHintClick2 = async (hintSetter, nextHintSetter,points) => {
+        try {
+            const response = await fetch("http://localhost:5000/updatepoints2", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ points }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update points");
+            }
+
+            const data = await response.json();
+            setPoints(data.points); // Update frontend with new points
+
+            // Disable current hint and enable the next one
+            hintSetter(false);
+            nextHintSetter(true);
+        } catch (error) {
+            console.error("Error updating points:", error);
+        }
+    };
+
+
+    const [hint1, setHint1] = useState(participant.hint1);
+    const [hint2, setHint2] = useState(participant.hint2);
+    const [hint3, setHint3] = useState(participant.hint3);
+
+    useEffect(() => {
+        const fetchHintStatus = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/gethints", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Failed to fetch hint status");
+                }
+    
+                const data = await response.json();
+                setHint1(data.hint1);
+                setHint2(data.hint2);
+                setHint3(data.hint3);
+                setPoints(data.points); // Update points
+    
+            } catch (error) {
+                console.error("Error fetching hint status:", error);
+            }
+        };
+    
+        fetchHintStatus();
+    }, []); 
 
     return (
+        <div>
 
-        <div className="flex justify-between p-10 space-x-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
-    {/* Left Side: Main Code Section */}
-    <div className="w-1/2">
-        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-6 flex items-center">
-                🚀 Round 3: <span className="text-blue-600 ml-2">Code Unravel</span>
+            <div className="pb-7 rounded-b-xl shadow-lg shadow-gray-300">
+            <h2 className="text-5xl font-extrabold text-center pb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                Code Unravel
             </h2>
-            <p className="text-xl font-semibold text-gray-700">🔍 Analyze the Emoji Code:</p>
-            <pre className="bg-gray-100 p-5 rounded-lg mt-4 text-gray-900 font-mono border border-gray-300 shadow-sm">
-                {emojiCode}
-            </pre>
 
-            {/* Output Input Field */}
-            <div className="mt-6">
-                <label className="block font-semibold text-gray-700 text-lg">Enter the exact output:</label>
-                <input
-                    type="text"
-                    value={userOutput}
-                    onChange={(e) => setUserOutput(e.target.value)}
-                    className="w-full p-3 mt-3 border-2 border-gray-300 rounded-xl focus:ring focus:ring-blue-400 shadow-sm"
-                    disabled={isSubmitted}
-                />
-            </div>
 
-            {/* Submit Button */}
-            <button
-                onClick={handleSubmit}
-                className={`mt-6 px-6 py-3 text-lg font-bold rounded-xl transition duration-300 ${
-                    isSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600 text-white shadow-md"
-                }`}
-                disabled={isSubmitted}
-            >
-                ✅ Submit
-            </button>
-
-            {/* Display Message */}
-            {message && <p className="mt-5 text-lg font-semibold text-green-600">{message}</p>}
-        </div>
-    </div>
-
-    {/* Right Side: Hint System */}
-    <div className="w-1/2 bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-        {/* Points Display */}
-        <div className="text-xl flex justify-end items-center font-extrabold text-gray-900 mb-6">
-            🏆 Points: <span className="text-blue-600 ml-2">{points}</span>
-        </div>
-
-        {/* Hint Buttons */}
-        <div className="flex justify-end space-x-4">
-            <button
-                onClick={() => revealHint(1)}
-                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
-                    hint1Revealed ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600 text-white shadow-md"
-                }`}
-                disabled={hint1Revealed}
-            >
-                💡 Hint 1
-            </button>
-            <button
-                onClick={() => revealHint(2)}
-                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
-                    hint2Revealed || !isAnswerCorrect ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
-                }`}
-                disabled={hint2Revealed || !isAnswerCorrect}
-            >
-                🧩 Hint 2
-            </button>
-            <button
-                onClick={() => revealHint(3)}
-                className={`px-5 py-3 text-lg font-bold rounded-xl transition duration-300 ${
-                    hint3Revealed || !isAnswerCorrect2 ? "bg-gray-400 cursor-not-allowed" : "bg-purple-500 hover:bg-purple-600 text-white shadow-md"
-                }`}
-                disabled={hint3Revealed || !isAnswerCorrect2}
-            >
-                🔥 Hint 3
-            </button>
-        </div>
-
-        {/* Display the Revealed Hint */}
-        {hint1Revealed && (
-            <div className="mt-6 p-5 bg-gray-100 rounded-lg shadow-md border border-gray-300">
-                <p className="text-lg font-semibold text-gray-800">{hint}</p>
-                <div className="mt-4">
-                    <p className="font-semibold text-gray-700">{mathQuestion}</p>
-                    <input
-                        type={hintNumber === 3 ? "text" : "number"} 
-                        value={userAnswer}
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        className="w-full p-3 border-2 border-gray-300 rounded-xl mt-3 focus:ring focus:ring-blue-400"
-                    />
-
-                    <button
-                        onClick={verifyAnswer}
-                        className="mt-4 px-5 py-3 text-lg font-bold rounded-xl bg-green-500 hover:bg-green-600 text-white shadow-md transition duration-300"
-                    >
-                        ✅ Verify
-                    </button>
+            {submissionTime && (
+                <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
+                    Submission Time: {submissionTime}
                 </div>
-                <p className="mt-4 font-semibold text-gray-700">{displayhint}</p>
+            )}
             </div>
-        )}
-    </div>
-</div>
 
-    
+
+
+
+            <div className="flex justify-between p-10 space-x-6 min-h-screen text-white">
+                {/* Left Side: Main Code Section */}
+
+                <div className="w-1/2">
+                    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
+
+                        <p className="text-xl font-semibold text-gray-300">🔍 Analyze the Emoji Code:</p>
+                        <pre className="bg-gray-900 p-5 rounded-lg mt-4 text font-mono border border-gray-600 shadow-sm">
+                            {Emoji}
+                        </pre>
+
+                        {/* Output Input Field */}
+                        <div className="mt-6">
+                            <label className="block font-semibold text-gray-300 text-lg">Enter the exact output:</label>
+                            <input
+                                type="text"
+                                value={userOutput}
+                                onChange={(e) => setUserOutput(e.target.value)}
+                                className="w-full p-3 mt-3 border-2 border-gray-600 bg-gray-900 text-white rounded-xl focus:ring focus:ring-blue-400 shadow-sm"
+                                disabled={isSubmitted}
+                            />
+                        </div>
+
+                        {/* Submit Button */}
+                        <button
+                            onClick={handleSubmit}
+                            className={`mt-6 px-6 py-3 text-lg font-bold rounded-xl transition duration-300 ${isSubmitted || submissionTime
+                                ? "bg-gray-600 cursor-not-allowed"
+                                : "bg-green-500 hover:bg-green-600 text-white shadow-md"
+                                }`}
+                            disabled={isSubmitted || submissionTime}
+                        >
+                            ✅ Submit
+                        </button>
+
+                        {/* Display Message */}
+                        {message && <p className="mt-5 text-lg font-semibold text-green-400">{message}</p>}
+                    </div>
+                </div>
+
+                {/* Right Side: Hint System */}
+                <div className="w-1/2">
+                    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 flex justify-between">
+                        {/* Points Display */}
+
+                        {/* Hint Buttons */}
+                        <div className="flex justify-between items-center w-full">
+
+                            <div className="flex gap-x-4">
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
+                                        }`}
+                                    onClick={() => handleHintClick(setHint1, setHint2,10)}
+                                    disabled={!hint1}
+                                >
+                                    Hint 1
+                                </button>
+
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
+                                        }`}
+                                    onClick={() => handleHintClick1(setHint2, setHint3,20)}
+                                    disabled={!hint2}
+                                >
+                                    Hint 2
+                                </button>
+
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
+                                        }`}
+                                    onClick={() => handleHintClick2(setHint3, () => { },10)} // No next hint after Hint 3
+                                    disabled={!hint3}
+                                >
+                                    Hint 3
+                                </button>
+                            </div>
+
+                            <div className="text-xl flex justify-end items-center font-extrabold text-white ">
+                                🏆 Points: <span className="text-blue-400 ml-2">{points}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     );
 };
 
-
-
-// Main Events Component
 const Events = () => {
     const location = useLocation();
-    const participant = location.state?.participant; // Get participant object
+    const participant = location.state?.participant;
 
     const [selectedRound, setSelectedRound] = useState(1);
-    const [allPassed, setAllPassed] = useState(false); // Track if Round 1 is passed
-    const [allPassed2, setAllPassed2] = useState(false); // Track if Round 2 is passed
+    const [allPassed, setAllPassed] = useState(false);
+    const [allPassed2, setAllPassed2] = useState(false);
+    const [allPassed3, setAllPassed3] = useState(false);
+    const [showSmiley, setShowSmiley] = useState(false);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [showCelebration1, setShowCelebration1] = useState(false);
 
     useEffect(() => {
-        console.log("useEffect triggered, allPassed:", allPassed);
-        if (allPassed === true) {
-            setSelectedRound(2);
+        console.log("Round 2 Passed:", allPassed2);
+        if (allPassed2) {
+            setShowSmiley(true);
+            setTimeout(() => {
+                setShowSmiley(false);
+                setSelectedRound(2);
+            }, 3000);
+        }
+    }, [allPassed2]);
+
+    useEffect(() => {
+        console.log("Round 1 Passed:", allPassed);
+        if (allPassed) {
+            setShowCelebration(true);  // Show another emoji 🎉
+            setTimeout(() => {
+                setShowCelebration(false);
+                setSelectedRound(3);
+            }, 3000);
         }
     }, [allPassed]);
+
+    useEffect(() => {
+        console.log("Round 3 Passed:", allPassed3);
+        if (allPassed3) {
+            setShowCelebration1(true);  // Show another emoji 🎉
+        }
+    }, [allPassed3]);
+
     const showRound1 = () => setSelectedRound(1);
     const showRound2 = () => setSelectedRound(2);
     const showRound3 = () => setSelectedRound(3);
 
     return (
-        <div>
+        <div className="min-h-screen bg-white text-black relative">
             <Navbar />
             <div className="text-center mt-6">
                 <h1 className="text-2xl font-semibold text-gray-800">
-                    Welcome, <span className="text-blue-600">{participant?.name}</span>!
+                    Welcome, <span className="text-red-700">{participant?.name}</span>!
                 </h1>
             </div>
+
+            {/* Smiley Video & Crackers Animation */}
+            {showSmiley && (
+    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        {/* Crackers Left */}
+        <video
+            src="/Fireworks.mp4"
+            autoPlay
+            muted
+            className="w-90 h-60 mt-10"
+        />
+        
+        {/* Crackers Right */}
+        
+        
+        {/* Smiley Video */}
+        <video
+            src="/Gratitude Emoji.mp4"
+            autoPlay
+            muted
+            className="w-60 h-60 mt-10"
+        />
+        <video
+            src="/Fireworks.mp4"
+            autoPlay
+            muted
+            className="w-90 h-60 mt-10"
+        />
+    </div>
+)}
+
+{showCelebration && (
+    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        {/* Fireworks Left */}
+        <video
+            src="/Fireworks.mp4"
+            autoPlay
+            muted
+            loop
+            className="w-80 h-60 md:w-96 md:h-72 mt-10"
+        />
+
+        {/* Gratitude Emoji */}
+        <video
+            src="/Emoji Laughing.mp4"
+            autoPlay
+            muted
+            loop
+            className="w-60 h-60 md:w-72 md:h-72 mt-10 mx-4"
+        />
+
+        {/* Fireworks Right */}
+        <video
+            src="/Fireworks.mp4"
+            autoPlay
+            muted
+            loop
+            className="w-80 h-60 md:w-96 md:h-72 mt-10"
+        />
+    </div>
+)}
+{showCelebration1 && (
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
+        {/* Fireworks & Emoji Row */}
+        <div className="flex items-center justify-center">
+            {/* Fireworks Left */}
+            <video
+                src="/Fireworks.mp4"
+                autoPlay
+                muted
+                loop
+                className="w-80 h-60 md:w-96 md:h-72"
+            />
+
+            {/* Laughing Emoji */}
+            <video
+                src="/Emoji Laughing.mp4"
+                autoPlay
+                muted
+                loop
+                className="w-60 h-60 md:w-72 md:h-72 mx-4"
+            />
+
+            {/* Fireworks Right */}
+            <video
+                src="/Fireworks.mp4"
+                autoPlay
+                muted
+                loop
+                className="w-80 h-60 md:w-96 md:h-72"
+            />
+        </div>
+
+        {/* Thank You Message */}
+        <h1 className="text-4xl font-extrabold text-center text-blue-600 mt-6">
+            🎉 Thank You For Participating! 🎉
+        </h1>
+    </div>
+)}
+
+
             <div className="flex justify-center space-x-6 mt-5">
                 <button
                     onClick={showRound1}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                        ${selectedRound === 1 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                > 
-    
+                    ${selectedRound === 1 ? 'text-[#01052A] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-blue-950'}`}
+                >
                     Round 1
                 </button>
 
                 <button
                     onClick={showRound2}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                        ${selectedRound === 2 && allPassed2 ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                    disabled={!allPassed2} // Disable button until Round 1 is passed
+                    ${selectedRound === 2 ? 'text-[#01052A] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-white'} 
+                    ${!allPassed2 && 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!allPassed2}
                 >
                     Round 2
                 </button>
@@ -1111,8 +1372,9 @@ const Events = () => {
                 <button
                     onClick={showRound3}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                        ${selectedRound === 3 && allPassed ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
-                    disabled={!allPassed} // Disable button until Round 2 is passed
+                    ${selectedRound === 3 ? 'text-[#01052Ab] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-white'} 
+                    ${!allPassed && 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!allPassed}
                 >
                     Round 3
                 </button>
@@ -1120,9 +1382,11 @@ const Events = () => {
 
             <div className="mt-10">
                 {selectedRound === 1 && <Round2 setAllPassed2={setAllPassed2} />}
-                {selectedRound === 2 && allPassed2 && <Round1 setAllPassed={setAllPassed} />}
-                {selectedRound === 3  && <Round3 />}
+                {selectedRound === 2 && <Round1 setAllPassed={setAllPassed} />}
+                {selectedRound === 3 && <Round3 setAllPassed3={setAllPassed3}/>}
             </div>
+
+           
         </div>
     );
 };

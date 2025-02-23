@@ -64,6 +64,49 @@ app.post('/getSubmittedCode', async (req, res) => {
     }
 });
 
+app.get('/getround2submissiontime', async (req, res) => {
+    try {
+        // Find the participant by email
+        const participant = await Participant.findOne({ email: currentUserEmail });
+
+        if (!participant) {
+            return res.status(404).send({ message: 'Participant not found' });
+        }
+       
+
+        if (!participant) {
+            return res.status(404).json({ message: 'Participant not found' });
+        }
+
+        // Send back the Round 2 submission time
+        res.status(200).json({ success: true, subtime2: participant.round2submissiontime });
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving submission time', error: error.message });
+    }
+});
+
+app.get('/getround3submissiontime', async (req, res) => {
+    try {
+        // Find the participant by email
+        const participant = await Participant.findOne({ email: currentUserEmail });
+
+        if (!participant) {
+            return res.status(404).send({ message: 'Participant not found' });
+        }
+       
+
+        if (!participant) {
+            return res.status(404).json({ message: 'Participant not found' });
+        }
+
+        // Send back the Round 2 submission time
+        res.status(200).json({ success: true, subtime3: participant.round3submissiontime });
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving submission time', error: error.message });
+    }
+});
+
+
 app.post('/saveCode', async (req, res) => {
     const { submittedCode } = req.body;
 
@@ -86,7 +129,7 @@ app.post('/saveCode', async (req, res) => {
 });
 
 app.use(express.json());
-import bcrypt from "bcrypt";
+
 
 
 app.post("/participantverify", async (req, res) => {
@@ -130,42 +173,281 @@ app.post("/participantverify", async (req, res) => {
 });
 
 
+app.post('/store-submission-time', async (req, res) => {
+    const {submissionTime } = req.body;
+
+    try{
+       const participant = await Participant.findOne({ email: currentUserEmail });
+
+        if (!participant) {
+            return res.status(404).send({ message: 'Participant not found' });
+        }
+
+        // Save the code in the 'submittedCode' field of the participant
+        participant.round2submissiontime = submissionTime;
+        await participant.save();
+
+
+        res.status(200).json({ message: 'Submission time stored successfully', updatedParticipant });
+
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Failed to store submission time' });
+    }
+});
 
 
 // POST endpoint for verifying inputs
-app.post('/verify', (req, res) => {
-    const { inputValues } = req.body;
-    const correctValues = [1, 2];
+app.post('/verify1', (req, res) => {
+    const { inputValues, result } = req.body;
+
+    if (!Array.isArray(inputValues) || !Array.isArray(result)) {
+        return res.status(400).json({ message: 'Invalid input format' });
+    }
+
+    // Ensure correctValues is an array of numbers
+    const correctValues = result.map(Number);
+
+    // Ensure inputValues is an array of numbers
+    const userValues = inputValues.map(Number);
 
     // Check if the number of inputs is correct
-    if (inputValues.length !== correctValues.length) {
+    if (userValues.length !== correctValues.length) {
         return res.status(400).json({ message: 'Invalid number of inputs' });
     }
 
     // Verify if the input values match the correct values
-    const isCorrect = inputValues.every((value, index) => parseInt(value) === correctValues[index]);
+    const isCorrect = userValues.every((value, index) => value === correctValues[index]);
 
     if (isCorrect) {
-        const submissionTime = new Date().toLocaleString();
+
+        const sub = new Date().toLocaleString('en-GB', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        }); 
+       
         return res.json({
             message: '✅ Success! Your output is correct!',
-            submissionTime: submissionTime,
+            submissionTime: sub,
             status: true,
-        });
+        }); 
+       
+
     } else {
         return res.json({ message: '❌ Some values are incorrect. Please try again!', status: false });
     }
 });
 
-// POST endpoint for verifying output
-app.post('/outputverify', (req, res) => {
-    const { userOutput } = req.body;
-    const correctOutput = "20"; // Replace with the correct output
+app.post('/verify', async (req, res) => {
+    const { inputValues, result } = req.body;
 
-    if (userOutput.trim() === correctOutput) {
-        res.json({ success: true });
+    if (!Array.isArray(inputValues) || !Array.isArray(result)) {
+        return res.status(400).json({ message: 'Invalid input format' });
+    }
+
+    // Ensure correctValues is an array of numbers
+    const correctValues = result.map(Number);
+
+    // Ensure inputValues is an array of numbers
+    const userValues = inputValues.map(Number);
+
+    // Check if the number of inputs is correct
+    if (userValues.length !== correctValues.length) {
+        return res.status(400).json({ message: 'Invalid number of inputs' });
+    }
+
+    // Verify if the input values match the correct values
+    const isCorrect = userValues.every((value, index) => value === correctValues[index]);
+
+    if (isCorrect) {
+        const sub = new Date().toLocaleString('en-GB', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        }); 
+
+    try {
+        // Find participant by ID and update their record with the submitted code
+        const participant = await Participant.findOne({ email: currentUserEmail });
+
+        if (!participant) {
+            return res.status(404).send({ message: 'Participant not found' });
+        }
+
+        // Save the code in the 'submittedCode' field of the participant
+        participant.round2submissiontime = sub;
+        await participant.save();
+
+        res.status(200).send({ 
+
+            message: '✅ Success! Your output is correct!',
+            submissionTime: sub,
+            status: true,});
+
+    } catch (error) {
+        res.status(500).send({ message: 'Error saving code to the database', error: error.message });
+
+    }
+
+       
+
     } else {
-        res.json({ success: false });
+        return res.json({ message: '❌ Some values are incorrect. Please try again!', status: false });
+    }
+
+});
+
+app.post("/updatepoints", async (req, res) => {
+   
+    const { points } = req.body; // Reduce 10 points for hint
+    
+    try {
+        // Find participant by email
+        const participant = await Participant.findOne({ email: currentUserEmail }); 
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        // Ensure points don't go negative
+        const updatedPoints = Math.max(0, participant.points - points);
+
+        // Update points in the database
+        participant.points = updatedPoints;
+        await participant.save();
+        
+        participant.hint1=false;
+        await participant.save();
+
+        participant.hint2=true;
+        await participant.save();
+
+        return res.status(200).json({ points: participant.points });
+
+    } catch (error) {
+        console.error("Error updating points:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.post("/updatepoints1", async (req, res) => {
+   
+    const { points } = req.body; // Reduce 10 points for hint
+    
+    try {
+        // Find participant by email
+        const participant = await Participant.findOne({ email: currentUserEmail }); 
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        // Ensure points don't go negative
+        const updatedPoints = Math.max(0, participant.points - points);
+
+        // Update points in the database
+        participant.points = updatedPoints;
+        await participant.save();
+        
+        participant.hint2=false;
+        await participant.save();
+
+        participant.hint3=true;
+        await participant.save();
+
+        return res.status(200).json({ points: participant.points });
+
+    } catch (error) {
+        console.error("Error updating points:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+app.post("/updatepoints2", async (req, res) => {
+   
+    const { points } = req.body; // Reduce 10 points for hint
+    
+    try {
+        // Find participant by email
+        const participant = await Participant.findOne({ email: currentUserEmail }); 
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        // Ensure points don't go negative
+        const updatedPoints = Math.max(0, participant.points - points);
+
+        // Update points in the database
+        participant.points = updatedPoints;
+        await participant.save();
+        
+        participant.hint3=false;
+        await participant.save();
+
+        return res.status(200).json({ points: participant.points });
+
+    } catch (error) {
+        console.error("Error updating points:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+app.post("/gethints", async (req, res) => {
+
+    try {
+        const participant = await Participant.findOne({ email: currentUserEmail }); 
+        
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found" });
+        }
+
+        return res.status(200).json({
+            hint1: participant.hint1,
+            hint2: participant.hint2,
+            hint3: participant.hint3,
+            points: participant.points
+        });
+
+    } catch (error) {
+        console.error("Error fetching hint status:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+// POST endpoint for verifying output
+app.post('/outputverify', async (req, res) => {
+    try {
+        const { userOutput, output } = req.body; // Get email from request
+
+        // Find the participant based on email
+        const participant = await Participant.findOne({ email: currentUserEmail });
+
+        if (!participant) {
+            return res.status(404).json({ success: false, message: "Participant not found" });
+        }
+
+        if (userOutput.trim() === output.toString()) {
+            const sub = new Date().toLocaleString('en-GB', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+
+            // Store submission time in DB
+            participant.round3submissiontime = sub;
+            await participant.save();
+
+            return res.json({ success: true, submissionTime: sub });
+        } else {
+            return res.json({ success: false, message: "Incorrect output" });
+        }
+    } catch (error) {
+        console.error("Error verifying output:", error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 });
 
@@ -388,16 +670,13 @@ app.post('/compile', async (req, res) => {
 
 
 
-            const time = new Date().toLocaleString("en-US", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false, // 24-hour format
+            const time = new Date().toLocaleString('en-GB', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
             });
-            
+
             
             participant.round1submissiontime = time; // Store time as a string
             await participant.save();

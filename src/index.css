@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities;/* Crackers animation */
+.cracker {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: url('/cracker.png') no-repeat center/cover;
+    animation: explode 0.8s linear infinite;
+}
+
+/* Position the left cracker */
+.left-cracker {
+    left: 15%;
+    top: 50%;
+    transform-origin: center;
+}
+
+/* Position the right cracker */
+.right-cracker {
+    right: 15%;
+    top: 50%;
+    transform-origin: center;
+}
+
+/* Keyframes for the explosion effect */
+@keyframes explode {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2) rotate(15deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5) rotate(30deg);
+        opacity: 0;
+    }
+}
