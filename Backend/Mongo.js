@@ -44,9 +44,9 @@ const Participant = mongoose.model('Participant', participantSchema);
 const insertParticipant = async () => {
     try {
       const newParticipant = new Participant({
-        name: "John Doe", 
-        email: "user@example.com",
-        password: "securepassword"
+        name: "unkonown", 
+        email: "unknown@gmail.com",
+        password: "unknown"
       });
   
       const savedParticipant = await newParticipant.save();
@@ -57,8 +57,8 @@ const insertParticipant = async () => {
       mongoose.connection.close();
     }
   };
-  
- 
+
+
 
 export default Participant;
 

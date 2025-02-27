@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Signin, { UserContext } from "./components/Signin";
 import About from "./components/About";
 import Events from "./components/Events";
+import Leaderboard from "./components/Leaderboard";
 
 const App = () => {
   const [user, setUser] = useState(null); // Store user name globally
@@ -13,6 +14,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="leaderboard" element={<Leaderboard/>}/> 
           <Route path="/signin" element={<Signin setUser={setUser} />} /> {/* Pass setUser */}
           <Route path="/about" element={<About />} />
           <Route path="/signin/events" element={<Events />} /> {/* Corrected path */}

@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import Participant from './Mongo.js';
-import crypto from "crypto";
+import crypto, { randomBytes } from "crypto";
 import connectDB from './db.js';
 
 import dotenv from "dotenv";
@@ -45,6 +45,33 @@ let currentUserEmail = "";
 
 // printParticipants();
 
+const timeToSeconds = (timeStr) => {
+    if (!timeStr) return Infinity; // Handle missing values
+    const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+  };
+
+app.get("/leaderboard", async (req, res) => {
+  try {
+    const participants = await Participant.find({}, "email round1submissiontime round2submissiontime round3submissiontime");
+
+    // Sort participants by total submission time
+    const sortedLeaderboard = participants
+      .map(participant => ({
+        email: participant.email,
+        totalTime: timeToSeconds(participant.round1submissiontime) +
+                   timeToSeconds(participant.round2submissiontime) +
+                   timeToSeconds(participant.round3submissiontime)
+      }))
+      .sort((a, b) => a.totalTime - b.totalTime);
+      
+    res.json(sortedLeaderboard);
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+  
 
 app.post('/getSubmittedCode', async (req, res) => {
 
@@ -158,7 +185,11 @@ app.post("/participantverify", async (req, res) => {
             return res.status(401).json({ message: "Incorrect password!" });
         }
 
-        // Check if passwords match
+        if (participant.randomnumber===0) {
+            participant.randomnumber = Math.floor(Math.random() * 5) + 1;
+            await participant.save();
+        }
+       
 
 
         console.log("✅ Participant Verified:", participant.email);

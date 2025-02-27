@@ -7,23 +7,14 @@ export const UserContext = createContext();
 
 const Signin = () => {
   const navigate = useNavigate();
-
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [message, setMessage] = useState(""); // State to store message
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-
+  const [data, setData] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { email, password } = data;
   const [user, setUser] = useState(null);
 
   const handler = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const togglePasswordVisibility = () => {
@@ -32,24 +23,18 @@ const Signin = () => {
 
   const display = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch("http://localhost:5000/participantverify", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
       console.log("Server Response:", result);
-
+      setMessage(result.message);
       if (response.ok) {
-        setMessage(result.message); // Show success message
         navigate("events", { state: { participant: result.participant } });
-      } else {
-        setMessage(result.message); // Show error message
       }
     } catch (error) {
       console.error("Error:", error);
@@ -57,102 +42,78 @@ const Signin = () => {
     }
   };
 
-
   return (
-    <UserContext.Provider value={user}> {/* Provide user context */}
-      <div className="min-h-screen flex flex-col bg-gray-50">
+    <UserContext.Provider value={user}>
+      <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
+        <div className="flex-grow flex justify-center items-center p-6">
+          {/* Glassmorphism with Light Borders */}
+          <div className="relative bg-white p-10 rounded-2xl shadow-lg w-full max-w-md border border-gray-300 transition-all duration-300 hover:shadow-2xl">
+            
+            <h2 className="text-[#01052A] text-2xl font-bold text-center mb-6">
+              Welcome to CodeMoji!
+            </h2>
 
-        <div className="flex-grow flex justify-center items-center p-4">
+            {message && <div className="text-red-600 text-center mb-4">{message}</div>}
 
-          <div
-            className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border-2 border-[#01052A]"
-            style={{ boxShadow: "0 4px 15px 0 #01052A" }} // Blue box-shadow
-          >
+            <form onSubmit={display} className="space-y-5">
+              {/* Email Input */}
+              <div className="flex flex-col">
+                <label htmlFor="email" className="text-gray-700 font-medium mb-2">
+                  Email Address
+                </label>
+                <input
+                  required
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handler}
+                  placeholder="Enter your email"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#01052A] transition-all duration-300 hover:border-[#01052A]"
+                />
+              </div>
 
-
-            <form onSubmit={display}>
-              <div className="space-y-6">
-                <h2 className="text-gray-800 text-3xl font-semibold mb-6 text-center">
-                  Welcome!
-                </h2>
-
-                {message && (
-                  <div className="text-red-600 text-center mb-4">
-                    {message}
-                  </div>
-                )}
-
-                <div className="flex flex-col">
-                  <label htmlFor="email" className="text-gray-700 font-semibold mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    required
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={handler}
-                    placeholder="Enter your email"
-                      className="p-3 border-2 border-[#01052A] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div className="flex flex-col relative">
-                  <label htmlFor="password" className="text-gray-700 font-semibold mb-2">
-                    Password
-                  </label>
-                  <input
-                    required
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={password}
-                    onChange={handler}
-                    placeholder="Enter your password"
-                    className="p-3 border-2 border-[#01052A] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 mt-2 mr-2 top-10 text-gray-500"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-
+              {/* Password Input */}
+              <div className="flex flex-col relative">
+                <label htmlFor="password" className="text-gray-700 font-medium mb-2">
+                  Password
+                </label>
+                <input
+                  required
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={handler}
+                  placeholder="Enter your password"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#01052A] transition-all duration-300 hover:border-[#01052A]"
+                />
                 <button
-                  type="submit"
-                  className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-[#01052A] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="button"
+                  className="absolute right-4 top-12 text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
                 >
-                  Login
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
+              </div>
 
-                <div className="flex justify-center mt-4">
-                  <a href="/forgot-password" className="text-blue-600 hover:underline text-sm">
-                    Forgot your password?
-                  </a>
-                </div>
+              {/* Soft-Shadow Button */}
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#01052A] text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Login
+              </button>
 
-                <div className="flex justify-center mt-2">
-                  <p className="text-gray-600 text-sm">
-                    Don't have an account?
-                    <a href="/signup" className="text-blue-600 hover:underline">
-                      Sign Up
-                    </a>
-                  </p>
-                </div>
+              {/* Footer Message */}
+              <div className="text-center mt-4 text-gray-600 font-medium">
+                <p className="text-sm font-bold">🌟 Where coding meets creativity 🌟</p>
               </div>
             </form>
           </div>
         </div>
       </div>
-
     </UserContext.Provider>
   );
-}
+};
 
 export default Signin;
-
-
-
-

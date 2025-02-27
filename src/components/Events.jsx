@@ -276,8 +276,11 @@ const Round1 = ({ setAllPassed }) => {
 
 
     const { Emojicode, exampleTestCases = [], testCases = [], Input = "" } = problemSets[randomNumber] || problemSets[1] || {};
+    const [isLoading1, setIsLoading1] = useState(false);
+    const [isLoading2, setIsLoading2] = useState(false);
 
     const handleRunCode = async () => {
+        setIsLoading1(true);
         try {
             const input = withInput ? Input : "";  // Only send input if 'withInput' is true
 
@@ -298,11 +301,15 @@ const Round1 = ({ setAllPassed }) => {
         } catch (error) {
             setOutput('Error running the code: ' + error.message);
         }
+        finally {
+            setIsLoading1(false); // Stop loading
+        }
     };
 
 
     const handleSubmit = async () => {
-        // let allPassed = false;
+
+        setIsLoading2(true);
         try {
             const response = await fetch('http://localhost:5000/compile', {
                 method: 'POST',
@@ -390,6 +397,9 @@ const Round1 = ({ setAllPassed }) => {
                 satisfiedTestCases: [],
             });
         }
+        finally {
+            setIsLoading2(false); // Stop loading
+        }
 
         // setAllPassed(allPassed);
         console.log(testCases)
@@ -399,55 +409,55 @@ const Round1 = ({ setAllPassed }) => {
     return (
 
         <div>
-       <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
-    Emoji Decription
-</h3>
-
-        {Round1sub && (
-            <h3 className="text-green-700 font-bold text-lg mb-5 text-center">
-                Submission Time: {Round1sub}
+            <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                Emoji Decription
             </h3>
-        )}
-        <div className="flex flex-col md:flex-row justify-center items-center md:items-start p-6 space-y-6 md:space-y-0 md:space-x-6 bg-white text-gray-900 min-h-screen">
-        {/* Emoji Code Section */}
-        <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg shadow-lg border border-gray-300">
-           
-            <div className="p-4 rounded-lg bg-navy-100 shadow-md">
-                <p className="text-navy-700 mb-5 font-bold text-lg text-start">🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
-                <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-sm border border-navy-300">{Emojicode}</pre>
-                <div className="mt-4">
-                    <h4 className="font-semibold text-lg text-navy-600 text-start pl-3">Test Cases</h4>
-                    {exampleTestCases.map((testCase, index) => (
-                        <div key={index} className="mt-2 p-3 rounded-md bg-navy-50 border border-gray-300">
-                            {index === 0 && <p className="font-bold text-navy-500">Initial Predefined Input</p>}
-                            <p><strong>Input:</strong> {testCase.input}</p>
-                            <p><strong>Output:</strong> {testCase.output}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    
-        {/* Write Your Code Section */}
-        <div className="w-full md:w-1/2 flex flex-col bg-white p-6 rounded-lg shadow-lg border border-gray-300">
-            <h3 className="text-3xl font-bold mb-4 text-navy-600 text-start">Write Your Code</h3>
-           <div className="flex  space-x-6">
-            <div className="mb-4 flex justify-center">
-                <select
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
-                    className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
-                >
-                    <option value={selectedLanguage}>{selectedLanguage}</option>
-                    {languages.filter((lang) => lang !== selectedLanguage).map((lang) => (
-                        <option key={lang} value={lang} className="text-navy-900">
-                            {lang.charAt(0).toUpperCase() + lang.slice(1)}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
-            {/* <div className="mb-4 flex justify-center">
+            {Round1sub && (
+                <h3 className="text-green-700 font-bold text-lg mb-5 text-center">
+                    Submission Time: {Round1sub}
+                </h3>
+            )}
+            <div className="flex flex-col md:flex-row justify-center items-center md:items-start p-6 space-y-6 md:space-y-0 md:space-x-6 bg-white text-gray-900 min-h-screen">
+                {/* Emoji Code Section */}
+                <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg bg-slate-200">
+
+                    <div className="p-4 rounded-lg bg-navy-100 ">
+                        <p className="text-navy-700 mb-3 font-bold text-lg text-start">🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
+                        <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-md font-bold">{Emojicode}</pre>
+                        <div className="mt-4">
+                            <h4 className="font-semibold text-lg text-navy-600 text-start pl-3">Test Cases</h4>
+                            {exampleTestCases.map((testCase, index) => (
+                                <div key={index} className="mt-2 p-3 rounded-md bg-navy-50 ">
+                                    {index === 0 && <p className="font-bold text-navy-500">Initial Predefined Input</p>}
+                                    <p><strong>Input:</strong> {testCase.input}</p>
+                                    <p><strong>Output:</strong> {testCase.output}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Write Your Code Section */}
+                <div className="w-full md:w-1/2 flex flex-col bg-white rounded-lg">
+                    <h3 className="text-2xl font-bold mb-4 text-navy-600 text-start">Write Your Code</h3>
+                    <div className="flex  space-x-6">
+                        <div className="mb-4 flex justify-center">
+                            <select
+                                value={selectedLanguage}
+                                onChange={(e) => setSelectedLanguage(e.target.value)}
+                                className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
+                            >
+                                <option value={selectedLanguage}>{selectedLanguage}</option>
+                                {languages.filter((lang) => lang !== selectedLanguage).map((lang) => (
+                                    <option key={lang} value={lang} className="text-navy-900">
+                                        {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* <div className="mb-4 flex justify-center">
                 <label className="flex items-center text-navy-700">
                     <input
                         type="checkbox"
@@ -458,67 +468,86 @@ const Round1 = ({ setAllPassed }) => {
                     <span>Run without input</span>
                 </label>
             </div> */}
-            </div>
+                    </div>
 
-            <div className="p-5 bg-navy-50 rounded-lg shadow-md border border-gray-300">
-                <MonacoEditor
-                    height="400px"
-                    language={selectedLanguage}
-                    theme="light"
-                    value={code}
-                    onChange={(value) => setCode(value)}
-                />
-            </div>
-            <div className="flex justify-start space-x-4 mt-4">
-                <button
-                    onClick={handleRunCode}
-                    className="px-6 py-2 bg-navy-600 hover:bg-navy-500 text-black rounded-md shadow-md"
-                >
-                    Run Code
-                </button>
-                <button
-                    onClick={handleSubmit}
-                    disabled={Round1sub}
-                    className={`px-8 py-2 rounded-md shadow-md ${Round1sub ? "bg-gray-400 cursor-not-allowed" : "bg-navy-700 hover:bg-navy-600 text-black"}`}
-                >
-                    Submit
-                </button>
-            </div>
-            <div className="mt-4">
-                <h4 className="text-lg font-semibold text-navy-600 text-start pl-2">Output</h4>
-                <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-sm border border-gray-300">{output || 'No output yet.'}</pre>
-            </div>
-            <div className="mt-4">
-                <h4 className="text-lg font-semibold text-navy-600 text-start">Test Case Results</h4>
-                <ul>
-                    {testResults.failedCount === 0 && testResults.satisfiedTestCases.length > 0 ? (
-                        <>
-                            <li className="text-green-600 font-bold text-center">✅ All Test Cases Passed!</li>
-                            {testResults.satisfiedTestCases.map((tc, index) => (
-                                <li key={index} className="text-green-600 text-center">
-                                    <strong>Input:</strong> {tc.input} <br />
-                                    <strong>Expected:</strong> {tc.expected} <br />
-                                    <strong>Got:</strong> {tc.got} <br />
-                                    <strong>Status:</strong> ✅ Success
-                                </li>
-                            ))}
-                        </>
-                    ) : (
-                        <>
-                            {testResults.satisfiedTestCases?.length > 0 && (
-                                <li className="text-green-600 text-center">✅ Passed Test Cases: {testResults.satisfiedTestCases.length}</li>
+                    <div className="pt-3 bg-navy-50 rounded-lg ">
+                        <MonacoEditor
+                            height="400px"
+                            language={selectedLanguage}
+                            theme="light"
+                            value={code}
+                            onChange={(value) => setCode(value)}
+                        />
+                    </div>
+                    <div className="flex justify-start space-x-4 mt-4">
+                        <button
+                            onClick={handleRunCode}
+                            className={`px-6 py-2 rounded-md shadow-md flex items-center justify-center gap-2 transition-all duration-300 ease-in-out 
+        ${isLoading1 ? ' bg-[#01052A] text-white cursor-not-allowed' : 'bg-[#01052A] text-white hover:bg-navy-50'}`}
+                            disabled={isLoading1}
+                        >
+                            {isLoading1 ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    Running...
+                                </>
+                            ) : (
+                                'Run Code'
                             )}
-                            {testResults.failedCount > 0 && (
-                                <li className="text-red-500 text-center">❌ Failed Test Cases: {testResults.failedCount}</li>
+                        </button>
+
+                        <button
+                            onClick={handleSubmit}
+                            disabled={Round1sub || isLoading2}
+                            className={`px-8 py-2 rounded-md shadow-md flex items-center justify-center gap-2 transition-all duration-300 ease-in-out 
+        ${Round1sub || isLoading2 ? "bg-[#01052A] text-white cursor-not-allowed" : "bg-[#01052A] text-white hover:bg-navy-600"}`}
+                        >
+                            {isLoading2 ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    Submitting...
+                                </>
+                            ) : (
+                                "Submit"
                             )}
-                        </>
-                    )}
-                </ul>
+                        </button>
+
+                    </div>
+                    <div className="mt-4">
+                        <h4 className="text-lg font-semibold text-navy-600 text-start pl-2">Output</h4>
+                        <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-sm border border-gray-300">{output || 'No output yet.'}</pre>
+                    </div>
+                    <div className="mt-4">
+                        <h4 className="text-lg font-semibold text-navy-600 text-start">Test Case Results</h4>
+                        <ul>
+                            {testResults.failedCount === 0 && testResults.satisfiedTestCases.length > 0 ? (
+                                <>
+                                    <li className="text-green-600 font-bold text-start">✅ All Test Cases Passed!</li>
+                                    {testResults.satisfiedTestCases.map((tc, index) => (
+                                        <li key={index} className="text-green-600 text-start">
+                                            <strong>Input:</strong> {tc.input} <br />
+                                            <strong>Expected:</strong> {tc.expected} <br />
+                                            <strong>Got:</strong> {tc.got} <br />
+                                            <strong>Status:</strong> ✅ Success
+                                        </li>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    {testResults.satisfiedTestCases?.length > 0 && (
+                                        <li className="text-green-600 ">✅ Passed Test Cases: {testResults.satisfiedTestCases.length}</li>
+                                    )}
+                                    {testResults.failedCount > 0 && (
+                                        <li className="text-red-500 ">❌ Failed Test Cases: {testResults.failedCount}</li>
+                                    )}
+                                </>
+                            )}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
-    </div>
-    
+
     );
 };
 
@@ -534,7 +563,7 @@ const Round2 = ({ setAllPassed2 }) => {
 
     const location = useLocation();
     const participant = location.state?.participant; // Get participant object safely
-    const randomNumber1 = participant?.randomNumber ?? 1; // Default to 1 if undefined
+    const randomNumber1 = participant?.randomnumber ?? 1; // Default to 1 if undefined
     const randomNumber2 = randomNumber1 + 1; // Increment for second random number
 
 
@@ -623,6 +652,9 @@ fibMulAdd(7, 3, 5)
     const [subtime2, setSubtime2] = useState(participant.round2submissiontime);
 
 
+    const [isLoading1, setIsLoading1] = useState(false);
+    const [isLoading2, setIsLoading2] = useState(false);
+
     const handleInputChange1 = (index, value) => {
         const newValues = [...inputValues1];
         newValues[index] = value;
@@ -662,6 +694,8 @@ fibMulAdd(7, 3, 5)
         setInputValues2(newValues);
     };
     const handleSubmit1 = async () => {
+        setIsLoading1(true);
+
         try {
             const response = await fetch('http://localhost:5000/verify1', {
                 method: 'POST',
@@ -681,12 +715,16 @@ fibMulAdd(7, 3, 5)
             console.error('Error:', error);
             setResultMessage1('Error verifying inputs: ' + error.message);
         }
+        finally {
+            setIsLoading1(false); // Stop loading
+        }
     };
 
 
 
 
     const handleSubmit2 = async () => {
+        setIsLoading2(true);
         try {
             if (!subtime1) {
                 setResultMessage('❌ Please complete the first submission before submitting this one.');
@@ -723,6 +761,9 @@ fibMulAdd(7, 3, 5)
             setResultMessage('Error verifying inputs: ' + error.message);
             setAllPassed2(false);
         }
+        finally {
+            setIsLoading2(false); // Stop loading
+        }
     };
     useEffect(() => {
         if (subtime1) {
@@ -747,7 +788,7 @@ fibMulAdd(7, 3, 5)
 
 
             {resultMessage && (
-                <div className="mb-4 text-lg font-bold text-center px-4 py-2 rounded-md bg-red-900 text-red-300 border border-red-500 shadow-lg">
+                <div className="mb-8 pb-5 text-lg font-bold text-center px-4 py-2 rounded-md text-red-700 shadow-lg">
                     {resultMessage}
                 </div>
             )}
@@ -769,6 +810,7 @@ fibMulAdd(7, 3, 5)
                             <div key={index} className="mt-2">
                                 <label className="text-gray-300">Value {index + 1}: </label>
                                 <input
+                                    required
                                     type="text"
                                     value={inputValues1[index]}
                                     onChange={(e) => handleInputChange1(index, e.target.value)}
@@ -779,11 +821,20 @@ fibMulAdd(7, 3, 5)
                     </div>
                     <button
                         onClick={handleSubmit1}
-                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out ${subtime1 || subtime2 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
-                        disabled={subtime1 || subtime2}
+                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out flex items-center justify-center gap-2
+        ${subtime1 || subtime2 || isLoading1 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
+                        disabled={subtime1 || subtime2 || isLoading1}
                     >
-                        Submit
+                        {isLoading1 ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Submitting...
+                            </>
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
+
                     <h2>{resultMessage1}</h2>
                 </div>
 
@@ -797,6 +848,7 @@ fibMulAdd(7, 3, 5)
                             <div key={index} className="mt-2">
                                 <label className="text-gray-300">Value {index + 1}: </label>
                                 <input
+                                    required
                                     type="text"
                                     value={inputValues2[index]}
                                     onChange={(e) => handleInputChange2(index, e.target.value)}
@@ -805,12 +857,23 @@ fibMulAdd(7, 3, 5)
                             </div>
                         ))}
                     </div>
-                    <button onClick={handleSubmit2}
-                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out ${subtime2 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
-                        disabled={subtime2}
+                    <button
+                        onClick={handleSubmit2}
+                        className={`mt-4 px-6 py-2 rounded-md text-white font-semibold transition-all duration-300 ease-in-out flex items-center justify-center gap-2 
+    ${subtime2 || isLoading2 ? 'bg-gray-700 cursor-not-allowed mb-5' : 'bg-cyan-500 hover:bg-cyan-600 shadow-sm mb-5 shadow-cyan-500/50'}`}
+                        disabled={subtime2 || isLoading2}
                     >
-                        Submit
+                        {isLoading2 ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Submitting...
+                            </>
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
+
+
                     <h2>{resultMessage2}</h2>
                 </div>
             </div>
@@ -819,7 +882,7 @@ fibMulAdd(7, 3, 5)
 };
 
 
-const Round3 = ( {setAllPassed3} ) => {
+const Round3 = ({ setAllPassed3 }) => {
 
     const problemSets = {
         1: {
@@ -870,12 +933,12 @@ sumPower(4, 3)
         },
         4: {
             Emojicode: `
-            📌 expSum(🔢, ⚡, 💡) {
+📌 expSum(🔢, ⚡, 💡) {
     🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-            🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
-            ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+        🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+        ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
 }
-            expSum(3, 3, 2)
+expSum(3, 3, 2)
             `,
             output: 147,
 
@@ -951,8 +1014,9 @@ sumPower(4, 3)
     useEffect(() => {
         fetchRound3SubTime(setSubmissionTime);
     }, []); // Fetch when component mounts
-
+    const [isLoading1, setIsLoading1] = useState(false);
     const handleSubmit = async () => {
+        setIsLoading1(true);
         try {
             const response = await fetch('http://localhost:5000/outputverify', {
                 method: 'POST',
@@ -965,7 +1029,7 @@ sumPower(4, 3)
                 setSubmissionTime(result.submissionTime);
                 setIsSubmitted(true);
                 setMessage('✅ Success! Your output is correct.');
-                
+
             } else {
                 setMessage('❌ Incorrect output. Please enter the correct answer.');
             }
@@ -973,8 +1037,11 @@ sumPower(4, 3)
             console.error('Error verifying output:', error);
             setMessage('⚠️ Error occurred. Please try again later.');
         }
+        finally {
+            setIsLoading1(false); // Stop loading
+        }
     };
-    const handleHintClick = async (hintSetter, nextHintSetter,points) => {
+    const handleHintClick = async (hintSetter, nextHintSetter, points) => {
         try {
             const response = await fetch("http://localhost:5000/updatepoints", {
                 method: "POST",
@@ -1004,7 +1071,7 @@ sumPower(4, 3)
             setAllPassed3(true);  // If submission time exists, mark Round 1 as passed
         }
     }, [submissionTime]);
-    const handleHintClick1 = async (hintSetter, nextHintSetter,points) => {
+    const handleHintClick1 = async (hintSetter, nextHintSetter, points) => {
         try {
             const response = await fetch("http://localhost:5000/updatepoints1", {
                 method: "POST",
@@ -1029,7 +1096,7 @@ sumPower(4, 3)
         }
     };
 
-    const handleHintClick2 = async (hintSetter, nextHintSetter,points) => {
+    const handleHintClick2 = async (hintSetter, nextHintSetter, points) => {
         try {
             const response = await fetch("http://localhost:5000/updatepoints2", {
                 method: "POST",
@@ -1068,39 +1135,39 @@ sumPower(4, 3)
                         "Content-Type": "application/json",
                     },
                 });
-    
+
                 if (!response.ok) {
                     throw new Error("Failed to fetch hint status");
                 }
-    
+
                 const data = await response.json();
                 setHint1(data.hint1);
                 setHint2(data.hint2);
                 setHint3(data.hint3);
                 setPoints(data.points); // Update points
-    
+
             } catch (error) {
                 console.error("Error fetching hint status:", error);
             }
         };
-    
+
         fetchHintStatus();
-    }, []); 
+    }, []);
 
     return (
         <div>
 
             <div className="pb-7 rounded-b-xl shadow-lg shadow-gray-300">
-            <h2 className="text-5xl font-extrabold text-center pb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
-                Code Unravel
-            </h2>
+                <h2 className="text-5xl font-extrabold text-center pb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                    Code Unravel
+                </h2>
 
 
-            {submissionTime && (
-                <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
-                    Submission Time: {submissionTime}
-                </div>
-            )}
+                {submissionTime && (
+                    <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
+                        Submission Time: {submissionTime}
+                    </div>
+                )}
             </div>
 
 
@@ -1132,64 +1199,91 @@ sumPower(4, 3)
                         {/* Submit Button */}
                         <button
                             onClick={handleSubmit}
-                            className={`mt-6 px-6 py-3 text-lg font-bold rounded-xl transition duration-300 ${isSubmitted || submissionTime
-                                ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-green-500 hover:bg-green-600 text-white shadow-md"
+                            className={`mt-6 px-6 py-3 text-lg font-bold rounded-xl transition duration-300 flex items-center justify-center gap-2 
+        ${isLoading1 || isSubmitted || submissionTime
+                                    ? "bg-gray-600 cursor-not-allowed"
+                                    : "bg-blue-500 hover:bg-blue-600 text-white shadow-md"
                                 }`}
-                            disabled={isSubmitted || submissionTime}
+                            disabled={isLoading1 || isSubmitted || submissionTime}
                         >
-                            ✅ Submit
+                            {isLoading1 ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    Submitting...
+                                </>
+                            ) : (
+                                <>
+                                    Submit
+                                </>
+                            )}
                         </button>
 
+
                         {/* Display Message */}
-                        {message && <p className="mt-5 text-lg font-semibold text-green-400">{message}</p>}
+                        {message && (
+                            <p
+                                className={`mt-5 text-lg font-semibold 
+            ${message.includes("✅")
+                                        ? "text-green-400"
+                                        : "text-red-500"
+                                    }`}
+                            >
+                                {message}
+                            </p>
+                        )}
+
                     </div>
                 </div>
 
                 {/* Right Side: Hint System */}
                 <div className="w-1/2">
-                    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 flex justify-between">
-                        {/* Points Display */}
+    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 flex justify-between">
+        {/* Points Display */}
 
-                        {/* Hint Buttons */}
-                        <div className="flex justify-between items-center w-full">
+        {/* Hint Buttons */}
+        <div className="flex justify-between items-center w-full">
+            <div className="flex gap-x-4">
+                <button
+                    className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                    onClick={() => handleHintClick(setHint1, setHint2, 10)}
+                    disabled={!hint1}
+                >
+                    Hint 1
+                </button>
 
-                            <div className="flex gap-x-4">
-                                <button
-                                    className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
-                                        }`}
-                                    onClick={() => handleHintClick(setHint1, setHint2,10)}
-                                    disabled={!hint1}
-                                >
-                                    Hint 1
-                                </button>
+                <button
+                    className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                    onClick={() => handleHintClick1(setHint2, setHint3, 20)}
+                    disabled={!hint2}
+                >
+                    Hint 2
+                </button>
 
-                                <button
-                                    className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
-                                        }`}
-                                    onClick={() => handleHintClick1(setHint2, setHint3,20)}
-                                    disabled={!hint2}
-                                >
-                                    Hint 2
-                                </button>
+                <button
+                    className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                    onClick={() => handleHintClick2(setHint3, () => {}, 10)} // No next hint after Hint 3
+                    disabled={!hint3}
+                >
+                    Hint 3
+                </button>
+            </div>
 
-                                <button
-                                    className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"
-                                        }`}
-                                    onClick={() => handleHintClick2(setHint3, () => { },10)} // No next hint after Hint 3
-                                    disabled={!hint3}
-                                >
-                                    Hint 3
-                                </button>
-                            </div>
+            <div className="text-xl flex justify-end items-center font-extrabold text-white">
+                🏆 Points: <span className="text-blue-400 ml-2">{points}</span>
+            </div>
+        </div>
 
-                            <div className="text-xl flex justify-end items-center font-extrabold text-white ">
-                                🏆 Points: <span className="text-blue-400 ml-2">{points}</span>
-                            </div>
+        {/* Hint Display */}
+       
+    </div>
 
-                        </div>
-                    </div>
-                </div>
+    <div className="flex flex-col mt-4 text-black">
+            {!hint1 && hint2 && !hint3 && <p><span>Hint1:</span>Think logically</p>}
+            {!hint1 && !hint2 && hint3 && <p><span>Hint2 :</span>Think mentally</p>}
+            {!hint1 && !hint2 && !hint3 && <p><span>Hint3 :</span> Use brain nad eyes</p>}
+        </div>
+</div>
+
             </div>
         </div>
 
@@ -1252,102 +1346,102 @@ const Events = () => {
 
             {/* Smiley Video & Crackers Animation */}
             {showSmiley && (
-    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
-        {/* Crackers Left */}
-        <video
-            src="/Fireworks.mp4"
-            autoPlay
-            muted
-            className="w-90 h-60 mt-10"
-        />
-        
-        {/* Crackers Right */}
-        
-        
-        {/* Smiley Video */}
-        <video
-            src="/Gratitude Emoji.mp4"
-            autoPlay
-            muted
-            className="w-60 h-60 mt-10"
-        />
-        <video
-            src="/Fireworks.mp4"
-            autoPlay
-            muted
-            className="w-90 h-60 mt-10"
-        />
-    </div>
-)}
+                <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+                    {/* Crackers Left */}
+                    <video
+                        src="/Fireworks.mp4"
+                        autoPlay
+                        muted
+                        className="w-90 h-60 mt-10"
+                    />
 
-{showCelebration && (
-    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
-        {/* Fireworks Left */}
-        <video
-            src="/Fireworks.mp4"
-            autoPlay
-            muted
-            loop
-            className="w-80 h-60 md:w-96 md:h-72 mt-10"
-        />
+                    {/* Crackers Right */}
 
-        {/* Gratitude Emoji */}
-        <video
-            src="/Emoji Laughing.mp4"
-            autoPlay
-            muted
-            loop
-            className="w-60 h-60 md:w-72 md:h-72 mt-10 mx-4"
-        />
 
-        {/* Fireworks Right */}
-        <video
-            src="/Fireworks.mp4"
-            autoPlay
-            muted
-            loop
-            className="w-80 h-60 md:w-96 md:h-72 mt-10"
-        />
-    </div>
-)}
-{showCelebration1 && (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
-        {/* Fireworks & Emoji Row */}
-        <div className="flex items-center justify-center">
-            {/* Fireworks Left */}
-            <video
-                src="/Fireworks.mp4"
-                autoPlay
-                muted
-                loop
-                className="w-80 h-60 md:w-96 md:h-72"
-            />
+                    {/* Smiley Video */}
+                    <video
+                        src="/Gratitude Emoji.mp4"
+                        autoPlay
+                        muted
+                        className="w-60 h-60 mt-10"
+                    />
+                    <video
+                        src="/Fireworks.mp4"
+                        autoPlay
+                        muted
+                        className="w-90 h-60 mt-10"
+                    />
+                </div>
+            )}
 
-            {/* Laughing Emoji */}
-            <video
-                src="/Emoji Laughing.mp4"
-                autoPlay
-                muted
-                loop
-                className="w-60 h-60 md:w-72 md:h-72 mx-4"
-            />
+            {showCelebration && (
+                <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+                    {/* Fireworks Left */}
+                    <video
+                        src="/Fireworks.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        className="w-80 h-60 md:w-96 md:h-72 mt-10"
+                    />
 
-            {/* Fireworks Right */}
-            <video
-                src="/Fireworks.mp4"
-                autoPlay
-                muted
-                loop
-                className="w-80 h-60 md:w-96 md:h-72"
-            />
-        </div>
+                    {/* Gratitude Emoji */}
+                    <video
+                        src="/Emoji Laughing.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        className="w-60 h-60 md:w-72 md:h-72 mt-10 mx-4"
+                    />
 
-        {/* Thank You Message */}
-        <h1 className="text-4xl font-extrabold text-center text-blue-600 mt-6">
-            🎉 Thank You For Participating! 🎉
-        </h1>
-    </div>
-)}
+                    {/* Fireworks Right */}
+                    <video
+                        src="/Fireworks.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        className="w-80 h-60 md:w-96 md:h-72 mt-10"
+                    />
+                </div>
+            )}
+            {showCelebration1 && (
+                <div className="fixed inset-0 flex flex-col items-center justify-center bg-white z-50">
+                    {/* Fireworks & Emoji Row */}
+                    <div className="flex items-center justify-center">
+                        {/* Fireworks Left */}
+                        <video
+                            src="/Fireworks.mp4"
+                            autoPlay
+                            muted
+                            loop
+                            className="w-80 h-60 md:w-96 md:h-72"
+                        />
+
+                        {/* Laughing Emoji */}
+                        <video
+                            src="/Emoji Laughing.mp4"
+                            autoPlay
+                            muted
+                            loop
+                            className="w-60 h-60 md:w-72 md:h-72 mx-4"
+                        />
+
+                        {/* Fireworks Right */}
+                        <video
+                            src="/Fireworks.mp4"
+                            autoPlay
+                            muted
+                            loop
+                            className="w-80 h-60 md:w-96 md:h-72"
+                        />
+                    </div>
+
+                    {/* Thank You Message */}
+                    <h1 className="text-4xl font-extrabold text-center text-blue-600 mt-6">
+                        🎉 Thank You For Participating! 🎉
+                    </h1>
+                </div>
+            )}
 
 
             <div className="flex justify-center space-x-6 mt-5">
@@ -1383,10 +1477,10 @@ const Events = () => {
             <div className="mt-10">
                 {selectedRound === 1 && <Round2 setAllPassed2={setAllPassed2} />}
                 {selectedRound === 2 && <Round1 setAllPassed={setAllPassed} />}
-                {selectedRound === 3 && <Round3 setAllPassed3={setAllPassed3}/>}
+                {selectedRound === 3 && <Round3 setAllPassed3={setAllPassed3} />}
             </div>
 
-           
+
         </div>
     );
 };
