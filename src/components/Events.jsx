@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import Navbar from './Navbar';  // Assuming you have Navbar component
 import MonacoEditor from '@monaco-editor/react';  // Monaco editor for code writing
 import { useLocation } from "react-router-dom";
@@ -9,14 +8,114 @@ import { useLocation } from "react-router-dom";
 const Round1 = ({ setAllPassed }) => {
 
 
-    const location = useLocation();
+    const [participant, setParticipant] = useState(null);
 
-    const participant = location.state?.participant || {}; // Ensure it's an object
-    const randomNumber = participant.randomnumber || 1;
+    const participantEmail = sessionStorage.getItem("participantEmail");
 
-    console.log("participant", participant);
-    console.log("Participant Data:", participant.name);
-    console.log("Participant Data:", participant.round1submissiontime);
+
+    useEffect(() => {
+        const fetchParticipant = async () => {
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(`http://localhost:5000/getParticipant?email=${participantEmail}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setParticipant(data.participant);
+                } else {
+                    console.error("Error:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching participant data:", error);
+            }
+        };
+
+        fetchParticipant();
+    }, [participantEmail]);
+
+
+    const [selectedLanguage, setSelectedLanguage] = useState(
+        participant?.language && participant?.language.trim() !== "" ? participant?.language : "c"
+    );
+
+    useEffect(() => {
+        const fetchLanguage = async () => {
+
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/getlanguage?email=${encodeURIComponent(participantEmail)}`
+                );
+                const data = await response.json();
+
+                if (response.ok) {
+                    setSelectedLanguage(data.language || ""); // Set language if available
+                } else {
+                    console.error("Error fetching language:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching language:", error);
+            }
+        };
+
+        fetchLanguage();
+    }, [participantEmail]);
+
+    const [code, setCode] = useState(participant?.submittedCode || "");
+
+    useEffect(() => {
+        const fetchCode = async () => {
+
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/getsubmittedcode?email=${encodeURIComponent(participantEmail)}`
+                );
+                const data = await response.json();
+
+                if (response.ok) {
+                    setCode(data.submittedCode || ""); // Set submitted code if available
+                } else {
+                    console.error("Error fetching code:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching code:", error);
+            }
+        };
+
+        fetchCode();
+    }, [participantEmail]);
+
+    useEffect(() => {
+        const fetchTime = async () => {
+
+            if (!participantEmail) return; // Ensure participantEmail is available
+
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/getsubmissiontime?email=${encodeURIComponent(participantEmail)}`
+                );
+                const data = await response.json();
+
+                if (response.ok) {
+                    setRound1Time(data.subtime || ""); // Set submission time if available
+                } else {
+                    console.error("Error fetching submission time:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching submission time:", error);
+            }
+        };
+
+        fetchTime();
+    }, [participantEmail]);
+
+    const randomNumber = participant?.randomnumber || 1;
+
+
 
     const problemSets = {
         1: {
@@ -173,55 +272,19 @@ const Round1 = ({ setAllPassed }) => {
         }
     };
 
-    const [selectedLanguage, setSelectedLanguage] = useState(
-        participant?.language && participant.language.trim() !== "" ? participant.language : "c"
-    );
-
-    useEffect(() => {
-        const fetchlanguage = async () => {
-            if (!participant.email) return; // Ensure email exists before making request
-
-            try {
-                const response = await fetch(`http://localhost:5000/getlanguage?email=${encodeURIComponent(participant.email)}`);
-                const data = await response.json();
-
-                if (response.ok) {
-                    if (data.language)
-                        setSelectedLanguage(data.language); // Set the submitted code if available
-                } else {
-                    console.error("Error fetching code:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching code:", error);
-            }
-        };
-
-        fetchlanguage();
-    }, [participant.email]);
 
 
-    const [code, setCode] = useState(participant?.submittedCode || "");
 
-    useEffect(() => {
-        const fetchCode = async () => {
-            if (!participant.email) return; // Ensure email exists before making request
 
-            try {
-                const response = await fetch(`http://localhost:5000/getsubmittedcode?email=${encodeURIComponent(participant.email)}`);
-                const data = await response.json();
 
-                if (response.ok) {
-                    setCode(data.submittedCode || ""); // Set the submitted code if available
-                } else {
-                    console.error("Error fetching code:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching code:", error);
-            }
-        };
 
-        fetchCode();
-    }, [participant.email]);
+    // Run only once on component mount
+
+
+
+
+
+    // Run only once when component mounts
 
 
 
@@ -233,29 +296,9 @@ const Round1 = ({ setAllPassed }) => {
     });
 
     const [withInput, setWithInput] = useState(true);
-    const [Round1sub, setRound1Time] = useState(participant.round1submissiontime || "");
+    const [Round1sub, setRound1Time] = useState(participant?.round1submissiontime || "");
 
-    useEffect(() => {
-        const fetchTime = async () => {
-            if (!participant.email) return; // Ensure email exists before making request
 
-            try {
-                const response = await fetch(`http://localhost:5000/getsubmissiontime?email=${encodeURIComponent(participant.email)}`);
-                const data = await response.json();
-
-                if (response.ok) {
-                    setRound1Time(data.subtime || ""); // Set the submitted code if available
-
-                } else {
-                    console.error("Error fetching code:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching code:", error);
-            }
-        };
-
-        fetchTime();
-    }, [participant.email]);
 
 
     useEffect(() => {
@@ -311,14 +354,23 @@ const Round1 = ({ setAllPassed }) => {
 
         setIsLoading2(true);
         try {
-            const response = await fetch('http://localhost:5000/compile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const participantEmail = sessionStorage.getItem("participantEmail");
+
+            if (!participantEmail) {
+                setIsLoading2(false);
+                alert("❌ Participant email is missing. Please log in again.");
+                return;
+            }
+
+            const response = await fetch("http://localhost:5000/compile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     language: selectedLanguage,
                     code: code,
                     action: "submit",
                     testcases: testCases,
+                    email: participantEmail, // Pass email as a parameter
                 }),
             });
 
@@ -561,22 +613,51 @@ const Round2 = ({ setAllPassed2 }) => {
             `;
 
 
-    const location = useLocation();
-    const participant = location.state?.participant; // Get participant object safely
-    const randomNumber1 = participant?.randomnumber ?? 1; // Default to 1 if undefined
-    const randomNumber2 = randomNumber1 + 1; // Increment for second random number
+    const [participant, setParticipant] = useState(null);
+
+    const participantEmail = sessionStorage.getItem("participantEmail");
+
+    useEffect(() => {
+        const fetchParticipant = async () => {
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(`http://localhost:5000/getParticipant?email=${participantEmail}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setParticipant(data.participant);
+                } else {
+                    console.error("Error:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching participant data:", error);
+            }
+        };
+
+        fetchParticipant();
+    }, [participantEmail]);
+
+
+    const randomNumber1 = participant?.randomnumber ?? 1; // Safe access
+    const randomNumber2 = randomNumber1 + 1;
 
 
     const problemSets = {
         1: {
             Emojicode: `
-📌 fact(🔢, 💡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
-    ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+int fibonacci (int n) {
+    if (n<= ❓)
+        return  n;
+    return fibonacci (n ➖ 1) ➕fibonacci (n ➖ ❓);
 }
-fact(5, 3)
+int main() {
+    int 📏 = 10; // Number of terms
+    for (int 🔢 = 0; 🔢 < 📏; 🔢++) {
+        printf("%d ", fibonacci (🔢));
+    }
+}
+
             `,
             output: 120,
             result: [1, 2],
@@ -649,7 +730,7 @@ fibMulAdd(7, 3, 5)
     const [resultMessage2, setResultMessage2] = useState('');
 
     const [subtime1, setSubtime1] = useState('');
-    const [subtime2, setSubtime2] = useState(participant.round2submissiontime);
+    const [subtime2, setSubtime2] = useState(participant?.round2submissiontime);
 
 
     const [isLoading1, setIsLoading1] = useState(false);
@@ -726,14 +807,26 @@ fibMulAdd(7, 3, 5)
     const handleSubmit2 = async () => {
         setIsLoading2(true);
         try {
+
+            const participantEmail = sessionStorage.getItem("participantEmail");
+
+            if (!participantEmail) {
+                setResultMessage("❌ Participant email is missing. Please log in again.");
+                return;
+            }
+
             if (!subtime1) {
                 setResultMessage('❌ Please complete the first submission before submitting this one.');
                 return;
             }
-            const response = await fetch('http://localhost:5000/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ inputValues: inputValues2.map(Number), result: result2 }),
+            const response = await fetch("http://localhost:5000/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    inputValues: inputValues2.map(Number),
+                    result: result2,
+                    email: participantEmail, // Pass email as a parameter
+                }),
             });
 
             if (!response.ok) {
@@ -990,7 +1083,14 @@ expSum(3, 3, 2)
 
     const fetchRound3SubTime = async (setSubmissionTime) => {
         try {
-            const response = await fetch("http://localhost:5000/getround3submissiontime", {
+            const participantEmail = sessionStorage.getItem("participantEmail"); // Get participant email from sessionStorage
+        
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+        
+            const response = await fetch(`http://localhost:5000/getround3submissiontime?email=${encodeURIComponent(participantEmail)}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -1013,16 +1113,25 @@ expSum(3, 3, 2)
     // Usage example
     useEffect(() => {
         fetchRound3SubTime(setSubmissionTime);
-    }, []); // Fetch when component mounts
+    }, []); 
+
+
     const [isLoading1, setIsLoading1] = useState(false);
     const handleSubmit = async () => {
-        setIsLoading1(true);
+        setIsLoading1(true)
         try {
+            const participantEmail = sessionStorage.getItem("participantEmail"); // Get participant email from sessionStorage
+
             const response = await fetch('http://localhost:5000/outputverify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userOutput, output }),
+                body: JSON.stringify({
+                    userOutput,
+                    output,
+                    email: participantEmail // Pass participantEmail as a parameter
+                }),
             });
+
 
             const result = await response.json();
             if (result.success) {
@@ -1043,12 +1152,20 @@ expSum(3, 3, 2)
     };
     const handleHintClick = async (hintSetter, nextHintSetter, points) => {
         try {
+
+            const participantEmail = sessionStorage.getItem("participantEmail"); // Retrieve email from session storage
+
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+    
             const response = await fetch("http://localhost:5000/updatepoints", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ points }),
+                body: JSON.stringify({ email: participantEmail, points }),
             });
 
             if (!response.ok) {
@@ -1073,12 +1190,20 @@ expSum(3, 3, 2)
     }, [submissionTime]);
     const handleHintClick1 = async (hintSetter, nextHintSetter, points) => {
         try {
+
+            const participantEmail = sessionStorage.getItem("participantEmail");
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+
+
             const response = await fetch("http://localhost:5000/updatepoints1", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ points }),
+                body: JSON.stringify({email: participantEmail, points }),
             });
 
             if (!response.ok) {
@@ -1098,12 +1223,20 @@ expSum(3, 3, 2)
 
     const handleHintClick2 = async (hintSetter, nextHintSetter, points) => {
         try {
+
+            const participantEmail = sessionStorage.getItem("participantEmail");
+
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+
             const response = await fetch("http://localhost:5000/updatepoints2", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ points }),
+                body: JSON.stringify({ email: participantEmail,points }),
             });
 
             if (!response.ok) {
@@ -1129,11 +1262,19 @@ expSum(3, 3, 2)
     useEffect(() => {
         const fetchHintStatus = async () => {
             try {
+                const participantEmail = sessionStorage.getItem("participantEmail");
+
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+
                 const response = await fetch("http://localhost:5000/gethints", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    body: JSON.stringify({ email: participantEmail }), 
                 });
 
                 if (!response.ok) {
@@ -1237,52 +1378,52 @@ expSum(3, 3, 2)
 
                 {/* Right Side: Hint System */}
                 <div className="w-1/2">
-    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 flex justify-between">
-        {/* Points Display */}
+                    <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 flex justify-between">
+                        {/* Points Display */}
 
-        {/* Hint Buttons */}
-        <div className="flex justify-between items-center w-full">
-            <div className="flex gap-x-4">
-                <button
-                    className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                    onClick={() => handleHintClick(setHint1, setHint2, 10)}
-                    disabled={!hint1}
-                >
-                    Hint 1
-                </button>
+                        {/* Hint Buttons */}
+                        <div className="flex justify-between items-center w-full">
+                            <div className="flex gap-x-4">
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                                    onClick={() => handleHintClick(setHint1, setHint2, 10)}
+                                    disabled={!hint1}
+                                >
+                                    Hint 1
+                                </button>
 
-                <button
-                    className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                    onClick={() => handleHintClick1(setHint2, setHint3, 20)}
-                    disabled={!hint2}
-                >
-                    Hint 2
-                </button>
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                                    onClick={() => handleHintClick1(setHint2, setHint3, 20)}
+                                    disabled={!hint2}
+                                >
+                                    Hint 2
+                                </button>
 
-                <button
-                    className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                    onClick={() => handleHintClick2(setHint3, () => {}, 10)} // No next hint after Hint 3
-                    disabled={!hint3}
-                >
-                    Hint 3
-                </button>
-            </div>
+                                <button
+                                    className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
+                                    onClick={() => handleHintClick2(setHint3, () => { }, 10)} // No next hint after Hint 3
+                                    disabled={!hint3}
+                                >
+                                    Hint 3
+                                </button>
+                            </div>
 
-            <div className="text-xl flex justify-end items-center font-extrabold text-white">
-                🏆 Points: <span className="text-blue-400 ml-2">{points}</span>
-            </div>
-        </div>
+                            <div className="text-xl flex justify-end items-center font-extrabold text-white">
+                                🏆 Points: <span className="text-blue-400 ml-2">{points}</span>
+                            </div>
+                        </div>
 
-        {/* Hint Display */}
-       
-    </div>
+                        {/* Hint Display */}
 
-    <div className="flex flex-col mt-4 text-black">
-            {!hint1 && hint2 && !hint3 && <p><span>Hint1:</span>Think logically</p>}
-            {!hint1 && !hint2 && hint3 && <p><span>Hint2 :</span>Think mentally</p>}
-            {!hint1 && !hint2 && !hint3 && <p><span>Hint3 :</span> Use brain nad eyes</p>}
-        </div>
-</div>
+                    </div>
+
+                    <div className="flex flex-col mt-4 text-black">
+                        {!hint1 && hint2 && !hint3 && <p><span>Hint1:</span>Think logically</p>}
+                        {!hint1 && !hint2 && hint3 && <p><span>Hint2 :</span>Think mentally</p>}
+                        {!hint1 && !hint2 && !hint3 && <p><span>Hint3 :</span> Use brain nad eyes</p>}
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -1291,8 +1432,31 @@ expSum(3, 3, 2)
 };
 
 const Events = () => {
-    const location = useLocation();
-    const participant = location.state?.participant;
+
+    const [participant1, setParticipant1] = useState(null);
+    const participantEmail = sessionStorage.getItem("participantEmail");
+
+    useEffect(() => {
+        const fetchParticipant = async () => {
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(`http://localhost:5000/getParticipant?email=${participantEmail}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setParticipant1(data.participant);
+                } else {
+                    console.error("Error:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching participant data:", error);
+            }
+        };
+
+        fetchParticipant();
+    }, [participantEmail]);
+
 
     const [selectedRound, setSelectedRound] = useState(1);
     const [allPassed, setAllPassed] = useState(false);
@@ -1340,7 +1504,7 @@ const Events = () => {
             <Navbar />
             <div className="text-center mt-6">
                 <h1 className="text-2xl font-semibold text-gray-800">
-                    Welcome, <span className="text-red-700">{participant?.name}</span>!
+                    Welcome, <span className="text-red-700">{participant1?.name}</span>!
                 </h1>
             </div>
 

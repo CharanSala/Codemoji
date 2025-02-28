@@ -45,32 +45,68 @@ let currentUserEmail = "";
 
 // printParticipants();
 
-const timeToSeconds = (timeStr) => {
-    if (!timeStr) return Infinity; // Handle missing values
-    const [hours, minutes, seconds] = timeStr.split(":").map(Number);
-    return hours * 3600 + minutes * 60 + seconds;
-  };
-
 app.get("/leaderboard", async (req, res) => {
-  try {
-    const participants = await Participant.find({}, "email round1submissiontime round2submissiontime round3submissiontime");
+    try {
+        const participants = await Participant.find(
+            {},
+            "email round1submissiontime round2submissiontime round3submissiontime points"
+        );
 
-    // Sort participants by total submission time
-    const sortedLeaderboard = participants
-      .map(participant => ({
-        email: participant.email,
-        totalTime: timeToSeconds(participant.round1submissiontime) +
-                   timeToSeconds(participant.round2submissiontime) +
-                   timeToSeconds(participant.round3submissiontime)
-      }))
-      .sort((a, b) => a.totalTime - b.totalTime);
-      
-    res.json(sortedLeaderboard);
-  } catch (error) {
-    console.error("Error fetching leaderboard:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+        const sortedLeaderboard = participants
+            .map(participant => {
+                // Convert times to seconds
+                const round1Time = timeToSeconds(participant.round1submissiontime);
+                const round2Time = timeToSeconds(participant.round2submissiontime);
+                const round3Time = timeToSeconds(participant.round3submissiontime);
+
+                // Count completed rounds
+                const completedRounds = [
+                    participant.round1submissiontime,
+                    participant.round2submissiontime,
+                    participant.round3submissiontime
+                ].filter(time => time && time !== "00:00:00").length;
+
+                // Calculate total time for completed rounds
+                const totalTime = round1Time + round2Time + round3Time;
+
+                return {
+                    email: participant.email,
+                    completedRounds,
+                    totalTime,
+                    points: participant.points || 0, // Default to 0 if undefined
+                };
+            })
+            // Exclude participants who haven't started any round (totalTime = 0)
+            .filter(participant => participant.totalTime > 0)
+            // Sorting logic:
+            .sort((a, b) => {
+                if (b.completedRounds !== a.completedRounds) {
+                    return b.completedRounds - a.completedRounds; // More completed rounds first
+                }
+                if (a.completedRounds === 3 && b.completedRounds === 3) {
+                    // If all completed 3 rounds, prioritize fastest time first
+                    if (a.totalTime !== b.totalTime) {
+                        return a.totalTime - b.totalTime;
+                    }
+                    return b.points - a.points; // If time is same, prioritize higher points
+                }
+                return a.totalTime - b.totalTime; // For others, lower total time is better
+            });
+
+        res.json(sortedLeaderboard);
+    } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
+
+// Helper function to convert HH:MM:SS to total seconds
+  function timeToSeconds(time) {
+    if (!time) return 0;
+    const [hh, mm, ss] = time.split(":").map(Number);
+    return hh * 3600 + mm * 60 + ss;
+  }
+  
   
 
 app.post('/getSubmittedCode', async (req, res) => {
@@ -114,8 +150,14 @@ app.get('/getround2submissiontime', async (req, res) => {
 
 app.get('/getround3submissiontime', async (req, res) => {
     try {
+
+        const { email } = req.query; // Retrieve email from query parameters
+
+        if (!email) {
+            return res.status(400).send({ message: 'Email parameter is required' });
+        }
         // Find the participant by email
-        const participant = await Participant.findOne({ email: currentUserEmail });
+        const participant = await Participant.findOne({ email: email });
 
         if (!participant) {
             return res.status(404).send({ message: 'Participant not found' });
@@ -193,12 +235,35 @@ app.post("/participantverify", async (req, res) => {
 
 
         console.log("✅ Participant Verified:", participant.email);
-        currentUserEmail = email;
+       
 
-        res.json({ message: "Participant verified successfully!", participant });
+        res.json({
+            message: "Login successful!",
+            email: participant.email // ✅ Send only the email
+        });
 
     } catch (error) {
         console.error("❌ Error verifying participant:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+app.get("/getParticipant", async (req, res) => {
+    try {
+        const email = req.query.email;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+        const participant = await Participant.findOne({ email });
+
+        if (!participant) {
+            return res.status(404).json({ message: "Participant not found!" });
+        }
+
+        res.json({ participant });
+    } catch (error) {
+        console.error("❌ Error fetching participant:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 });
@@ -272,7 +337,7 @@ app.post('/verify1', (req, res) => {
 });
 
 app.post('/verify', async (req, res) => {
-    const { inputValues, result } = req.body;
+    const { inputValues, result, email } = req.body; 
 
     if (!Array.isArray(inputValues) || !Array.isArray(result)) {
         return res.status(400).json({ message: 'Invalid input format' });
@@ -302,7 +367,7 @@ app.post('/verify', async (req, res) => {
 
     try {
         // Find participant by ID and update their record with the submitted code
-        const participant = await Participant.findOne({ email: currentUserEmail });
+        const participant = await Participant.findOne({ email: email });
 
         if (!participant) {
             return res.status(404).send({ message: 'Participant not found' });
@@ -321,9 +386,7 @@ app.post('/verify', async (req, res) => {
     } catch (error) {
         res.status(500).send({ message: 'Error saving code to the database', error: error.message });
 
-    }
-
-       
+    }     
 
     } else {
         return res.json({ message: '❌ Some values are incorrect. Please try again!', status: false });
@@ -333,11 +396,11 @@ app.post('/verify', async (req, res) => {
 
 app.post("/updatepoints", async (req, res) => {
    
-    const { points } = req.body; // Reduce 10 points for hint
+    const { points,email } = req.body; // Reduce 10 points for hint
     
     try {
         // Find participant by email
-        const participant = await Participant.findOne({ email: currentUserEmail }); 
+        const participant = await Participant.findOne({ email: email }); 
 
         if (!participant) {
             return res.status(404).json({ message: "Participant not found" });
@@ -366,11 +429,11 @@ app.post("/updatepoints", async (req, res) => {
 
 app.post("/updatepoints1", async (req, res) => {
    
-    const { points } = req.body; // Reduce 10 points for hint
+    const { points,email } = req.body; // Reduce 10 points for hint
     
     try {
         // Find participant by email
-        const participant = await Participant.findOne({ email: currentUserEmail }); 
+        const participant = await Participant.findOne({ email: email }); 
 
         if (!participant) {
             return res.status(404).json({ message: "Participant not found" });
@@ -398,11 +461,11 @@ app.post("/updatepoints1", async (req, res) => {
 });
 app.post("/updatepoints2", async (req, res) => {
    
-    const { points } = req.body; // Reduce 10 points for hint
+    const { points,email } = req.body; // Reduce 10 points for hint
     
     try {
         // Find participant by email
-        const participant = await Participant.findOne({ email: currentUserEmail }); 
+        const participant = await Participant.findOne({ email: email }); 
 
         if (!participant) {
             return res.status(404).json({ message: "Participant not found" });
@@ -427,8 +490,14 @@ app.post("/updatepoints2", async (req, res) => {
 });
 app.post("/gethints", async (req, res) => {
 
+    const { email } = req.body; // Retrieve email from request body
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+
     try {
-        const participant = await Participant.findOne({ email: currentUserEmail }); 
+        const participant = await Participant.findOne({ email: email }); 
         
         if (!participant) {
             return res.status(404).json({ message: "Participant not found" });
@@ -451,10 +520,10 @@ app.post("/gethints", async (req, res) => {
 // POST endpoint for verifying output
 app.post('/outputverify', async (req, res) => {
     try {
-        const { userOutput, output } = req.body; // Get email from request
+        const { userOutput, output ,email } = req.body; // Get email from request
 
         // Find the participant based on email
-        const participant = await Participant.findOne({ email: currentUserEmail });
+        const participant = await Participant.findOne({ email: email });
 
         if (!participant) {
             return res.status(404).json({ success: false, message: "Participant not found" });
@@ -584,8 +653,8 @@ app.get("/getsubmissiontime", async (req, res) => {
 
 // POST endpoint for compiling and running code
 app.post('/compile', async (req, res) => {
-    const { language, code, input, action, testcases, withInput } = req.body;
-
+   
+    const { language, code, action,input, testcases, email } = req.body;
     console.log(language);
     console.log(code);
     console.log(input);
@@ -690,7 +759,7 @@ app.post('/compile', async (req, res) => {
             console.log("pass", passedCases);
            
             console.log("Myemail", currentUserEmail);
-            const participant = await Participant.findOne({ email: currentUserEmail });
+            const participant = await Participant.findOne({ email: email });
 
            console.log(code);
             participant.submittedCode = code;

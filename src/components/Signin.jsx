@@ -29,13 +29,19 @@ const Signin = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
+      
       const result = await response.json();
       console.log("Server Response:", result);
       setMessage(result.message);
+
       if (response.ok) {
-        navigate("events", { state: { participant: result.participant } });
-      }
+        // Store only participantEmail in sessionStorage
+        sessionStorage.setItem("participantEmail", result.email);
+    
+        // Navigate to Events page (we will fetch full data there)
+        navigate("/signin/events");
+    }
+    
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again.");
