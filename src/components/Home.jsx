@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../components/Signin";
-import Events from "../components/Events";
+import { UserContext } from "./Signin";
+import Events from "./Events";
 
 const Home = () => {
   const username = useContext(UserContext);
