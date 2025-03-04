@@ -36,10 +36,10 @@ const Home = () => {
 
   return (
     <div>
-      <div className="absolute bg-[#01052A] h-[55%] w-full"></div>
+      <div className="-z-10 absolute bg-[#01052A] h-[55%] w-full"></div>
       <Navbar />
       <div 
-  className="min-h-screen flex flex-col items-center bg-white bg-no-repeat bg-top text-white"
+  className="min-h-screen flex flex-col items-center bg-no-repeat bg-top text-white"
   style={{ backgroundImage: "", backgroundSize: "100% 50vh" }}
 >
 
