@@ -18,7 +18,7 @@ const Navbar = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/getPoints1?email=${encodeURIComponent(email)}`, {
+            const response = await fetch(`https://codemojibackend.onrender.com/getPoints1?email=${encodeURIComponent(email)}`, {
               method: "GET",
               headers: { "Content-Type": "application/json" },
           });
