@@ -1,10 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle menu visibility
-
+  const [emojies,setEmoji]= useState(0);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+ 
+
+
+  useEffect(() => {
+    const fetchPoints = async () => {
+        try {
+            const email = sessionStorage.getItem("participantEmail"); // Get email from session storage
+            if (!email) {
+                console.error("No email found in session storage.");
+                return;
+            }
+
+            const response = await fetch(`http://localhost:5000/getPoints1?email=${encodeURIComponent(email)}`, {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+          });
+          
+            if (!response.ok) {
+                throw new Error("Failed to fetch points");
+            }
+
+            const data = await response.json();
+            console.log("emojies",data.points);
+
+            setEmoji(data.points);
+        } catch (error) {
+            console.error("Error fetching points:", error);
+        }
+    };
+    const intervalId = setInterval(fetchPoints, 5000);
+
+    // Cleanup function to clear interval on component unmount
+    return () => clearInterval(intervalId);
+}, []);
 
   return (
     <div className="bg-[#01052A] shadow-md">
@@ -47,7 +82,7 @@ const Navbar = () => {
           <li>
             <Link
               to="/"
-              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 mt-3 hover:text-blue-500 transition duration-300 flex items-center"
             >
               🏠 Home
             </Link>
@@ -55,7 +90,7 @@ const Navbar = () => {
           <li>
             <Link
               to="/signin"
-              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 mt-3 hover:text-blue-500 transition duration-300 flex items-center"
             >
               🔑 Sign In
             </Link>
@@ -63,11 +98,17 @@ const Navbar = () => {
           <li>
             <Link
               to="/about"
-              className="text-gray-200 hover:text-blue-500 transition duration-300 flex items-center"
+              className="text-gray-200 mt-3 hover:text-blue-500 transition duration-300 flex items-center"
             >
               ℹ️ About
             </Link>
           </li>
+          <li className="flex items-center gap-2 px-4 py-2  bg-[#01052A] rounded-lg shadow-md border border-gray-600">
+    <p className="text-white text-lg font-semibold flex items-center gap-2">
+        😜 <span className="text-yellow-400 pl-3">{emojies}</span>
+    </p>
+</li>
+
         </ul>
 
         {/* Navbar Decorative Underline */}

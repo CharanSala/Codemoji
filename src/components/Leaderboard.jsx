@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 const Leaderboard = () => {
-  const [leaderboardData, setLeaderboardData] = useState([]); // State to store leaderboard data
-  const [loading, setLoading] = useState(true); // State to track loading
-  const [error, setError] = useState(null); // State to track errors
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -18,7 +18,22 @@ const Leaderboard = () => {
         }
 
         const data = await response.json();
-        setLeaderboardData(data); // Store data in state
+
+        console.log("leaderboard",data);
+
+        // Sorting logic
+        const sortedData = data.sort((a, b) => {
+          // First, sort by points (higher is better)
+          if (b.points !== a.points) return b.points - a.points;
+
+          // If points are equal, sort by submission time (lower is better)
+          return (
+            (a.round3SubmissionTime || a.round2SubmissionTime || a.round1SubmissionTime) -
+            (b.round3SubmissionTime || b.round2SubmissionTime || b.round1SubmissionTime)
+          );
+        });
+
+        setLeaderboardData(sortedData);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -26,12 +41,32 @@ const Leaderboard = () => {
       }
     };
 
-    // Fetch immediately & then every 5 seconds
     fetchLeaderboard();
     const interval = setInterval(fetchLeaderboard, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, []); // Runs once on mount
+  // Function to format time (minutes and seconds)
+  const formatTime = (totalSeconds) => {
+    if (totalSeconds === Infinity || totalSeconds == null) return "--"; // Handle missing data
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}m ${seconds}s`;
+  };
+
+  // Function to assign rank emojis
+  const getRankEmoji = (rank) => {
+    switch (rank) {
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return "🎖️";
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -50,15 +85,27 @@ const Leaderboard = () => {
             <tr className="bg-gray-200">
               <th className="border p-2">Rank</th>
               <th className="border p-2">Email</th>
-              <th className="border p-2">Total Time (seconds)</th>
+              <th className="border p-2">Points</th>
+              <th className="border p-2">Latest Submission Time</th>
             </tr>
           </thead>
           <tbody>
             {leaderboardData.map((participant, index) => (
               <tr key={index} className="border">
-                <td className="border p-2 text-center">{index + 1}</td>
+                <td className="border p-2 text-center">
+                  {getRankEmoji(index + 1)} {index + 1}
+                </td>
                 <td className="border p-2 text-center">{participant.email}</td>
-                <td className="border p-2 text-center">{participant.totalTime}</td>
+                <td className="border p-2 text-center font-bold text-green-600">
+                  {participant.points} 😜
+                </td>
+                <td className="border p-2 text-center">
+                  {formatTime(
+                    participant. round1Time ||
+                      participant. round2Time ||
+                      participant. round3Time
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import Navbar from './Navbar';  // Assuming you have Navbar component
 import MonacoEditor from '@monaco-editor/react';  // Monaco editor for code writing
 import { useLocation } from "react-router-dom";
@@ -120,34 +120,49 @@ const Round1 = ({ setAllPassed }) => {
     const problemSets = {
         1: {
             Emojicode: `
-    🔢 = 123456  
-    🔡 = [ ]  
-    🔢1 = [ ]  
-    🔁(🔢 > 0) {  
-        📍 = 🔢 % 10  
-        🤔(📍 ⚖️ 2) 👉 🔡 ➕= 📍  
-        🤔(📍 ⚖️ 4) 👉 🔡1 ➕= 📍  
-        🔢 ➗= 10  
-    }  
-    📜 = 🔡 ➕🔡1  
-    🔁(📜 📏 > 0) {  
-        📍 = 📜 % 10  
-        🤔(📍 ⚖️ 5) 👉 📜 ➖= 1  
-    }  
-    ✍️(📜)  
+Mystery_box2 (🔢) 
+{
+    🍿= 1;
+    🔁 (int 📍 = 1; 📍 ◀️ = 🔢; 📍⏩) {
+        🍿*= 📍;
+}
+    ↩️ 🍿;
+}
+Mystery_box1 (🔢) {
+    🍬 = 0;
+    🔁 (🔢 ▶️ 0) {
+        🍷 = 🔢 % 10;
+        🍬 += Mystery_box2(🍷);  
+        🔢 /= 10; 
+    }
+    ↩️ 🍬;
+}
+
+Mystery_box3(🔢) {
+    🍬 = 0;
+      🔁 (🔢 ▶️ 0) {
+       🍷 = 🔢 % 10;  
+        🍬 += (🍷*🍷*🍷 );  
+        🔢 /= 10;  
+    }
+    ↩️ 🍬;
+}
+🎁=Mystery_box1(🔢)
+🍟=Mystery_box3(🎁)
+✍️ (🍟)   
+  
             `,
 
             exampleTestCases: [
-                { input: "10", output: "20" },
-                { input: "20", output: "40" },
+                { input: "245", output: "281" },
+                { input: "123", output: "729" },
             ],
-            Input: "10",
+            Input: "245",
             testCases: [
-                { input: "10", expectedOutput: "20" },
-                { input: "20", expectedOutput: "40" },
-                { input: "30", expectedOutput: "60" },
-                { input: "70", expectedOutput: "140" },
-                { input: "120", expectedOutput: "240" },
+                { input: "245", expectedOutput: "281" },
+                { input: "123", expectedOutput: "729" },
+                { input: "405", expectedOutput: "190" },
+                { input: "145", expectedOutput: "190" },
             ]
         },
         2: {
@@ -235,56 +250,106 @@ const Round1 = ({ setAllPassed }) => {
         },
         4: {
             Emojicode: `
-    🔢 = 1001  
-    🔡 = 0  
-    🔁(🔢 > 0) {  
-        📜 = 🔢 % 10  
-        🤔(📜 ⚖️ 1) 👉 🔡 ➕= 📜  
-        🔢 ➗= 10  
+Mystery_box1(🔢) 
+{
+    🍷= 0, 
+    🍬 = 1, 
+    🍟,🍿= 0;
+    
+   🔁(🍷 <= 🔢 ) {
+        🍿+= 🍷;
+         🍟= 🍷+ 🍬;
+        🍷= 🍬;
+        🍬= 🍟 ;
     }
-    ✍️(🔡)
+     ↩️ 🍿;
+}
+Mystery_box2(🔢) {
+    🧺 = 0;
+    🔁 (🔢 > 0) {
+         🧺 = 🧺 * 10 + (🔢 % 10);
+        🔢 /= 10;
+    }
+    ↩️ 🧺;
+}
+Mystery_box3(🔢) {
+    🎯= 0, 📍 = 1;
+    🔁 (🔢 > 0) {
+        🔔=(🔢 % 10) * 68;
+        🎯 +=🔔 * 📍;
+        📍 *= 100; 
+        🔢 /= 10;
+    }
+    ↩️ 🎯;
+}
+🎁= Mystery_box1(🔢); 
+📦 = Mystery_box2(🎁); 
+📢 = Mystery_box3(📦); 
+
+✍️(📢);    
+
             `,
             exampleTestCases: [
-                { input: "101", output: "2" },
-                { input: "111", output: "3" },
+                { input: "10", output: "136" },
+                { input: "5", output: "2136" },
             ],
-            Input: "101",
+            Input: "10",
             testCases: [
-                { input: "101", expectedOutput: "2" },
-                { input: "111", expectedOutput: "3" },
+                { input: "10", expectedOutput: "136" },
+                { input: "5", expectedOutput: "13668" },
+                { input: "15", expectedOutput: "20604" },
+                { input: "50", expectedOutput: "54944" },
+                { input: "13", expectedOutput: "20604" },
             ]
         },
         5: {
             Emojicode: `
-    🔢 = 9  
-    🔡 = 🔢 ** 2  
-    ✍️(🔡)
+   Mystery_box2(🔢) {
+    🤔 (🔢 < 2) ↩️  0;   
+     🔁 (🎈 = 2;  🎈* 🎈 ◀️ = 🔢; 🎈⏩) {
+        🤔 (🔢 % 🎈 == 0) ↩️ 0;  
+    }
+   ↩️ 1;
+}
+Mystery_box1(🔢) {
+    🏆 = 1;  
+    🔁 ( 📍= 2; 📍◀️= 🔢; 📍⏩) {
+        🤔 (Mystery_box2(📍))
+ {  
+            🏆 *= 📍;
+           }
+    }
+    ↩️  🏆;  
+}
+
+Mystery_box3 (🔢) {
+    💰= 0;  
+     🔁 (🍬 = 1; 🍬 ◀️= 🔢; 🍬⏩) {  
+        🤔 (🔢 % 🍬 == 0) {  
+            💰 += 🍬; 
+        }
+    }
+     ↩️ 💰;  
+}
+🏆 = Mystery_box1(🔢);  
+💰 = Mystery_box3(🏆);  
+✍️(💰);  
+
             `,
             exampleTestCases: [
-                { input: "2", output: "4" },
-                { input: "3", output: "9" },
+                { input: "10", output: "576" },
+                { input: "6", output: "72" },
             ],
-            Input: "2",
+            Input: "10",
             testCases: [
-                { input: "2", expectedOutput: "4" },
-                { input: "3", expectedOutput: "9" },
+                { input: "10", expectedOutput: "576" },
+                { input: "6", expectedOutput: "72" },
+                { input: "15", expectedOutput: "96768" },
+                { input: "24", expectedOutput: "836075520" },
+                { input: "17", expectedOutput: "1741824" },
             ]
         }
     };
-
-
-
-
-
-
-
-    // Run only once on component mount
-
-
-
-
-
-    // Run only once when component mounts
 
 
 
@@ -321,13 +386,14 @@ const Round1 = ({ setAllPassed }) => {
     const { Emojicode, exampleTestCases = [], testCases = [], Input = "" } = problemSets[randomNumber] || problemSets[1] || {};
     const [isLoading1, setIsLoading1] = useState(false);
     const [isLoading2, setIsLoading2] = useState(false);
+    const [status, setStatus] = useState(false);
 
     const handleRunCode = async () => {
         setIsLoading1(true);
         try {
             const input = withInput ? Input : "";  // Only send input if 'withInput' is true
 
-            const response = await fetch('http://localhost:5000/compile', {
+            const response = await fetch('https://codemojibackend.onrender.com/compile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -340,7 +406,9 @@ const Round1 = ({ setAllPassed }) => {
             });
 
             const result = await response.json();
+            
             setOutput(result.output || result.message);
+            setStatus(result.status);
         } catch (error) {
             setOutput('Error running the code: ' + error.message);
         }
@@ -456,7 +524,49 @@ const Round1 = ({ setAllPassed }) => {
         // setAllPassed(allPassed);
         console.log(testCases)
     };
-    const languages = ["python", "cpp", "c", "java"];
+
+    const handleCodeChange = async (value) => {
+        setCode(value);
+
+        const email = sessionStorage.getItem("participantEmail"); // Get email from session storage
+        if (!email) {
+            console.error("No email found in session storage");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/savecode", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    code: value,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to save code");
+            }
+
+            console.log("Code saved successfully");
+        } catch (error) {
+            console.error("Error saving code:", error);
+        }
+    };
+    const editorRef = useRef(null);
+
+    const handleEditorDidMount = (editor) => {
+        editorRef.current = editor;
+
+        // Prevent pasting
+        editor.onDidPaste(() => {
+            editor.trigger(null, "undo", null); // Revert the paste operation
+        });
+    };
+
+    const languages = ["python", "cpp", "c"];
 
     return (
 
@@ -472,11 +582,17 @@ const Round1 = ({ setAllPassed }) => {
             )}
             <div className="flex flex-col md:flex-row justify-center items-center md:items-start p-6 space-y-6 md:space-y-0 md:space-x-6 bg-white text-gray-900 min-h-screen">
                 {/* Emoji Code Section */}
-                <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg bg-slate-200">
+                <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg bg-slate-300">
 
                     <div className="p-4 rounded-lg bg-navy-100 ">
                         <p className="text-navy-700 mb-3 font-bold text-lg text-start">🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
-                        <pre className="bg-navy-50 p-4 rounded-md text-navy-800 text-md font-bold">{Emojicode}</pre>
+                        <pre
+                            className="bg-navy-50 p-4 rounded-md text-navy-800 text-md font-bold"
+                            style={{ userSelect: "none" }}
+                        >
+                            {Emojicode}
+                        </pre>
+
                         <div className="mt-4">
                             <h4 className="font-semibold text-lg text-navy-600 text-start pl-3">Test Cases</h4>
                             {exampleTestCases.map((testCase, index) => (
@@ -528,7 +644,8 @@ const Round1 = ({ setAllPassed }) => {
                             language={selectedLanguage}
                             theme="light"
                             value={code}
-                            onChange={(value) => setCode(value)}
+                            onChange={handleCodeChange}
+                            onMount={handleEditorDidMount}
                         />
                     </div>
                     <div className="flex justify-start space-x-4 mt-4">
@@ -544,15 +661,16 @@ const Round1 = ({ setAllPassed }) => {
                                     Running...
                                 </>
                             ) : (
+
                                 'Run Code'
                             )}
                         </button>
 
                         <button
                             onClick={handleSubmit}
-                            disabled={Round1sub || isLoading2}
+                            disabled={!status || Round1sub || isLoading2}
                             className={`px-8 py-2 rounded-md shadow-md flex items-center justify-center gap-2 transition-all duration-300 ease-in-out 
-        ${Round1sub || isLoading2 ? "bg-[#01052A] text-white cursor-not-allowed" : "bg-[#01052A] text-white hover:bg-navy-600"}`}
+        ${!status || Round1sub || isLoading2 ? "bg-[#01052A] text-white cursor-not-allowed" : "bg-[#01052A] text-white hover:bg-navy-600"}`}
                         >
                             {isLoading2 ? (
                                 <>
@@ -563,6 +681,7 @@ const Round1 = ({ setAllPassed }) => {
                                 "Submit"
                             )}
                         </button>
+
 
                     </div>
                     <div className="mt-4">
@@ -640,85 +759,82 @@ const Round2 = ({ setAllPassed2 }) => {
 
 
     const randomNumber1 = participant?.randomnumber ?? 1; // Safe access
-    const randomNumber2 = randomNumber1 + 1;
+
+    let randomNumber2; // Declare outside so it can be used globally in this scope
+    if (randomNumber1 === 5) {
+        randomNumber2 = 1; // Assign inside conditions
+    } else {
+        randomNumber2 = randomNumber1 + 1;
+    }
 
 
     const problemSets = {
         1: {
             Emojicode: `
-int fibonacci (int n) {
-    if (n<= ❓)
-        return  n;
-    return fibonacci (n ➖ 1) ➕fibonacci (n ➖ ❓);
+📌 fact (🔢) {
+    🤔 (🔢 ⚖️❓) 👉 ↩️ 1️⃣
+    ↩️ 🔢 ✖️ fact (🔢 – ❓)
 }
-int main() {
-    int 📏 = 10; // Number of terms
-    for (int 🔢 = 0; 🔢 < 📏; 🔢++) {
-        printf("%d ", fibonacci (🔢));
-    }
-}
+fact (🔢)
 
-            `,
-            output: 120,
-            result: [1, 2],
+`,
+            // output: 120,
+            result: [1, 1],
         },
         2: {
             Emojicode: `
-📌 sumPower(🔢, ⚡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
-    ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+📌 sumDigits (🔢) {
+    🤔 (🔢 ⚖️❓) 👉 ↩️ 0️⃣
+    ↩️ ((🔢 %🔟) ➕ sumDigits (🔢 / ❓)
 }
-sumPower(4, 3)
-            `,
-            output: 364,
-            result: [1, 2],
+sumDigits (🔢)
+
+`,
+            // output: 364,
+            result: [0, 10],
         },
         3: {
             Emojicode: `
-📌 calc(🔢, 💡, ⚡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
-    ↩️ 🔢 ✖️ 💡 ➕ calc(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓)
+📌 sumEven (🔢) {
+    🤔 (🔢 ⚖️❓) 👉 ↩️ 2️⃣
+    ↩️ sumEven (❓* 🔢) ➕ sumEven (🔢 – 1️⃣)
 }
-calc(4, 2, 3)
+sumEven(🔢)
+
             `,
-            output: 40,
+            // output: 40,
             result: [1, 2],
         },
         4: {
             Emojicode: `
-📌 expSum(🔢, ⚡, 💡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
-    ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+📌 reverse (🔢, 🔡) {
+    🤔 (🔢 ⚖️❓) 👉 ↩️ 🔡
+    ↩️ reverse(n/🔟, 🔡*🔟+(🔢% ❓ ))
 }
-expSum(3, 3, 2)
+reverse (🔢)
+
             `,
-            output: 147,
-            result: [1, 2],
+            // output: 147,
+            result: [0, 10],
         },
         5: {
             Emojicode: `
-📌 fibMulAdd(🔢, 💡, ⚡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(💡 ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ✖️ 2
-    🤔(⚡ ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
-    ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ 1, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+📌 fibonacci (🔢) {
+    🤔 ( 🔢 ⚖️❓) 👉 ↩️ 🔢
+    ↩️ fibonacci (🔢 - 1️⃣) ➕ fibonacci (🔢 - ❓)
 }
-fibMulAdd(7, 3, 5)
+fibonacci (🔢)
+
+
             `,
-            output: 9,
+            // output: 9,
             result: [1, 2],
         }
     };
 
     const { Emojicode: Emojicode1, output: output1, result: result1 } = problemSets[randomNumber1];
     const { Emojicode: Emojicode2, output: output2, result: result2 } = problemSets[randomNumber2];
+
 
 
     const predefinedValues = [1, 2];
@@ -744,12 +860,24 @@ fibMulAdd(7, 3, 5)
 
     const fetchRound2SubTime = async (setSubtime2) => {
         try {
-            const response = await fetch("http://localhost:5000/getround2submissiontime", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+
+            const participantEmail = sessionStorage.getItem("participantEmail");
+
+            if (!participantEmail) {
+                console.error("Participant email not found in session storage");
+                return;
+            }
+
+            const response = await fetch(
+                `http://localhost:5000/getround2submissiontime?email=${encodeURIComponent(participantEmail)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
 
             const data = await response.json();
 
@@ -895,7 +1023,7 @@ fibMulAdd(7, 3, 5)
             <div className="flex justify-between p-6 space-x-6">
                 <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <p className="text-cyan-400 font-semibold mb-5">Task: Identify and provide the missing values in the incomplete code.</p>
-                    <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto">{Emojicode1}</pre>
+                    <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto" style={{userSelect:"none"}} >{Emojicode1}</pre>
                     <p className="mt-2 text-gray-400">Output: {output1}</p>
                     <div className="mt-4">
                         <h4 className="font-semibold text-lg text-blue-400">Input Values</h4>
@@ -1084,12 +1212,12 @@ expSum(3, 3, 2)
     const fetchRound3SubTime = async (setSubmissionTime) => {
         try {
             const participantEmail = sessionStorage.getItem("participantEmail"); // Get participant email from sessionStorage
-        
+
             if (!participantEmail) {
                 console.error("Participant email not found in session storage");
                 return;
             }
-        
+
             const response = await fetch(`http://localhost:5000/getround3submissiontime?email=${encodeURIComponent(participantEmail)}`, {
                 method: "GET",
                 headers: {
@@ -1113,7 +1241,7 @@ expSum(3, 3, 2)
     // Usage example
     useEffect(() => {
         fetchRound3SubTime(setSubmissionTime);
-    }, []); 
+    }, []);
 
 
     const [isLoading1, setIsLoading1] = useState(false);
@@ -1159,7 +1287,7 @@ expSum(3, 3, 2)
                 console.error("Participant email not found in session storage");
                 return;
             }
-    
+
             const response = await fetch("http://localhost:5000/updatepoints", {
                 method: "POST",
                 headers: {
@@ -1203,7 +1331,7 @@ expSum(3, 3, 2)
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email: participantEmail, points }),
+                body: JSON.stringify({ email: participantEmail, points }),
             });
 
             if (!response.ok) {
@@ -1236,7 +1364,7 @@ expSum(3, 3, 2)
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email: participantEmail,points }),
+                body: JSON.stringify({ email: participantEmail, points }),
             });
 
             if (!response.ok) {
@@ -1264,17 +1392,17 @@ expSum(3, 3, 2)
             try {
                 const participantEmail = sessionStorage.getItem("participantEmail");
 
-            if (!participantEmail) {
-                console.error("Participant email not found in session storage");
-                return;
-            }
+                if (!participantEmail) {
+                    console.error("Participant email not found in session storage");
+                    return;
+                }
 
                 const response = await fetch("http://localhost:5000/gethints", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ email: participantEmail }), 
+                    body: JSON.stringify({ email: participantEmail }),
                 });
 
                 if (!response.ok) {
@@ -1311,9 +1439,6 @@ expSum(3, 3, 2)
                 )}
             </div>
 
-
-
-
             <div className="flex justify-between p-10 space-x-6 min-h-screen text-white">
                 {/* Left Side: Main Code Section */}
 
@@ -1321,7 +1446,7 @@ expSum(3, 3, 2)
                     <div className="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
 
                         <p className="text-xl font-semibold text-gray-300">🔍 Analyze the Emoji Code:</p>
-                        <pre className="bg-gray-900 p-5 rounded-lg mt-4 text font-mono border border-gray-600 shadow-sm">
+                        <pre className="bg-gray-900 p-5 rounded-lg mt-4 text font-mono border border-gray-600 shadow-sm" style={{userSelect:"none"}}>
                             {Emoji}
                         </pre>
 
@@ -1418,11 +1543,43 @@ expSum(3, 3, 2)
 
                     </div>
 
-                    <div className="flex flex-col mt-4 text-black">
-                        {!hint1 && hint2 && !hint3 && <p><span>Hint1:</span>Think logically</p>}
-                        {!hint1 && !hint2 && hint3 && <p><span>Hint2 :</span>Think mentally</p>}
-                        {!hint1 && !hint2 && !hint3 && <p><span>Hint3 :</span> Use brain nad eyes</p>}
+                    <div className="flex flex-col mt-4 text-black space-y-2">
+                        {!hint1 && hint2 && !hint3 && (
+                            <p className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md shadow-md">
+                                <span className="font-semibold">Hint 1: </span>Think logically
+                            </p>
+                        )}
+                        {!hint1 && !hint2 && hint3 && (
+                            <p className="bg-green-100 text-green-700 px-4 py-2 rounded-md shadow-md">
+                                <span className="font-semibold">Hint 2: </span>Think mentally
+                            </p>
+                        )}
+                        {!hint1 && !hint2 && !hint3 && (
+                            <p className="bg-red-100 text-red-700 px-4 py-2 rounded-md shadow-md border border-yellow-500">
+                                <span className="font-semibold">Hint 3: </span>Use brain and eyes
+                            </p>
+
+                        )}
                     </div>
+                    <div className="mt-5 p-6 bg-gray-900 rounded-lg shadow-lg border border-gray-700">
+                        <h1 className="text-xl font-bold text-gray-200 mb-4 underline">Round 3 Guidelines</h1>
+                        <ul className="space-y-2">
+                            <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
+                                <span className="font-semibold text-blue-400">🔹 Hint 1:</span> Using this hint will **deduct 10 emojis**.
+                            </li>
+                            <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
+                                <span className="font-semibold text-green-400">🔹 Hint 2:</span> Using this hint will **deduct 20 emojis**.
+                            </li>
+                            <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
+                                <span className="font-semibold text-red-400">🔹 Hint 3:</span> Using this hint will **deduct 30 emojis**.
+                            </li>
+                        </ul>
+                        <p className="mt-4 mb-5  text-lg text-center font-semibold bg-gray-800 text-gray-300 p-3 rounded-md border border-gray-600">
+                            🎯 Participants with the **highest number of emojis** will secure the **top positions on the leaderboard**.
+                        </p>
+                    </div>
+
+
                 </div>
 
             </div>
