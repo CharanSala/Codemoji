@@ -96,12 +96,22 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
+          <Link
+              to="/leaderboard"
+              className="text-gray-200 mt-3 hover:text-blue-500 transition duration-300 flex items-center"
+            >
+              🏆Leaderboard
+            </Link>
+          </li>
+          
+          <li>
             <Link
               to="/about"
               className="text-gray-200 mt-3 hover:text-blue-500 transition duration-300 flex items-center"
             >
               ℹ️ About
             </Link>
+            
           </li>
           <li className="flex items-center gap-2 px-4 py-2  bg-[#01052A] rounded-lg shadow-md border border-gray-600">
     <p className="text-white text-lg font-semibold flex items-center gap-2">
