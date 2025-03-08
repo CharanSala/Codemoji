@@ -565,108 +565,74 @@ Mystery_box3 (🔢) {
             editor.trigger(null, "undo", null); // Revert the paste operation
         });
     };
+    
 
 
-    const [timeLeft, setTimeLeft] = useState(10);
+    const fixedStartTime = new Date();
+    fixedStartTime.setHours(12, 40, 0, 0); // 10:20 PM
+    const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
+   
+    const [currentTime, setCurrentTime] = useState(Date.now()); 
+  
+  
+    // Round closing times based on fixed start time
+    // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
+     const round2Close = fixedStartTimestamp + 5 * 60 * 1000; // Round 2 closes at 10:22 PM
+    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
+  
     useEffect(() => {
-        const fetchTimeFromDatabase = async () => {
-            try {
-                const email = sessionStorage.getItem("participantEmail");
+      const timer = setInterval(() => {
+        setCurrentTime(Date.now());
 
-                if (!email) {
-                    console.error("No email found in session storage");
-                    return;
-                }
+        if (Date.now() >= round2Close) {
+           
+            const checkRound1Eligibility = async () => {
+              const email = sessionStorage.getItem("participantEmail");
+              console.log("Gett email");
 
-                const response = await fetch(`http://localhost:5000/get-level2timer?email=${email}`);
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch time: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-
-                const fetchedTime = data.timeLeft;
-
-            setTimeLeft(data.timeLeft); 
-
-            } catch (error) {
-                console.error("Error fetching time:", error);
-                setTimeLeft(600);
-            }
-        };
-
-        fetchTimeFromDatabase();
-    }, []); // Runs only on component mount
-
-    // Timer logic - Updates backend every second
-    useEffect(() => {
-        if (timeLeft === null || timeLeft <= 0) return; // Ensure time is fetched before starting countdown
-
-        const timer = setInterval(() => {
-            setTimeLeft((prevTime) => {
-                if (prevTime === null || prevTime <= 0) return 0; // Stop at 0
-                const newTime = prevTime - 1;
-                updateTimeInDatabase(newTime);
-                return newTime;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [timeLeft]); // Runs when `timeLeft` is set
-
-    // Function to send timeLeft to backend
-    const updateTimeInDatabase = async (time) => {
-        try {
-            const email = sessionStorage.getItem("participantEmail"); // Retrieve email from sessionStorage
-
-            if (!email) {
+              if (!email) {
                 console.error("No email found in session storage");
                 return;
-            }
-
-            if (time === 0) {
-                setAllPassed(true);
-                const response = await fetch("http://localhost:5000/update-level2submissiontime", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, time }),
-                });
-
-                if (response.ok) {
-                    console.log("saved");
-                }
-
-            }
-
-            const response = await fetch("http://localhost:5000/update-level2timer", {
-                method: "POST",
-                headers: {
+              }
+    
+              try {
+                const response = await fetch("https://codemojibackend.onrender.com/check-round1", {
+                  method: "POST",
+                  headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, time }),
-            });
+                  },
+                  body: JSON.stringify({ email }),
+                });
+    
+                const data = await response.json();
+                console.log(data.message);
+    
+                if (data.eligible) {
+                  // Handle logic when user is eligible for round 2
+                }
+              } catch (error) {
+                console.error("Error checking round 1 eligibility:", error);
+              }
+            };
+    
+            checkRound1Eligibility();
+            
+            setAllPassed(true);
+          }
+        }, 1000);
 
+      return () => clearInterval(timer); // Cleanup on component unmount
+    }, [round2Close]);
+  
+    
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const seconds = date.getSeconds().toString().padStart(2, "0");
+        return `${hours}:${minutes}:${seconds}`;
+      };
 
-            if (!response.ok) {
-                throw new Error(`Failed to update time: ${response.statusText}`);
-            }
-
-            console.log(`Time updated in database for ${email}:`, time);
-        } catch (error) {
-            console.error("Error updating time:", error);
-        }
-    };
-
-    // Format time in mm:ss
-    const formatTime = (seconds) => {
-        if (seconds <= 0) return "00:00"; // Ensure it doesn't show negative time
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-    };
 
     const languages = ["python", "cpp", "c"];
 
@@ -674,16 +640,16 @@ Mystery_box3 (🔢) {
 
         <div>
             <div className="flex justify-center w-full px-10">
-            <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
-                Emoji Decription
-            </h3>
+                <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                    Emoji Decription
+                </h3>
 
                 {/* Right-aligned Timer */}
                 <p className="absolute right-10 text-2xl font-semibold text-red-700  px-4 py-2 rounded-lg">
-                    ⏰{formatTime(timeLeft)}
+                    ⏰{formatTime(currentTime)}
                 </p>
 
-            </div> 
+            </div>
 
             {Round1sub && (
                 <h3 className="text-green-700 font-bold text-lg mb-5 text-center">
@@ -868,7 +834,7 @@ const Round2 = ({ setAllPassed2 }) => {
     }, [participantEmail]);
 
 
-    const randomNumber1 = participant?.randomnumber ?? 1 ;
+    const randomNumber1 = participant?.randomnumber ?? 1;
 
     let randomNumber2; // Declare outside so it can be used globally in this scope
     if (randomNumber1 === 5) {
@@ -1038,7 +1004,7 @@ fibonacci (🔢)
             setIsLoading1(false); // Stop loading
         }
     };
-    
+
     const handleSubmit2 = async () => {
         setIsLoading2(true);
         try {
@@ -1095,116 +1061,83 @@ fibonacci (🔢)
     };
     useEffect(() => {
         if (subtime1) {
-            setResultMessage(""); 
+            setResultMessage("");
         }
     }, [subtime1]);
 
     useEffect(() => {
         if (subtime2) {
-            setAllPassed2(true);  
+            setAllPassed2(true);
         }
     }, [subtime2]);
 
-    const [timeLeft, setTimeLeft] = useState();
+
+    const fixedStartTime = new Date();
+    fixedStartTime.setHours(12, 40, 0, 0); // 10:20 PM
+    const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
+   
+    const [currentTime, setCurrentTime] = useState(Date.now());
+  
+  
+    // Round closing times based on fixed start time
+    const round1Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 1 closes at 10:21 PM
+    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
+    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
+  
     useEffect(() => {
-        const fetchTimeFromDatabase = async () => {
-            try {
-                const email = sessionStorage.getItem("participantEmail");
-
-                if (!email) {
-                    console.error("No email found in session storage");
-                    return;
-                }
-
-                const response = await fetch(`http://localhost:5000/get-timer?email=${email}`);
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch time: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-
-                const fetchedTime = data.timeLeft;
-
-            setTimeLeft(data.timeLeft); 
-
-            } catch (error) {
-                console.error("Error fetching time:", error);
-                setTimeLeft(600);
-            }
-        };
-
-        fetchTimeFromDatabase();
-    }, []); // Runs only on component mount
-
-    // Timer logic - Updates backend every second
-    useEffect(() => {
-        if (timeLeft === null || timeLeft <= 0) return; // Ensure time is fetched before starting countdown
-
         const timer = setInterval(() => {
-            setTimeLeft((prevTime) => {
-                if (prevTime === null || prevTime <= 0) return 0; // Stop at 0
-                const newTime = prevTime - 1;
-                updateTimeInDatabase(newTime);
-                return newTime;
-            });
-        }, 1000);
+          setCurrentTime(Date.now());
 
-        return () => clearInterval(timer);
-    }, [timeLeft]); // Runs when `timeLeft` is set
+          if (Date.now() >= round1Close) {
+           
+            const checkRound2Eligibility = async () => {
+              const email = sessionStorage.getItem("participantEmail");
+              console.log("Gett email");
 
-    // Function to send timeLeft to backend
-    const updateTimeInDatabase = async (time) => {
-        try {
-            const email = sessionStorage.getItem("participantEmail"); // Retrieve email from sessionStorage
-
-            if (!email) {
+              if (!email) {
                 console.error("No email found in session storage");
                 return;
-            }
-
-            if (time === 0) {
-                setAllPassed2(true);
-                const response = await fetch("http://localhost:5000/update-level1submissiontime", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, time }),
-                });
-
-                if (response.ok) {
-                    console.log("saved");
-                }
-
-            }
-
-            const response = await fetch("http://localhost:5000/update-timer", {
-                method: "POST",
-                headers: {
+              }
+    
+              try {
+                const response = await fetch("https://codemojibackend.onrender.com/check-round2", {
+                  method: "POST",
+                  headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, time }),
-            });
+                  },
+                  body: JSON.stringify({ email }),
+                });
+    
+                const data = await response.json();
+                console.log(data.message);
+    
+                if (data.eligible) {
+                  // Handle logic when user is eligible for round 2
+                }
+              } catch (error) {
+                console.error("Error checking round 2 eligibility:", error);
+              }
+            };
+    
+            checkRound2Eligibility();
+            
+            setAllPassed2(true);
+          }
+        }, 1000);
+    
+        return () => clearInterval(timer); // Cleanup on component unmount
+      }, [round1Close]);
+  
+    
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const seconds = date.getSeconds().toString().padStart(2, "0");
+        return `${hours}:${minutes}:${seconds}`;
+      };
 
-            if (!response.ok) {
-                throw new Error(`Failed to update time: ${response.statusText}`);
-            }
-
-            console.log(`Time updated in database for ${email}:`, time);
-        } catch (error) {
-            console.error("Error updating time:", error);
-        }
-    };
-
-    // Format time in mm:ss
-    const formatTime = (seconds) => {
-        if (seconds <= 0) return "00:00"; // Ensure it doesn't show negative time
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-    };
-
+    
     return (
         <div className="min-h-screen bg-white text-white ">
             <div className="flex justify-center w-full px-10">
@@ -1215,11 +1148,11 @@ fibonacci (🔢)
 
                 {/* Right-aligned Timer */}
                 <p className="absolute right-10 text-2xl font-semibold text-red-700  px-4 py-2 rounded-lg">
-                    ⏰{formatTime(timeLeft)}
+                    ⏰{formatTime(currentTime)}
                 </p>
 
-            </div> 
-        
+            </div>
+
             {resultMessage && (
                 <div className="mb-8 pb-5 text-lg font-bold text-center px-4 py-2 rounded-md text-red-700 shadow-lg">
                     {resultMessage}
@@ -1528,6 +1461,8 @@ expSum(3, 3, 2)
             setAllPassed3(true);  // If submission time exists, mark Round 1 as passed
         }
     }, [submissionTime]);
+
+
     const handleHintClick1 = async (hintSetter, nextHintSetter, points) => {
         try {
 
@@ -1636,107 +1571,71 @@ expSum(3, 3, 2)
     }, []);
 
 
-    const [timeLeft, setTimeLeft] = useState(10);
+
+    const fixedStartTime = new Date();
+    fixedStartTime.setHours(12, 40, 0, 0); 
+    const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
+     
+    const [currentTime, setCurrentTime] = useState(Date.now());
+  
+  
+    // Round closing times based on fixed start time
+    // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
+    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
+     const round3Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 3 closes at 10:23 PM
+  
     useEffect(() => {
-        const fetchTimeFromDatabase = async () => {
-            try {
-                const email = sessionStorage.getItem("participantEmail");
-
-                if (!email) {
-                    console.error("No email found in session storage");
-                    return;
-                }
-
-                const response = await fetch(`http://localhost:5000/get-level3timer?email=${email}`);
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch time: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-
-                const fetchedTime = data.timeLeft;
-
-            setTimeLeft(data.timeLeft); 
-
-            } catch (error) {
-                console.error("Error fetching time:", error);
-                setTimeLeft(600);
-            }
-        };
-
-        fetchTimeFromDatabase();
-    }, []); // Runs only on component mount
-
-    // Timer logic - Updates backend every second
-    useEffect(() => {
-        if (timeLeft === null || timeLeft <= 0) return; // Ensure time is fetched before starting countdown
-
         const timer = setInterval(() => {
-            setTimeLeft((prevTime) => {
-                if (prevTime === null || prevTime <= 0) return 0; // Stop at 0
-                const newTime = prevTime - 1;
-                updateTimeInDatabase(newTime);
-                return newTime;
-            });
-        }, 1000);
+          setCurrentTime(Date.now());
 
-        return () => clearInterval(timer);
-    }, [timeLeft]); // Runs when `timeLeft` is set
+          if (Date.now() >= round3Close) {
+           
+            const checkRound3Eligibility = async () => {
+              const email = sessionStorage.getItem("participantEmail");
+              console.log("Gett email");
 
-    // Function to send timeLeft to backend
-    const updateTimeInDatabase = async (time) => {
-        try {
-            const email = sessionStorage.getItem("participantEmail"); // Retrieve email from sessionStorage
-
-            if (!email) {
+              if (!email) {
                 console.error("No email found in session storage");
                 return;
-            }
-
-            if (time === 0) {
-                setAllPassed3(true);
-                const response = await fetch("http://localhost:5000/update-level3submissiontime", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, time }),
-                });
-
-                if (response.ok) {
-                    console.log("saved");
-                }
-
-            }
-
-            const response = await fetch("http://localhost:5000/update-level3timer", {
-                method: "POST",
-                headers: {
+              }
+    
+              try {
+                const response = await fetch("https://codemojibackend.onrender.com/check-round3", {
+                  method: "POST",
+                  headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, time }),
-            });
-
-
-            if (!response.ok) {
-                throw new Error(`Failed to update time: ${response.statusText}`);
-            }
-
-            console.log(`Time updated in database for ${email}:`, time);
-        } catch (error) {
-            console.error("Error updating time:", error);
-        }
-    };
-
-    // Format time in mm:ss
-    const formatTime = (seconds) => {
-        if (seconds <= 0) return "00:00"; // Ensure it doesn't show negative time
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-    };
-
+                  },
+                  body: JSON.stringify({ email }),
+                });
+    
+                const data = await response.json();
+                console.log(data.message);
+    
+                if (data.eligible) {
+                  // Handle logic when user is eligible for round 2
+                }
+              } catch (error) {
+                console.error("Error checking round 3 eligibility:", error);
+              }
+            };
+    
+            checkRound3Eligibility();
+            
+            setAllPassed3(true);
+          }
+        }, 1000);
+    
+        return () => clearInterval(timer); // Cleanup on component unmount
+      }, [round3Close]);
+  
+    
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const seconds = date.getSeconds().toString().padStart(2, "0");
+        return `${hours}:${minutes}:${seconds}`;
+      };
 
     return (
         <div>
@@ -1744,17 +1643,17 @@ expSum(3, 3, 2)
             <div className="pb-7 rounded-b-xl shadow-lg shadow-gray-300">
 
 
-            <div className="flex justify-center w-full px-10">
-                <h2 className="text-5xl font-extrabold text-center pb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
-                    Code Unravel
-                </h2>
-          
-                <p className="absolute right-10 text-2xl font-semibold text-red-700  px-4 py-2 rounded-lg">
-                    ⏰{formatTime(timeLeft)}
-                </p>
+                <div className="flex justify-center w-full px-10">
+                    <h2 className="text-5xl font-extrabold text-center pb-4 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                        Code Unravel
+                    </h2>
 
-            </div> 
-            
+                    <p className="absolute right-10 text-2xl font-semibold text-red-700  px-4 py-2 rounded-lg">
+                        ⏰{formatTime(currentTime)}
+                    </p>
+
+                </div>
+
                 {submissionTime && (
                     <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
                         Submission Time: {submissionTime}
