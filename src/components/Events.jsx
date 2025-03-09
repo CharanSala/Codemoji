@@ -1263,84 +1263,156 @@ const Round3 = ({ setAllPassed3 }) => {
     const problemSets = {
         1: {
             Emojicode: `
-📌 fact(🔢, 💡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(💡 ⚖️ ❓) 👉 ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
-    ↩️ 🔢 ✖️ fact(🔢 ➖ ❓, 💡 ➖ ❓)
+📌Mystery_box(🔢 ) {
+   🤔 (🔢 == 0️⃣)
+        ↩️1️⃣ ;
+    
+    📕= 🔢 % 🔟; 
+    
+    🤔 ( 📕% 2️⃣ == 0️⃣) 
+        ↩️ Mystery_box (🔢 / 🔟); 
+    
+    ↩️ 📕*️⃣ Mystery_box (🔢 /🔟); 
 }
-fact(5, 3)
+Mystery_box(482351 )
+
             `,
-            output: 120,
+            output: 15,
+            hint1:`The program breaks down the number and processes each digit separately`,
+            hint2:`Certain digits affect the result, while others do not`,
+            hint3:`The program extracts digits and multiply only the odd ones(3,5,1)`,
 
         },
         2: {
             Emojicode: `
-📌 sumPower(🔢, ⚡) 
-{
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-    🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
-    ↩️ 🔢 ** ⚡ ➕ sumPower(🔢 ➖ ❓, ⚡ ➖ ❓)
+📌Mystery_box(🔢 ) {
+   🤔 (🔢 == 0️⃣)
+        ↩️1️⃣
+    
+    🍬= 🔢 % 🔟
+    
+    🤔 ( 🍬% 2️!=0️⃣)
+        ↩️ Mystery_box (🔢 / 🔟) 
+    
+    ↩️ 🍬*️⃣ Mystery_box (🔢 /🔟) 
 }
-sumPower(4, 3)
+Mystery_box(482351 )
             `,
-            output: 364,
+            output: 32,
+            hint1:`The program breaks down the number and processes each digit separately`,
+            hint2:`Certain digits affect the result, while others do not`,
+            hint3:`The program extracts digits and multiply only the even ones(4,8,2)`,
 
         },
         3: {
             Emojicode: `
-📌 secret_mystery(📦, 🔢, 🔡, 🔠) 
-{  
-    🤔(🔠 ⚖️ len(📦️)) 👉 ↩️ 🔡  
-    🤔(🔡 ⚖️ 📦[🔠] ➖ 📦[🔢]) 👉 🔡 = 📦[🔠] ➖ 📦[🔢]  
-    🔠 ➕= 1  
-    📌 secret_mystery(📦, 🔢, 🔡, 🔠)  
-}  
-📌 hidden_difference(📦, 🔢) 
-{  
-    🔡 = -10000  
-    🔠 = 1  
-    📌 secret_mystery(📦, 0, 🔡, 🔠)  
-    ↩️ 🔡  
+📌Mystery_box(🔢 ) {
+   🤔 (🔢 == 0️⃣)
+        ↩️1️⃣
+    
+    📍= 🔢 % 🔟
+    
+    🤔 ( 📍% 2️!=0️⃣)
+        ↩️ Mystery_box (🔢 / 🔟) 
+    
+    ↩️ 📍➕ Mystery_box (🔢 /🔟) 
+}
+Mystery_box(482351 )
 
 `,
-            output: "40",
+            output: 14,
+            hint1:`The program breaks down the number and processes each digit separately`,
+            hint2:`Certain digits affect the result, while others do not`,
+            hint3:`The program extracts digits and sum only the even ones(4,8,2)`,
+
 
         },
         4: {
             Emojicode: `
-📌 expSum(🔢, ⚡, 💡) {
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-        🤔(⚡ ⚖️ ❓) 👉 ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
-        ↩️ 🔢 ** ⚡ ➕ expSum(🔢 ➖ ❓, ⚡ ➕ ❓, 💡 ➖ ❓)
+📌Mystery_box1(🔡) {
+        ↩️🔡==2️⃣||🔡==3️⃣||🔡==5️⃣||🔡==7️⃣
+
+📌Mystery_box2(🔢 ) {
+   🤔 (🔢 == 0️⃣)
+        ↩️0️⃣
+    
+    🎁= 🔢 % 🔟
+    
+    🤔 Mystery_box1 ( 🔡)
+        ↩️ Mystery_box (🔢 / 🔟) 
+    
+    ↩️🎁➕Mystery_box2 (🔢 /🔟) 
 }
-expSum(3, 3, 2)
+Mystery_box2(735289 )
+
             `,
-            output: 147,
+            output: 17,
+            hint1:`The program breaks down the number and processes each digit separately`,
+            hint2:`Certain digits affect the result, while others do not`,
+            hint3:`The program extracts digits and sum only the prime ones (2, 3, 5, 7).`,
+
+
 
         },
         5: {
             Emojicode: `
-            📌 fibMulAdd(🔢, 💡, ⚡) {
-    🤔(🔢 ⚖️ ❓) 👉 ↩️ ❓
-            🤔(💡 ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ✖️ 2
-            🤔(⚡ ⚖️ ❓) 👉 ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ ❓, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
-            ↩️ fibMulAdd(🔢 ➖ ❓, 💡 ➕ 1, ⚡ ➖ ❓) ➕ fibMulAdd(🔢 ➖ 1, 💡 ➕ 1, ⚡ ➖ 1)
+📌Mystery_box1(🔡) {
+    ↩️🔡==2️⃣||🔡==3️⃣||🔡==5️⃣||🔡==7️⃣
+
+📌Mystery_box2(🔢 ) {
+   🤔 (🔢 == 0️⃣)
+        ↩️0️⃣
+    
+    🎯= 🔢 % 🔟
+    
+    🤔 Mystery_box1 ( 🔡)
+        ↩️ Mystery_box (🔢 / 🔟) 
+    
+    ↩️🎯*️⃣Mystery_box2 (🔢 /🔟) 
 }
-            fibMulAdd(7, 3, 5)
+Mystery_box2(735289 )
+
             `,
-            output: 9,
+            output: 210,
+            hint1:`The program breaks down the number and processes each digit separately`,
+            hint2:`Certain digits affect the result, while others do not`,
+            hint3:`TThe program extracts digits and multiply only the prime ones (2, 3, 5, 7)`,
+
 
         }
     };
 
 
-    const location = useLocation();
+    const [randomnum,setRandomnumber]=useState(1);
 
-    const participant = location.state?.participant || {}; // Ensure it's an object
-    const randomNumber = participant.randomnumber || 1;
+    useEffect(() => {
+        // Retrieve the email from session storage
+        const email = sessionStorage.getItem('participantEmail');
+        if (!email) {
+          console.error('No email found in session storage');
+          return;
+        }
+    
+        // Function to fetch random number from backend
+        const fetchRandomNumber = async () => {
+          try {
+            const response = await fetch(`/randomnumber?email=${encodeURIComponent(email)}`);
+            if (!response.ok) {
+              throw new Error('Failed to fetch random number');
+            }
+            const data = await response.json();
+            setRandomnumber(data.randomnum);
+          } catch (error) {
+            console.error('Error fetching random number:', error);
+          }
+        };
+    
+        fetchRandomNumber();
+      }, []);
+    
+    const randomNumber = randomnum || 1;
 
-    const { Emojicode: Emoji, output } = problemSets[randomNumber] || problemSets[1];
+    const { Emojicode: Emoji, output: output, hint1: Hint1, hint2:Hint2 ,hint3:Hint3 } = problemSets[randomNumber] || problemSets[1];
 
     console.log(output);
     const [userOutput, setUserOutput] = useState('');
@@ -1783,17 +1855,17 @@ expSum(3, 3, 2)
                     <div className="flex flex-col mt-4 text-black space-y-2">
                         {!hint1 && hint2 && !hint3 && (
                             <p className="bg-gray-800 text-blue-700 px-4 py-2 rounded-md shadow-md">
-                                <span className="font-semibold">Hint 1: </span>Think logically
+                                <span className="font-semibold">Hint 1: </span>{Hint1}
                             </p>
                         )}
                         {!hint1 && !hint2 && hint3 && (
                             <p className="bg-gray-800 text-green-700 px-4 py-2 rounded-md shadow-md">
-                                <span className="font-semibold">Hint 2: </span>Think mentally
+                                <span className="font-semibold">Hint 2: </span>{Hint2}
                             </p>
                         )}
                         {!hint1 && !hint2 && !hint3 && (
                             <p className="bg-gray-800 text-red-700 px-4 py-2 rounded-md shadow-md border border-yellow-500">
-                                <span className="font-semibold">Hint 3: </span>Use brain and eyes
+                                <span className="font-semibold">Hint 3: </span>{Hint3}
                             </p>
 
                         )}
@@ -1808,7 +1880,7 @@ expSum(3, 3, 2)
                                 <span className="font-semibold text-green-400">🔹 Hint 2:</span> Using this hint will deduct 20 emojis
                             </li>
                             <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
-                                <span className="font-semibold text-red-400">🔹 Hint 3:</span>Using this hint will deduct 30 emojis
+                                <span className="font-semibold text-red-400">🔹 Hint 3:</span> Using this hint will deduct 30 emojis
                             </li>
                         </ul>
                         <p className="mt-4 mb-5  text-lg text-center font-semibold bg-gray-800 text-gray-300 p-3 rounded-md border border-gray-600">
