@@ -656,7 +656,7 @@ Mystery_box3 (🔢) {
                     Submission Time: {Round1sub}
                 </h3>
             ) : (
-                <h3 className="text-lg font-extrabold text-center bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                <h3 className="text-red-700 text-lg font-bold text-center ">
                     Round1 closes at 2:40 pm
                 </h3>
             )}
