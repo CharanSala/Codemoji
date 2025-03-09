@@ -1851,17 +1851,17 @@ Mystery_box2(735289 )
 
                     <div className="flex flex-col mt-4 text-black space-y-2">
                         {!hint1 && hint2 && !hint3 && (
-                            <p className="bg-gray-800 text-blue-700 px-4 py-2 rounded-md shadow-md">
+                            <p className="bg-gray-800 text-blue-400 text-center font-semibold px-4 py-2 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 1: </span>{Hint1}
                             </p>
                         )}
                         {!hint1 && !hint2 && hint3 && (
-                            <p className="bg-gray-800 text-green-700 px-4 py-2 rounded-md shadow-md">
+                            <p className="bg-gray-800 font-semibold text-green-400 text-center px-4 py-2 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 2: </span>{Hint2}
                             </p>
                         )}
                         {!hint1 && !hint2 && !hint3 && (
-                            <p className="bg-gray-800 text-red-700 px-4 py-2 rounded-md shadow-md border border-yellow-500">
+                            <p className="bg-gray-800 text-red-400 font-semibold text-center px-4 py-2 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 3: </span>{Hint3}
                             </p>
 
