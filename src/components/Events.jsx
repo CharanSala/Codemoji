@@ -693,7 +693,7 @@ Mystery_box3 (🔢) {
                                 className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
                             >
                                 <option value="" disabled>
-                                    Select language
+                                Lang
                                 </option>
                                 {languages.map((lang) => (
                                     <option key={lang} value={lang} className="text-navy-900">
