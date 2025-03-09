@@ -1849,7 +1849,7 @@ Mystery_box2(735289 )
 
                     </div>
 
-                    <div className="flex flex-col items-center mt-4 text-black space-y-2">
+                    <div className="flex flex-col mt-4 text-black space-y-2">
                         {!hint1 && hint2 && !hint3 && (
                             <p className="bg-gray-800 text-blue-400 text-center font-semibold px-4 py-2 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 1: </span>{Hint1}
