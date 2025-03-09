@@ -1170,7 +1170,7 @@ fibonacci (🔢)
                     Submission Time: {subtime2}
                 </div>
             ) : (
-                <h3 className="text-red-700 text-lg font-bold text-center ">
+                <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
                     🔒 Round1 closes at 2:40 pm
                 </h3>
             )}
