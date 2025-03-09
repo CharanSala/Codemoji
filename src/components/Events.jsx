@@ -1383,34 +1383,29 @@ Mystery_box2(735289 )
     };
 
 
-    const [randomnum,setRandomnumber]=useState(1);
-
     useEffect(() => {
-        // Retrieve the email from session storage
-        const email = sessionStorage.getItem('participantEmail');
-        if (!email) {
-          console.error('No email found in session storage');
-          return;
-        }
-    
-        // Function to fetch random number from backend
-        const fetchRandomNumber = async () => {
-          try {
-            const response = await fetch(`/randomnumber?email=${encodeURIComponent(email)}`);
-            if (!response.ok) {
-              throw new Error('Failed to fetch random number');
+        const fetchParticipant = async () => {
+            if (!participantEmail) return;
+
+            try {
+                const response = await fetch(`https://codemojibackend.onrender.com/getParticipant?email=${participantEmail}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setParticipant(data.participant);
+                } else {
+                    console.error("Error:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching participant data:", error);
             }
-            const data = await response.json();
-            setRandomnumber(data.randomnum);
-          } catch (error) {
-            console.error('Error fetching random number:', error);
-          }
         };
-    
-        fetchRandomNumber();
-      }, []);
-    
-    const randomNumber = randomnum || 1;
+
+        fetchParticipant();
+    }, [participantEmail]);
+
+
+    const randomNumber = participant?.randomnumber ?? 1;
 
     const { Emojicode: Emoji, output: output, hint1: Hint1, hint2:Hint2 ,hint3:Hint3 } = problemSets[randomNumber] || problemSets[1];
 
