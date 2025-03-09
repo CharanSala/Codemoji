@@ -657,7 +657,7 @@ Mystery_box3 (🔢) {
                 </h3>
             ) : (
                 <h3 className="text-red-700 text-lg font-bold text-center ">
-                    Round1 closes at 2:40 pm
+                    🔒 Round2 closes at 3:10 pm
                 </h3>
             )}
 
@@ -1165,11 +1165,17 @@ fibonacci (🔢)
                 </div>
             )}
 
-            {subtime2 && (
+            {subtime2 ? (
                 <div className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-green-700  shadow-lg">
                     Submission Time: {subtime2}
                 </div>
+            ) : (
+                <h3 className="text-red-700 text-lg font-bold text-center ">
+                    🔒 Round1 closes at 2:40 pm
+                </h3>
             )}
+
+
 
             <div className="flex justify-between p-6 space-x-6">
                 <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
@@ -1660,11 +1666,16 @@ expSum(3, 3, 2)
 
                 </div>
 
-                {submissionTime && (
+                {submissionTime ? (
                     <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
                         Submission Time: {submissionTime}
                     </div>
+                ):(
+                    <h3 className="text-red-700 text-lg font-bold text-center ">
+                        🔒 Round3 closes at 3:30 pm
+                    </h3>
                 )}
+
             </div>
 
             <div className="flex justify-between p-10 space-x-6 min-h-screen text-white">
