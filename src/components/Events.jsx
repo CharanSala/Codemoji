@@ -1382,6 +1382,9 @@ Mystery_box2(735289 )
         }
     };
 
+    const [participant, setParticipant] = useState(null);
+
+    const participantEmail = sessionStorage.getItem("participantEmail");
 
     useEffect(() => {
         const fetchParticipant = async () => {
