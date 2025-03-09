@@ -692,14 +692,13 @@ Mystery_box3 (🔢) {
                                 onChange={(e) => setSelectedLanguage(e.target.value)}
                                 className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
                             >
-                                {languages.filter((lang) => lang !== selectedLanguage).map((lang) => (
+                                {languages.map((lang) => (
                                     <option key={lang} value={lang} className="text-navy-900">
                                         {lang.charAt(0).toUpperCase() + lang.slice(1)}
                                     </option>
                                 ))}
                             </select>
                         </div>
-
                         {/* <div className="mb-4 flex justify-center">
                 <label className="flex items-center text-navy-700">
                     <input
