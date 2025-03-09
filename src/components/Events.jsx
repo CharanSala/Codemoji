@@ -651,11 +651,16 @@ Mystery_box3 (🔢) {
 
             </div>
 
-            {Round1sub && (
+            {Round1sub ? (
                 <h3 className="text-green-700 font-bold text-lg mb-5 text-center">
                     Submission Time: {Round1sub}
                 </h3>
+            ) : (
+                <h3 className="text-5xl font-extrabold text-center pb-5 bg-gradient-to-r from-red-600 via-red-500 to-red-400 text-transparent bg-clip-text drop-shadow-lg animate-pulse">
+                    Round1 closes at 2:40 pm
+                </h3>
             )}
+
             <div className="flex flex-col md:flex-row justify-center items-center md:items-start p-6 space-y-6 md:space-y-0 md:space-x-6 bg-white text-gray-900 min-h-screen">
                 {/* Emoji Code Section */}
                 <div className="w-full md:w-1/2 flex flex-col bg-gray-00 p-6 rounded-lg bg-slate-300">
@@ -693,7 +698,7 @@ Mystery_box3 (🔢) {
                                 className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
                             >
                                 <option value="" disabled>
-                                Lang
+                                    Lang
                                 </option>
                                 {languages.map((lang) => (
                                     <option key={lang} value={lang} className="text-navy-900">
