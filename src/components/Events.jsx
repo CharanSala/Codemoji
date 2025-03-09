@@ -1416,14 +1416,14 @@ Mystery_box2(735289 )
 
     console.log(output);
     const [userOutput, setUserOutput] = useState('');
-    const [submissionTime, setSubmissionTime] = useState(participant.round3submissiontime);
+    const [submissionTime, setSubmissionTime] = useState(null);
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [hintNumber, setHintNumber] = useState(null);
 
     const [hint, setHint] = useState(""); // Track the revealed hint
     const [displayhint, setdisplayHint] = useState("");
-    const [points, setPoints] = useState(participant.points); // Track points
+    const [points, setPoints] = useState(0); // Track points
     const [hint1Revealed, setHint1Revealed] = useState(false);
     const [hint2Revealed, setHint2Revealed] = useState(false);
     const [hint3Revealed, setHint3Revealed] = useState(false);
