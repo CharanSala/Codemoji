@@ -468,8 +468,6 @@ Mystery_box3 (🔢) {
                 });
 
 
-
-
             } else {
                 if (result.failedTestCases.length > 0) {
                     let failedCount = result.failedTestCases.length;
@@ -656,7 +654,7 @@ Mystery_box3 (🔢) {
                     Submission Time: {Round1sub}
                 </h3>
             ) : (
-                <h3 className="text-red-700 text-lg font-bold text-center ">
+                <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
                     🔒 Round2 closes at 3:10 pm
                 </h3>
             )}
@@ -1671,7 +1669,7 @@ expSum(3, 3, 2)
                         Submission Time: {submissionTime}
                     </div>
                 ):(
-                    <h3 className="text-red-700 text-lg font-bold text-center ">
+                    <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
                         🔒 Round3 closes at 3:30 pm
                     </h3>
                 )}
@@ -2016,7 +2014,7 @@ const Events = () => {
                 <button
                     onClick={showRound2}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                    ${selectedRound === 2 ? 'text-[#01052A] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-white'} 
+                    ${selectedRound === 2 ? 'text-[#01052A] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-blue-950'} 
                     ${!allPassed2 && 'opacity-50 cursor-not-allowed'}`}
                     disabled={!allPassed2}
                 >
@@ -2026,7 +2024,7 @@ const Events = () => {
                 <button
                     onClick={showRound3}
                     className={`px-6 py-2 text-lg font-medium transition duration-300 
-                    ${selectedRound === 3 ? 'text-[#01052Ab] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-white'} 
+                    ${selectedRound === 3 ? 'text-[#01052Ab] border-b-2 border-[#01052A]' : 'text-gray-800 hover:text-blue-950'} 
                     ${!allPassed && 'opacity-50 cursor-not-allowed'}`}
                     disabled={!allPassed}
                 >
