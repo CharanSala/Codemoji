@@ -1764,7 +1764,7 @@ expSum(3, 3, 2)
 
                                 <button
                                     className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                                    onClick={() => handleHintClick2(setHint3, () => { }, 10)} // No next hint after Hint 3
+                                    onClick={() => handleHintClick2(setHint3, () => { }, 30)} // No next hint after Hint 3
                                     disabled={!hint3}
                                 >
                                     Hint 3
@@ -1782,17 +1782,17 @@ expSum(3, 3, 2)
 
                     <div className="flex flex-col mt-4 text-black space-y-2">
                         {!hint1 && hint2 && !hint3 && (
-                            <p className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md shadow-md">
+                            <p className="bg-gray-800 text-blue-700 px-4 py-2 rounded-md shadow-md">
                                 <span className="font-semibold">Hint 1: </span>Think logically
                             </p>
                         )}
                         {!hint1 && !hint2 && hint3 && (
-                            <p className="bg-green-100 text-green-700 px-4 py-2 rounded-md shadow-md">
+                            <p className="bg-gray-800 text-green-700 px-4 py-2 rounded-md shadow-md">
                                 <span className="font-semibold">Hint 2: </span>Think mentally
                             </p>
                         )}
                         {!hint1 && !hint2 && !hint3 && (
-                            <p className="bg-red-100 text-red-700 px-4 py-2 rounded-md shadow-md border border-yellow-500">
+                            <p className="bg-gray-800 text-red-700 px-4 py-2 rounded-md shadow-md border border-yellow-500">
                                 <span className="font-semibold">Hint 3: </span>Use brain and eyes
                             </p>
 
@@ -1802,17 +1802,17 @@ expSum(3, 3, 2)
                         <h1 className="text-xl font-bold text-gray-200 mb-4 underline">Round 3 Guidelines</h1>
                         <ul className="space-y-2">
                             <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
-                                <span className="font-semibold text-blue-400">🔹 Hint 1:</span> Using this hint will **deduct 10 emojis**.
+                                <span className="font-semibold text-blue-400">🔹 Hint 1:</span> Using this hint will deduct 10 emojis
                             </li>
                             <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
-                                <span className="font-semibold text-green-400">🔹 Hint 2:</span> Using this hint will **deduct 20 emojis**.
+                                <span className="font-semibold text-green-400">🔹 Hint 2:</span> Using this hint will deduct 20 emojis
                             </li>
                             <li className="bg-gray-800 text-gray-300 px-4 py-2 rounded-md shadow-sm">
-                                <span className="font-semibold text-red-400">🔹 Hint 3:</span> Using this hint will **deduct 30 emojis**.
+                                <span className="font-semibold text-red-400">🔹 Hint 3:</span>Using this hint will deduct 30 emojis
                             </li>
                         </ul>
                         <p className="mt-4 mb-5  text-lg text-center font-semibold bg-gray-800 text-gray-300 p-3 rounded-md border border-gray-600">
-                            🎯 Participants with the **highest number of emojis** will secure the **top positions on the leaderboard**.
+                            🎯 Participants with the highest number of emojis will secure the top positions on the leaderboard
                         </p>
                     </div>
 
