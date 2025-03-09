@@ -634,7 +634,7 @@ Mystery_box3 (🔢) {
     };
 
 
-    const languages = ["c","python"];
+    const languages = ["c", "python"];
 
     return (
 
@@ -692,6 +692,9 @@ Mystery_box3 (🔢) {
                                 onChange={(e) => setSelectedLanguage(e.target.value)}
                                 className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
                             >
+                                <option value="" disabled>
+                                    Select language
+                                </option>
                                 {languages.map((lang) => (
                                     <option key={lang} value={lang} className="text-navy-900">
                                         {lang.charAt(0).toUpperCase() + lang.slice(1)}
