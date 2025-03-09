@@ -567,7 +567,7 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(4, 25, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(16, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1077,7 +1077,7 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(4, 25, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(16, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1652,7 +1652,7 @@ Mystery_box2(735289 )
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(4, 25, 0, 0);
+    fixedStartTime.setHours(16, 30, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
