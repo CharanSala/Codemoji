@@ -29,7 +29,7 @@ const Signin = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
+      
       const result = await response.json();
       console.log("Server Response:", result);
       setMessage(result.message);
@@ -37,25 +37,17 @@ const Signin = () => {
       if (response.ok) {
         // Store only participantEmail in sessionStorage
         sessionStorage.setItem("participantEmail", result.email);
-
+    
         // Navigate to Events page (we will fetch full data there)
         navigate("/signin/events");
-      }
-
+    }
+    
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again.");
     }
   };
 
-  const [loading, setLoading] = useState(false);
-
-  const handleClick = async () => {
-    setLoading(true);
-    await onSubmit(); // Simulating API call
-    setLoading(false);
-  };
-  
   return (
     <UserContext.Provider value={user}>
       <div className="min-h-screen flex flex-col bg-white">
@@ -63,7 +55,7 @@ const Signin = () => {
         <div className="flex-grow flex justify-center items-center p-6">
           {/* Glassmorphism with Light Borders */}
           <div className="relative bg-white p-10 rounded-2xl shadow-lg w-full max-w-md border border-gray-300 transition-all duration-300 hover:shadow-2xl">
-
+            
             <h2 className="text-[#01052A] text-2xl font-bold text-center mb-6">
               Welcome to CodeMoji!
             </h2>
@@ -113,12 +105,9 @@ const Signin = () => {
               {/* Soft-Shadow Button */}
               <button
                 type="submit"
-                className={`w-full py-3 bg-[#01052A] text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${loading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                onClick={handleClick}
-                disabled={loading}
+                className="w-full py-3 bg-[#01052A] text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                {loading ? "Loading..." : "Login"}
+                Login
               </button>
 
               {/* Footer Message */}
