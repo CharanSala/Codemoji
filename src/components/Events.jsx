@@ -654,7 +654,7 @@ Mystery_box3 (🔢) {
                     Submission Time: {Round1sub}
                 </h3>
             ) : (
-                <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
+                <h3 className="text-lg font-bold text-center text-red-700 ">
                     🔒 Round2 closes at 3:10 pm
                 </h3>
             )}
