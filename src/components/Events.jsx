@@ -35,9 +35,7 @@ const Round1 = ({ setAllPassed }) => {
     }, [participantEmail]);
 
 
-    const [selectedLanguage, setSelectedLanguage] = useState(
-        participant?.language && participant?.language.trim() !== "" ? participant?.language : "c"
-    );
+    const [selectedLanguage, setSelectedLanguage] = useState("c");
 
     useEffect(() => {
         const fetchLanguage = async () => {
@@ -634,7 +632,7 @@ Mystery_box3 (🔢) {
     };
 
 
-    const languages = ["python", "c"];
+    const languages = [ "c","python"];
 
     return (
 
