@@ -565,73 +565,73 @@ Mystery_box3 (🔢) {
             editor.trigger(null, "undo", null); // Revert the paste operation
         });
     };
-    
+
 
 
     const fixedStartTime = new Date();
     fixedStartTime.setHours(12, 57, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
-   
-    const [currentTime, setCurrentTime] = useState(Date.now()); 
-  
-  
+
+    const [currentTime, setCurrentTime] = useState(Date.now());
+
+
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-     const round2Close = fixedStartTimestamp + 5 * 60 * 1000; // Round 2 closes at 10:22 PM
+    const round2Close = fixedStartTimestamp + 5 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
-  
+
     useEffect(() => {
-      const timer = setInterval(() => {
-        setCurrentTime(Date.now());
+        const timer = setInterval(() => {
+            setCurrentTime(Date.now());
 
-        if (Date.now() >= round2Close) {
-           
-            const checkRound1Eligibility = async () => {
-              const email = sessionStorage.getItem("participantEmail");
-              console.log("Gett email");
+            if (Date.now() >= round2Close) {
 
-              if (!email) {
-                console.error("No email found in session storage");
-                return;
-              }
-    
-              try {
-                const response = await fetch("https://codemojibackend.onrender.com/check-round1", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ email }),
-                });
-    
-                const data = await response.json();
-                console.log(data.message);
-    
-                if (data.eligible) {
-                  // Handle logic when user is eligible for round 2
-                }
-              } catch (error) {
-                console.error("Error checking round 1 eligibility:", error);
-              }
-            };
-    
-            checkRound1Eligibility();
-            
-            setAllPassed(true);
-          }
+                const checkRound1Eligibility = async () => {
+                    const email = sessionStorage.getItem("participantEmail");
+                    console.log("Gett email");
+
+                    if (!email) {
+                        console.error("No email found in session storage");
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch("https://codemojibackend.onrender.com/check-round1", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ email }),
+                        });
+
+                        const data = await response.json();
+                        console.log(data.message);
+
+                        if (data.eligible) {
+                            // Handle logic when user is eligible for round 2
+                        }
+                    } catch (error) {
+                        console.error("Error checking round 1 eligibility:", error);
+                    }
+                };
+
+                checkRound1Eligibility();
+
+                setAllPassed(true);
+            }
         }, 1000);
 
-      return () => clearInterval(timer); // Cleanup on component unmount
+        return () => clearInterval(timer); // Cleanup on component unmount
     }, [round2Close]);
-  
-    
+
+
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
         const hours = date.getHours().toString().padStart(2, "0");
         const minutes = date.getMinutes().toString().padStart(2, "0");
         const seconds = date.getSeconds().toString().padStart(2, "0");
         return `${hours}:${minutes}:${seconds}`;
-      };
+    };
 
 
     const languages = ["python", "c"];
@@ -692,7 +692,6 @@ Mystery_box3 (🔢) {
                                 onChange={(e) => setSelectedLanguage(e.target.value)}
                                 className="p-2 bg-navy-100 border border-gray-300 rounded-md text-navy-700"
                             >
-                               
                                 {languages.filter((lang) => lang !== selectedLanguage).map((lang) => (
                                     <option key={lang} value={lang} className="text-navy-900">
                                         {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -1075,69 +1074,69 @@ fibonacci (🔢)
     const fixedStartTime = new Date();
     fixedStartTime.setHours(12, 57, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
-   
+
     const [currentTime, setCurrentTime] = useState(Date.now());
-  
-  
+
+
     // Round closing times based on fixed start time
     const round1Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 1 closes at 10:21 PM
     // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
-  
+
     useEffect(() => {
         const timer = setInterval(() => {
-          setCurrentTime(Date.now());
+            setCurrentTime(Date.now());
 
-          if (Date.now() >= round1Close) {
-           
-            const checkRound2Eligibility = async () => {
-              const email = sessionStorage.getItem("participantEmail");
-              console.log("Gett email");
+            if (Date.now() >= round1Close) {
 
-              if (!email) {
-                console.error("No email found in session storage");
-                return;
-              }
-    
-              try {
-                const response = await fetch("https://codemojibackend.onrender.com/check-round2", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ email }),
-                });
-    
-                const data = await response.json();
-                console.log(data.message);
-    
-                if (data.eligible) {
-                  // Handle logic when user is eligible for round 2
-                }
-              } catch (error) {
-                console.error("Error checking round 2 eligibility:", error);
-              }
-            };
-    
-            checkRound2Eligibility();
-            
-            setAllPassed2(true);
-          }
+                const checkRound2Eligibility = async () => {
+                    const email = sessionStorage.getItem("participantEmail");
+                    console.log("Gett email");
+
+                    if (!email) {
+                        console.error("No email found in session storage");
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch("https://codemojibackend.onrender.com/check-round2", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ email }),
+                        });
+
+                        const data = await response.json();
+                        console.log(data.message);
+
+                        if (data.eligible) {
+                            // Handle logic when user is eligible for round 2
+                        }
+                    } catch (error) {
+                        console.error("Error checking round 2 eligibility:", error);
+                    }
+                };
+
+                checkRound2Eligibility();
+
+                setAllPassed2(true);
+            }
         }, 1000);
-    
+
         return () => clearInterval(timer); // Cleanup on component unmount
-      }, [round1Close]);
-  
-    
+    }, [round1Close]);
+
+
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
         const hours = date.getHours().toString().padStart(2, "0");
         const minutes = date.getMinutes().toString().padStart(2, "0");
         const seconds = date.getSeconds().toString().padStart(2, "0");
         return `${hours}:${minutes}:${seconds}`;
-      };
+    };
 
-    
+
     return (
         <div className="min-h-screen bg-white text-white ">
             <div className="flex justify-center w-full px-10">
@@ -1573,69 +1572,69 @@ expSum(3, 3, 2)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(12, 57, 0, 0); 
+    fixedStartTime.setHours(12, 57, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
-     
+
     const [currentTime, setCurrentTime] = useState(Date.now());
-  
-  
+
+
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
     // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
-     const round3Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 3 closes at 10:23 PM
-  
+    const round3Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 3 closes at 10:23 PM
+
     useEffect(() => {
         const timer = setInterval(() => {
-          setCurrentTime(Date.now());
+            setCurrentTime(Date.now());
 
-          if (Date.now() >= round3Close) {
-           
-            const checkRound3Eligibility = async () => {
-              const email = sessionStorage.getItem("participantEmail");
-              console.log("Gett email");
+            if (Date.now() >= round3Close) {
 
-              if (!email) {
-                console.error("No email found in session storage");
-                return;
-              }
-    
-              try {
-                const response = await fetch("https://codemojibackend.onrender.com/check-round3", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ email }),
-                });
-    
-                const data = await response.json();
-                console.log(data.message);
-    
-                if (data.eligible) {
-                  // Handle logic when user is eligible for round 2
-                }
-              } catch (error) {
-                console.error("Error checking round 3 eligibility:", error);
-              }
-            };
-    
-            checkRound3Eligibility();
-            
-            setAllPassed3(true);
-          }
+                const checkRound3Eligibility = async () => {
+                    const email = sessionStorage.getItem("participantEmail");
+                    console.log("Gett email");
+
+                    if (!email) {
+                        console.error("No email found in session storage");
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch("https://codemojibackend.onrender.com/check-round3", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ email }),
+                        });
+
+                        const data = await response.json();
+                        console.log(data.message);
+
+                        if (data.eligible) {
+                            // Handle logic when user is eligible for round 2
+                        }
+                    } catch (error) {
+                        console.error("Error checking round 3 eligibility:", error);
+                    }
+                };
+
+                checkRound3Eligibility();
+
+                setAllPassed3(true);
+            }
         }, 1000);
-    
+
         return () => clearInterval(timer); // Cleanup on component unmount
-      }, [round3Close]);
-  
-    
+    }, [round3Close]);
+
+
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
         const hours = date.getHours().toString().padStart(2, "0");
         const minutes = date.getMinutes().toString().padStart(2, "0");
         const seconds = date.getSeconds().toString().padStart(2, "0");
         return `${hours}:${minutes}:${seconds}`;
-      };
+    };
 
     return (
         <div>
