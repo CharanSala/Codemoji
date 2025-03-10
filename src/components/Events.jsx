@@ -392,7 +392,7 @@ Mystery_box3 (🔢) {
         try {
             const input = withInput ? Input : "";  // Only send input if 'withInput' is true
 
-            const response = await fetch('https://1vk96852-5000.inc1.devtunnels.ms/compile', {
+            const response = await fetch('https://codemojibackend2k25.onrender.com/compile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -429,7 +429,7 @@ Mystery_box3 (🔢) {
                 return;
             }
 
-            const response = await fetch("https://1vk96852-5000.inc1.devtunnels.ms/compile", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/compile", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
