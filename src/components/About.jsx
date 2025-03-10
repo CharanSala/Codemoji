@@ -45,16 +45,16 @@ const About = () => {
         </h2>
 
         {/* Team Members Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow p-6 flex flex-col items-center"
+              className="bg-white rounded-lg shadow p-6 flex flex-col items-center max-w-xs mx-auto"
             >
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-32 h-32 rounded-full object-cover mb-4"
+                className="w-28 h-28 rounded-full object-cover mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
               <div className="flex space-x-4">
@@ -64,7 +64,7 @@ const About = () => {
                   rel="noopener noreferrer"
                   aria-label="GitHub"
                 >
-                  <FaGithub size={24} className="text-gray-800 hover:text-gray-900" />
+                  <FaGithub size={20} className="text-gray-800 hover:text-gray-900" />
                 </a>
                 <a
                   href={member.linkedin}
@@ -72,7 +72,7 @@ const About = () => {
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
                 >
-                  <FaLinkedin size={24} className="text-blue-700 hover:text-blue-800" />
+                  <FaLinkedin size={20} className="text-blue-700 hover:text-blue-800" />
                 </a>
                 <a
                   href={member.instagram}
@@ -80,7 +80,7 @@ const About = () => {
                   rel="noopener noreferrer"
                   aria-label="Instagram"
                 >
-                  <FaInstagram size={24} className="text-pink-600 hover:text-pink-700" />
+                  <FaInstagram size={20} className="text-pink-600 hover:text-pink-700" />
                 </a>
               </div>
             </div>
