@@ -575,7 +575,7 @@ Mystery_box3 (🔢) {
 
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 2 closes at 10:22 PM
+    const round2Close = fixedStartTimestamp + 50 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
     useEffect(() => {
@@ -1084,7 +1084,7 @@ fibonacci (🔢)
 
 
     // Round closing times based on fixed start time
-    const round1Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 1 closes at 10:21 PM
+    const round1Close = fixedStartTimestamp + 30 * 60 * 1000; // Round 1 closes at 10:21 PM
     // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
