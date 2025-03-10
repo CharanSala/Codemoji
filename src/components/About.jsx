@@ -45,11 +45,11 @@ const About = () => {
         </h2>
 
         {/* Team Members Container */}
-        <div className="flex items-center justify-center flex-wrap gap-8">
+        <div className="flex items-center justify-center flex-wrap">
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow p-6 flex flex-col items-center max-w-xs mx-auto"
+              className="bg-white rounded-lg shadow p-6 flex flex-col items-center max-w-xs"
             >
               <img
                 src={member.image}
@@ -57,7 +57,7 @@ const About = () => {
                 className="w-28 h-28 rounded-full object-cover mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-              <div className="flex space-x-4">
+              <div className="flex">
                 <a
                   href={member.github}
                   target="_blank"
@@ -71,6 +71,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
+                  className="ml-0"
                 >
                   <FaLinkedin size={20} className="text-blue-700 hover:text-blue-800" />
                 </a>
@@ -79,6 +80,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
+                  className="ml-0"
                 >
                   <FaInstagram size={20} className="text-pink-600 hover:text-pink-700" />
                 </a>
