@@ -346,7 +346,6 @@ Mystery_box3 (🔢) {
                 { input: "6", expectedOutput: "72" },
                 { input: "15", expectedOutput: "96768" },
                 { input: "24", expectedOutput: "836075520" },
-                { input: "17", expectedOutput: "1741824" },
             ]
         }
     };
