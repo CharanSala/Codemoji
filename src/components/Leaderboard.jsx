@@ -18,22 +18,10 @@ const Leaderboard = () => {
         }
 
         const data = await response.json();
+        console.log("leaderboard", data);
 
-        console.log("leaderboard",data);
-
-        // Sorting logic
-        const sortedData = data.sort((a, b) => {
-          // First, sort by points (higher is better)
-          if (b.points !== a.points) return b.points - a.points;
-
-          // If points are equal, sort by submission time (lower is better)
-          return (
-            (a.round3SubmissionTime || a.round2SubmissionTime || a.round1SubmissionTime) -
-            (b.round3SubmissionTime || b.round2SubmissionTime || b.round1SubmissionTime)
-          );
-        });
-
-        setLeaderboardData(sortedData);
+        // Rely on backend for sorting and HH:MM:SS time formatting
+        setLeaderboardData(data);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -45,14 +33,6 @@ const Leaderboard = () => {
     const interval = setInterval(fetchLeaderboard, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  // Function to format time (minutes and seconds)
-  const formatTime = (totalSeconds) => {
-    if (totalSeconds === Infinity || totalSeconds == null) return "--"; // Handle missing data
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}m ${seconds}s`;
-  };
 
   // Function to assign rank emojis
   const getRankEmoji = (rank) => {
@@ -100,11 +80,13 @@ const Leaderboard = () => {
                   {participant.points} 😜
                 </td>
                 <td className="border p-2 text-center">
-                  {formatTime(
-                    participant. round1Time ||
-                      participant. round2Time ||
-                      participant. round3Time
-                  )}
+                  {participant.latestRound === 3
+                    ? participant.round3Time
+                    : participant.latestRound === 2
+                    ? participant.round2Time
+                    : participant.latestRound === 1
+                    ? participant.round1Time
+                    : "--"}
                 </td>
               </tr>
             ))}
