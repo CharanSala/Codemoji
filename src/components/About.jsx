@@ -40,11 +40,39 @@ const About = () => {
 
       {/* Main Content */}
       <div className="container mx-auto py-16">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-8">
           About Us
         </h2>
+        
+        {/* Event Description */}
+        <div className="mb-12 text-center px-4">
+          <p className="mb-4 text-lg text-gray-700">
+            Codemoji is a one-of-a-kind tech event that challenges participants with a creative twist on programming. Instead of traditional code, participants work with emoji-based programs—decoding their meaning, identifying missing logic, and analyzing execution. The ultimate goal? Transform a crying emoji into a smiling one by successfully solving all three rounds.
+          </p>
+          <h3 className="text-2xl font-semibold mb-4 text-gray-800">Event Rounds:</h3>
+          <div className="text-left max-w-3xl mx-auto text-gray-700">
+            <p className="mb-2">
+              <span className="font-bold">1. Logic Patch –</span> Given an incomplete emoji-based code with missing logic represented by question marks (?), participants must analyze the structure, identify the missing logic, and complete the program correctly.
+            </p>
+            <p className="mb-4">
+              <span className="font-bold">Ex:</span> 🤔(🔢%❓== 0 ) 👉🏼 ✍🏼('Even'); <span className="italic">Value:❓- 2</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-bold">2. Emoji Description –</span> Participants receive a program written entirely in emojis. Their challenge is to interpret the meaning and translate it into a valid programming language (C, C++, Java, or Python). To proceed, they must ensure all test cases pass successfully.
+            </p>
+            <p className="mb-4">
+              <span className="font-bold">Ex:</span> 🤔(🔢% 2 == 0) <span className="italic">Program: If( a % 2 == 0 )</span>
+            </p>
+            <p className="mb-2">
+              <span className="font-bold">3. CodeUnreal –</span> Participants must carefully analyze its execution step by step and accurately determine the final output. Precision and attention to detail are key.
+            </p>
+            <p>
+              <span className="font-bold">Ex:</span> 📌 Even(🔢): 🤔(🔢 % 2 == 0 ) 👉🏼 ↩ 🔢 ✍🏼 Even(2) <span className="italic">Output : 2</span>
+            </p>
+          </div>
+        </div>
 
-        {/* Team Members Container with small gap */}
+        {/* Team Members Grid */}
         <div className="flex items-center justify-center flex-wrap gap-4">
           {teamMembers.map((member, index) => (
             <div
@@ -56,7 +84,8 @@ const About = () => {
                 alt={member.name}
                 className="w-28 h-28 rounded-full object-cover mb-4"
               />
-              <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+              <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
+              <span className="text-sm text-gray-500 mb-2">Event cordinators</span>
               <div className="flex">
                 <a
                   href={member.github}
