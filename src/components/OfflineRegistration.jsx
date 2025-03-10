@@ -16,7 +16,7 @@ const OfflineRegistration = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://codemojibackend.onrender.com/register", {
+      const response = await fetch("https://codemojibackend2k25.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -18,7 +18,7 @@ const Round1 = ({ setAllPassed }) => {
             if (!participantEmail) return;
 
             try {
-                const response = await fetch(`https://codemojibackend.onrender.com/getParticipant?email=${participantEmail}`);
+                const response = await fetch(`https://codemojibackend2k25.onrender.com/getParticipant?email=${participantEmail}`);
                 const data = await response.json();
 
                 if (response.ok) {
@@ -46,7 +46,7 @@ const Round1 = ({ setAllPassed }) => {
 
             try {
                 const response = await fetch(
-                    `https://codemojibackend.onrender.com/getlanguage?email=${encodeURIComponent(participantEmail)}`
+                    `https://codemojibackend2k25.onrender.com/getlanguage?email=${encodeURIComponent(participantEmail)}`
                 );
                 const data = await response.json();
 
@@ -72,7 +72,7 @@ const Round1 = ({ setAllPassed }) => {
 
             try {
                 const response = await fetch(
-                    `https://codemojibackend.onrender.com/getsubmittedcode?email=${encodeURIComponent(participantEmail)}`
+                    `https://codemojibackend2k25.onrender.com/getsubmittedcode?email=${encodeURIComponent(participantEmail)}`
                 );
                 const data = await response.json();
 
@@ -96,7 +96,7 @@ const Round1 = ({ setAllPassed }) => {
 
             try {
                 const response = await fetch(
-                    `https://codemojibackend.onrender.com/getsubmissiontime?email=${encodeURIComponent(participantEmail)}`
+                    `https://codemojibackend2k25.onrender.com/getsubmissiontime?email=${encodeURIComponent(participantEmail)}`
                 );
                 const data = await response.json();
 
@@ -393,7 +393,7 @@ Mystery_box3 (🔢) {
         try {
             const input = withInput ? Input : "";  // Only send input if 'withInput' is true
 
-            const response = await fetch('https://codemojibackend.onrender.com/compile', {
+            const response = await fetch('https://codemojibackend2k25.onrender.com/compile', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -430,7 +430,7 @@ Mystery_box3 (🔢) {
                 return;
             }
 
-            const response = await fetch("https://codemojibackend.onrender.com/compile", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/compile", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -533,7 +533,7 @@ Mystery_box3 (🔢) {
         }
 
         try {
-            const response = await fetch("https://codemojibackend.onrender.com/savecode", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/savecode", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -594,7 +594,7 @@ Mystery_box3 (🔢) {
                     }
 
                     try {
-                        const response = await fetch("https://codemojibackend.onrender.com/check-round1", {
+                        const response = await fetch("https://codemojibackend2k25.onrender.com/check-round1", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -821,7 +821,7 @@ const Round2 = ({ setAllPassed2 }) => {
             if (!participantEmail) return;
 
             try {
-                const response = await fetch(`https://codemojibackend.onrender.com/getParticipant?email=${participantEmail}`);
+                const response = await fetch(`https://codemojibackend2k25.onrender.com/getParticipant?email=${participantEmail}`);
                 const data = await response.json();
 
                 if (response.ok) {
@@ -949,7 +949,7 @@ fibonacci (🔢)
             }
 
             const response = await fetch(
-                `https://codemojibackend.onrender.com/getround2submissiontime?email=${encodeURIComponent(participantEmail)}`,
+                `https://codemojibackend2k25.onrender.com/getround2submissiontime?email=${encodeURIComponent(participantEmail)}`,
                 {
                     method: "GET",
                     headers: {
@@ -986,7 +986,7 @@ fibonacci (🔢)
         setIsLoading1(true);
 
         try {
-            const response = await fetch('https://codemojibackend.onrender.com/verify1', {
+            const response = await fetch('https://codemojibackend2k25.onrender.com/verify1', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inputValues: inputValues1.map(Number), result: result1 }),
@@ -1024,7 +1024,7 @@ fibonacci (🔢)
                 setResultMessage('❌ Please complete the first submission before submitting this one.');
                 return;
             }
-            const response = await fetch("https://codemojibackend.onrender.com/verify", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -1104,7 +1104,7 @@ fibonacci (🔢)
                     }
 
                     try {
-                        const response = await fetch("https://codemojibackend.onrender.com/check-round2", {
+                        const response = await fetch("https://codemojibackend2k25.onrender.com/check-round2", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -1390,7 +1390,7 @@ Mystery_box2(735289 )
             if (!participantEmail) return;
 
             try {
-                const response = await fetch(`https://codemojibackend.onrender.com/getParticipant?email=${participantEmail}`);
+                const response = await fetch(`https://codemojibackend2k25.onrender.com/getParticipant?email=${participantEmail}`);
                 const data = await response.json();
 
                 if (response.ok) {
@@ -1442,7 +1442,7 @@ Mystery_box2(735289 )
                 return;
             }
 
-            const response = await fetch(`https://codemojibackend.onrender.com/getround3submissiontime?email=${encodeURIComponent(participantEmail)}`, {
+            const response = await fetch(`https://codemojibackend2k25.onrender.com/getround3submissiontime?email=${encodeURIComponent(participantEmail)}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -1474,7 +1474,7 @@ Mystery_box2(735289 )
         try {
             const participantEmail = sessionStorage.getItem("participantEmail"); // Get participant email from sessionStorage
 
-            const response = await fetch('https://codemojibackend.onrender.com/outputverify', {
+            const response = await fetch('https://codemojibackend2k25.onrender.com/outputverify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1517,7 +1517,7 @@ Mystery_box2(735289 )
                 return;
             }
 
-            const response = await fetch("https://codemojibackend.onrender.com/updatepoints", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/updatepoints", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1561,7 +1561,7 @@ Mystery_box2(735289 )
             }
 
 
-            const response = await fetch("https://codemojibackend.onrender.com/updatepoints1", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/updatepoints1", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1598,7 +1598,7 @@ Mystery_box2(735289 )
                 return;
             }
 
-            const response = await fetch("https://codemojibackend.onrender.com/updatepoints2", {
+            const response = await fetch("https://codemojibackend2k25.onrender.com/updatepoints2", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1642,7 +1642,7 @@ Mystery_box2(735289 )
                     return;
                 }
 
-                const response = await fetch("https://codemojibackend.onrender.com/gethints", {
+                const response = await fetch("https://codemojibackend2k25.onrender.com/gethints", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -1698,7 +1698,7 @@ Mystery_box2(735289 )
                     }
 
                     try {
-                        const response = await fetch("https://codemojibackend.onrender.com/check-round3", {
+                        const response = await fetch("https://codemojibackend2k25.onrender.com/check-round3", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -1926,7 +1926,7 @@ const Events = () => {
             if (!participantEmail) return;
 
             try {
-                const response = await fetch(`https://codemojibackend.onrender.com/getParticipant?email=${participantEmail}`);
+                const response = await fetch(`https://codemojibackend2k25.onrender.com/getParticipant?email=${participantEmail}`);
                 const data = await response.json();
 
                 if (response.ok) {

@@ -8,7 +8,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch("https://codemojibackend.onrender.com/leaderboard", {
+        const response = await fetch("https://codemojibackend2k25.onrender.com/leaderboard", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
