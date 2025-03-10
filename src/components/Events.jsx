@@ -1177,7 +1177,7 @@ fibonacci (🔢)
 
             <div className="flex justify-between p-6 space-x-6">
                 <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
-                    <p className="text-cyan-400 font-semibold mb-5">Task: Identify and provide the missing values in the incomplete code.</p>
+                    <p className="text-cyan-400 font-semibold mb-5">Task: Identify missing values in place of ❓and fill the values </p>
                     <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto" style={{ userSelect: "none" }} >{Emojicode1}</pre>
                     <p className="mt-2 text-gray-400">Output: {output1}</p>
                     <div className="mt-4">
