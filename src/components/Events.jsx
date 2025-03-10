@@ -567,7 +567,7 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(11, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(11, 40, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -575,7 +575,7 @@ Mystery_box3 (🔢) {
 
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 2 closes at 10:22 PM
+    const round2Close = fixedStartTimestamp + 60 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
     useEffect(() => {
@@ -1077,14 +1077,14 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(11, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(11, 40, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
 
 
     // Round closing times based on fixed start time
-    const round1Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 1 closes at 10:21 PM
+    const round1Close = fixedStartTimestamp + 20 * 60 * 1000; // Round 1 closes at 10:21 PM
     // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
@@ -1671,7 +1671,7 @@ Mystery_box2(735289 )
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(11, 0, 0, 0);
+    fixedStartTime.setHours(11, 40, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
