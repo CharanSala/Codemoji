@@ -44,8 +44,8 @@ const About = () => {
           About Us
         </h2>
 
-        {/* Team Members Container */}
-        <div className="flex items-center justify-center flex-wrap">
+        {/* Team Members Container with small gap */}
+        <div className="flex items-center justify-center flex-wrap gap-4">
           {teamMembers.map((member, index) => (
             <div
               key={index}
@@ -71,7 +71,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="ml-0"
+                  className="ml-2"
                 >
                   <FaLinkedin size={20} className="text-blue-700 hover:text-blue-800" />
                 </a>
@@ -80,7 +80,7 @@ const About = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="ml-0"
+                  className="ml-2"
                 >
                   <FaInstagram size={20} className="text-pink-600 hover:text-pink-700" />
                 </a>
