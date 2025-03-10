@@ -567,7 +567,7 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 30, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(11, 0, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -575,7 +575,7 @@ Mystery_box3 (🔢) {
 
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    const round2Close = fixedStartTimestamp + 20 * 60 * 1000; // Round 2 closes at 10:22 PM
+    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
     useEffect(() => {
@@ -852,7 +852,7 @@ const Round2 = ({ setAllPassed2 }) => {
         1: {
             Emojicode: `
 📌 fact (🔢) {
-    🤔 (🔢 ⚖️❓) 👉 ↩️ 1️⃣
+    🤔 (🔢 ==❓) 👉 ↩️ 1️⃣
     ↩️ 🔢 ✖️ fact (🔢 – ❓)
 }
 fact (🔢)
@@ -864,7 +864,7 @@ fact (🔢)
         2: {
             Emojicode: `
 📌 sumDigits (🔢) {
-    🤔 (🔢 ⚖️❓) 👉 ↩️ 0️⃣
+    🤔 (🔢 ==❓) 👉 ↩️ 0️⃣
     ↩️ ((🔢 %🔟) ➕ sumDigits (🔢 / ❓)
 }
 sumDigits (🔢)
@@ -876,7 +876,7 @@ sumDigits (🔢)
         3: {
             Emojicode: `
 📌 sumEven (🔢) {
-    🤔 (🔢 ⚖️❓) 👉 ↩️ 2️⃣
+    🤔 (🔢 ==❓) 👉 ↩️ 2️⃣
     ↩️ sumEven (❓* 🔢) ➕ sumEven (🔢 – 1️⃣)
 }
 sumEven(🔢)
@@ -888,7 +888,7 @@ sumEven(🔢)
         4: {
             Emojicode: `
 📌 reverse (🔢, 🔡) {
-    🤔 (🔢 ⚖️❓) 👉 ↩️ 🔡
+    🤔 (🔢 ==❓) 👉 ↩️ 🔡
     ↩️ reverse(n/🔟, 🔡*🔟+(🔢% ❓ ))
 }
 reverse (🔢)
@@ -900,7 +900,7 @@ reverse (🔢)
         5: {
             Emojicode: `
 📌 fibonacci (🔢) {
-    🤔 ( 🔢 ⚖️❓) 👉 ↩️ 🔢
+    🤔 ( 🔢 ==❓) 👉 ↩️ 🔢
     ↩️ fibonacci (🔢 - 1️⃣) ➕ fibonacci (🔢 - ❓)
 }
 fibonacci (🔢)
@@ -1077,7 +1077,7 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 30, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(11, 0, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1278,9 +1278,9 @@ Mystery_box(482351 )
 
             `,
             output: 15,
-            hint1:`The program breaks down the number and processes each digit separately`,
-            hint2:`Certain digits affect the result, while others do not`,
-            hint3:`The program extracts digits and multiply only the odd ones(3,5,1)`,
+            hint1: `The program breaks down the number and processes each digit separately`,
+            hint2: `Certain digits affect the result, while others do not`,
+            hint3: `The program extracts digits and multiply only the odd ones(3,5,1)`,
 
         },
         2: {
@@ -1296,12 +1296,12 @@ Mystery_box(482351 )
     
     ↩️ 🍬*️⃣ Mystery_box (🔢 /🔟) 
 }
-Mystery_box(482351 )
+Mystery_box(482351)
             `,
             output: 32,
-            hint1:`The program breaks down the number and processes each digit separately`,
-            hint2:`Certain digits affect the result, while others do not`,
-            hint3:`The program extracts digits and multiply only the even ones(4,8,2)`,
+            hint1: `The program breaks down the number and processes each digit separately`,
+            hint2: `Certain digits affect the result, while others do not`,
+            hint3: `The program extracts digits and multiply only the even ones(4,8,2)`,
 
         },
         3: {
@@ -1321,9 +1321,9 @@ Mystery_box(482351 )
 
 `,
             output: 14,
-            hint1:`The program breaks down the number and processes each digit separately`,
-            hint2:`Certain digits affect the result, while others do not`,
-            hint3:`The program extracts digits and sum only the even ones(4,8,2)`,
+            hint1: `The program breaks down the number and processes each digit separately`,
+            hint2: `Certain digits affect the result, while others do not`,
+            hint3: `The program extracts digits and sum only the even ones(4,8,2)`,
 
 
         },
@@ -1347,9 +1347,9 @@ Mystery_box2(735289 )
 
             `,
             output: 17,
-            hint1:`The program breaks down the number and processes each digit separately`,
-            hint2:`Certain digits affect the result, while others do not`,
-            hint3:`The program extracts digits and sum only the prime ones (2, 3, 5, 7).`,
+            hint1: `The program breaks down the number and processes each digit separately`,
+            hint2: `Certain digits affect the result, while others do not`,
+            hint3: `The program extracts digits and sum only the prime ones (2, 3, 5, 7).`,
 
 
 
@@ -1374,9 +1374,9 @@ Mystery_box2(735289 )
 
             `,
             output: 210,
-            hint1:`The program breaks down the number and processes each digit separately`,
-            hint2:`Certain digits affect the result, while others do not`,
-            hint3:`TThe program extracts digits and multiply only the prime ones (2, 3, 5, 7)`,
+            hint1: `The program breaks down the number and processes each digit separately`,
+            hint2: `Certain digits affect the result, while others do not`,
+            hint3: `TThe program extracts digits and multiply only the prime ones (2, 3, 5, 7)`,
 
 
         }
@@ -1409,7 +1409,7 @@ Mystery_box2(735289 )
 
     const randomNumber = participant?.randomnumber ?? 1;
 
-    const { Emojicode: Emoji, output: output, hint1: Hint1, hint2:Hint2 ,hint3:Hint3 } = problemSets[randomNumber] || problemSets[1];
+    const { Emojicode: Emoji, output: output, hint1: Hint1, hint2: Hint2, hint3: Hint3 } = problemSets[randomNumber] || problemSets[1];
 
     console.log(output);
     const [userOutput, setUserOutput] = useState('');
@@ -1502,9 +1502,14 @@ Mystery_box2(735289 )
             setIsLoading1(false); // Stop loading
         }
     };
-    const handleHintClick = async (hintSetter, nextHintSetter, points) => {
+    const [loading1, setLoading1] = useState(false);
+    const [loading2, setLoading2] = useState(false);
+    const [loading3, setLoading3] = useState(false);
+
+    const handleHintClick = async (hintSetter, nextHintSetter, points, setLoading) => {
         try {
 
+            setLoading(true); // Start loading
             const participantEmail = sessionStorage.getItem("participantEmail"); // Retrieve email from session storage
 
             if (!participantEmail) {
@@ -1533,6 +1538,9 @@ Mystery_box2(735289 )
         } catch (error) {
             console.error("Error updating points:", error);
         }
+        finally {
+            setLoading(false); // Stop loading
+        }
     };
 
     useEffect(() => {
@@ -1542,9 +1550,10 @@ Mystery_box2(735289 )
     }, [submissionTime]);
 
 
-    const handleHintClick1 = async (hintSetter, nextHintSetter, points) => {
+    const handleHintClick1 = async (hintSetter, nextHintSetter, points, setLoading) => {
         try {
 
+            setLoading(true);
             const participantEmail = sessionStorage.getItem("participantEmail");
             if (!participantEmail) {
                 console.error("Participant email not found in session storage");
@@ -1573,11 +1582,15 @@ Mystery_box2(735289 )
         } catch (error) {
             console.error("Error updating points:", error);
         }
+        finally {
+            setLoading(false); // Stop loading
+        }
     };
 
-    const handleHintClick2 = async (hintSetter, nextHintSetter, points) => {
+    const handleHintClick2 = async (hintSetter, nextHintSetter, points, setLoading) => {
         try {
 
+            setLoading(true);
             const participantEmail = sessionStorage.getItem("participantEmail");
 
             if (!participantEmail) {
@@ -1606,12 +1619,18 @@ Mystery_box2(735289 )
         } catch (error) {
             console.error("Error updating points:", error);
         }
+        finally {
+            setLoading(false); // Stop loading
+        }
+
     };
 
 
     const [hint1, setHint1] = useState(participant?.hint1);
     const [hint2, setHint2] = useState(participant?.hint2);
     const [hint3, setHint3] = useState(participant?.hint3);
+
+
 
     useEffect(() => {
         const fetchHintStatus = async () => {
@@ -1652,7 +1671,7 @@ Mystery_box2(735289 )
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 30, 0, 0);
+    fixedStartTime.setHours(11, 0, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1661,7 +1680,7 @@ Mystery_box2(735289 )
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
     // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
-    const round3Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 3 closes at 10:23 PM
+    const round3Close = fixedStartTimestamp + 60 * 60 * 1000; // Round 3 closes at 10:23 PM
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -1737,8 +1756,8 @@ Mystery_box2(735289 )
                     <div className=" text-lg font-bold text-center rounded-md text-green-700 ">
                         Submission Time: {submissionTime}
                     </div>
-                ):(
-                    <h3 className="text-lg mb-5 font-bold text-center text-red-700 ">
+                ) : (
+                    <h3 className="text-lg  font-bold text-center text-red-700 ">
                         🔒 Round3 closes at 3:30 pm
                     </h3>
                 )}
@@ -1815,29 +1834,32 @@ Mystery_box2(735289 )
                         {/* Hint Buttons */}
                         <div className="flex justify-between items-center w-full">
                             <div className="flex gap-x-4">
+
                                 <button
                                     className={`px-4 py-2 rounded-lg ${hint1 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                                    onClick={() => handleHintClick(setHint1, setHint2, 10)}
-                                    disabled={!hint1}
+                                    onClick={() => handleHintClick(setHint1, setHint2, 10, setLoading1)}
+                                    disabled={!hint1 || loading1}
                                 >
-                                    Hint 1
+                                    {loading1 ? "Loading..." : "Hint 1"}
                                 </button>
 
                                 <button
                                     className={`px-4 py-2 rounded-lg ${hint2 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                                    onClick={() => handleHintClick1(setHint2, setHint3, 20)}
-                                    disabled={!hint2}
+                                    onClick={() => handleHintClick1(setHint2, setHint3, 20, setLoading2)}
+                                    disabled={!hint2 || loading2} // Disable when loading
                                 >
-                                    Hint 2
+                                    {loading2 ? "Loading..." : "Hint 2"}
                                 </button>
 
+            
                                 <button
                                     className={`px-4 py-2 rounded-lg ${hint3 ? "bg-blue-500 text-white" : "bg-gray-600 cursor-not-allowed"}`}
-                                    onClick={() => handleHintClick2(setHint3, () => { }, 30)} // No next hint after Hint 3
-                                    disabled={!hint3}
+                                    onClick={() => handleHintClick2(setHint3, () => { }, 30,setLoading3)}
+                                    disabled={!hint3 || loading3} // Disable when loading
                                 >
-                                    Hint 3
+                                    {loading3 ? "Loading..." : "Hint 3"}
                                 </button>
+
                             </div>
 
                             <div className="text-xl flex justify-end items-center font-extrabold text-white">
@@ -1851,17 +1873,17 @@ Mystery_box2(735289 )
 
                     <div className="flex flex-col mt-4 text-black space-y-2">
                         {!hint1 && hint2 && !hint3 && (
-                            <p className="bg-gray-800 text-blue-400 text-center font-semibold px-4 py-2 rounded-md shadow-sm">
+                            <p className="bg-gray-800 text-blue-400 text-center font-semibold px-4 py-5 rounded-md shadow-sm ">
                                 <span className="font-semibold">Hint 1: </span>{Hint1}
                             </p>
                         )}
                         {!hint1 && !hint2 && hint3 && (
-                            <p className="bg-gray-800 font-semibold text-green-400 text-center px-4 py-2 rounded-md shadow-sm">
+                            <p className="bg-gray-800 font-semibold text-green-400 text-center px-4 py-5 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 2: </span>{Hint2}
                             </p>
                         )}
                         {!hint1 && !hint2 && !hint3 && (
-                            <p className="bg-gray-800 text-red-400 font-semibold text-center px-4 py-2 rounded-md shadow-sm">
+                            <p className="bg-gray-800 text-red-400 font-semibold text-center px-4 py-3 rounded-md shadow-sm">
                                 <span className="font-semibold">Hint 3: </span>{Hint3}
                             </p>
 
