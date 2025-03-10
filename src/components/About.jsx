@@ -1,8 +1,12 @@
 import React from 'react';
-import unique_img from '/images/image.jpg';
-import sample_audio from '/audio.mp3';
+import Navbar from './Navbar'; // Adjust the import as needed
+import { FaLinkedin, FaInstagram } from 'react-icons/fa';
 
-import Navbar from '../components/Navbar'; // Ensure correct import path
+// Import your photos
+import photo1 from '/images/image.jpg';
+import photo2 from '/images/image.jpg';
+import photo3 from '/images/image.jpg';
+
 
 const About = () => {
   return (
@@ -11,59 +15,57 @@ const About = () => {
       {/* Navbar */}
       <Navbar />
 
-      {/* Main content area */}
-      <div className="flex justify-center items-center px-6 md:px-12 py-16">
-        <div className="max-w-5xl flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-12 bg-white shadow-xl rounded-lg p-8">
-          
-          {/* Image Section */}
-          <div className="flex-shrink-0 w-full md:w-1/2">
+      {/* Main Content */}
+      <div className="container mx-auto py-16">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
+          About Us
+        </h2>
+
+        {/* Photos Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="w-full">
             <img
-              className="w-full h-full object-cover rounded-2xl shadow-lg"
-              src={unique_img}
-              alt="Unique Image"
+              src={photo1}
+              alt="Team Member 1"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
             />
           </div>
-
-          {/* Text Section */}
-          <div className="flex flex-col justify-center items-start space-y-6">
-            <h2 className="text-3xl font-semibold text-gray-800">What is CoretoGlo?</h2>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              "CoretoGlo" is a name you've chosen, but it doesn’t appear to be a standard or widely recognized term with a defined meaning. It looks like a combination of two words:
-            </p>
-            <p className="text-lg text-gray-600 font-semibold">
-              <strong>Coreto</strong>: This could be derived from the word "Core" (which can represent the central or most important part of something) or it could be a unique or brand-specific word you're creating.
-            </p>
-            <p className="text-lg text-gray-600 font-semibold">
-              <strong>Glo</strong>: This could be shorthand for "Glow," meaning light, brilliance, or something that shines. "Glo" can also symbolize something vibrant, energetic, or growing.
-            </p>
+          <div className="w-full">
+            <img
+              src={photo2}
+              alt="Team Member 2"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
+            />
           </div>
+          <div className="w-full">
+            <img
+              src={photo3}
+              alt="Team Member 3"
+              className="rounded-lg shadow-lg object-cover w-full h-full"
+            />
+          </div>
+        </div>
 
+        {/* Social Media Links */}
+        <div className="flex justify-center mt-12 space-x-6">
+          <a
+            href="https://www.linkedin.com/in/yourprofile"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin size={32} className="text-blue-700 hover:text-blue-800" />
+          </a>
+          <a
+            href="https://www.instagram.com/yourprofile"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <FaInstagram size={32} className="text-pink-600 hover:text-pink-700" />
+          </a>
         </div>
       </div>
-
-      {/* Video Section */}
-      {/* <div className="flex justify-center my-12">
-        <video
-          controls
-          autoPlay
-          className="w-full max-w-2xl h-auto rounded-2xl shadow-lg"
-        >
-          <source src={video} />
-        </video>
-      </div> */}
-
-      {/* Audio Section */}
-      <div className="flex justify-center my-8">
-        <audio
-          controls
-          autoPlay
-          loop
-          className="bg-white rounded-lg shadow-md p-2"
-        >
-          <source src={sample_audio} type="audio/mp3" />
-        </audio>
-      </div>
-
     </div>
   );
 };
