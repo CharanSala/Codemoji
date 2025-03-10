@@ -655,7 +655,7 @@ Mystery_box3 (🔢) {
                 </h3>
             ) : (
                 <h3 className="text-lg mb-5 font-bold text-center text-red-700 ">
-                    🔒 Round2 closes at 3:10 pm
+                    🔒 Round2 closes at 11:40 am
                 </h3>
             )}
 
@@ -1169,7 +1169,7 @@ fibonacci (🔢)
                 </div>
             ) : (
                 <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
-                    🔒 Round1 closes at 2:40 pm
+                    🔒 Round1 closes at 11:10 am
                 </h3>
             )}
 
@@ -1758,7 +1758,7 @@ Mystery_box2(735289 )
                     </div>
                 ) : (
                     <h3 className="text-lg  font-bold text-center text-red-700 ">
-                        🔒 Round3 closes at 3:30 pm
+                        🔒 Round3 closes at 12:00 am
                     </h3>
                 )}
 
