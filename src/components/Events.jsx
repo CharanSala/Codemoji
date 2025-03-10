@@ -725,7 +725,7 @@ Mystery_box3 (🔢) {
                             theme="light"
                             value={code}
                             onChange={handleCodeChange}
-                            onMount={handleEditorDidMount}
+                            // onMount={handleEditorDidMount}
                         />
                     </div>
                     <div className="flex justify-start space-x-4 mt-4">
