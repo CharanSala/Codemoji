@@ -44,8 +44,8 @@ const About = () => {
           About Us
         </h2>
 
-        {/* Team Members Grid */}
-        <div className="flex items-center">
+        {/* Team Members Container */}
+        <div className="flex items-center justify-center flex-wrap gap-8">
           {teamMembers.map((member, index) => (
             <div
               key={index}
