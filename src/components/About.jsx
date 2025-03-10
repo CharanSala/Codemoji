@@ -1,9 +1,9 @@
 import React from 'react';
 import sample_audio from '/audio.mp3';
 // Coordinator images – ensure these exist in your public/images folder
-import coordinator1 from '/images/coordinator1.jpg';
-import coordinator2 from '/images/coordinator2.jpg';
-import coordinator3 from '/images/coordinator3.jpg';
+import coordinator1 from '';
+import coordinator2 from '';
+import coordinator3 from '';
 
 import Navbar from '../components/Navbar'; // Ensure correct import path
 
