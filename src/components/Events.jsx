@@ -1156,7 +1156,7 @@ fibonacci (🔢)
             </div>
 
             {resultMessage && (
-                <div className="mb-8 text-lg font-bold text-center text-red-700">
+                <div className="mb-2 text-lg font-bold text-center text-red-700">
                     {resultMessage}
                 </div>
             )}
