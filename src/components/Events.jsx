@@ -1019,7 +1019,7 @@ fibonacci (🔢)
             }
 
             if (!subtime1) {
-                setResultMessage('❌ Please complete the first submission before submitting this one.');
+                setResultMessage('⚠️ Please complete the first submission before submitting this one.');
                 return;
             }
             const response = await fetch("https://codemojibackend2k25.onrender.com/verify", {
@@ -1156,7 +1156,7 @@ fibonacci (🔢)
             </div>
 
             {resultMessage && (
-                <div className="mb-2 text-lg font-bold text-center text-red-700">
+                <div className="mb-2 text-lg font-bold text-center text-yellow-700">
                     {resultMessage}
                 </div>
             )}
