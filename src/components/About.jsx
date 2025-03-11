@@ -54,7 +54,7 @@ const About = () => {
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-28 h-28 rounded-md object-cover mb-4"
+                className="w-28 h-32 rounded-md object-cover mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
               <div className="flex">
