@@ -3,28 +3,28 @@ import Navbar from './Navbar'; // Adjust the import as needed
 import { FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 
 // Import your photos
-import photo1 from '/images/image.jpg';
-import photo2 from '/images/image.jpg';
-import photo3 from '/images/image.jpg';
+import photo1 from '/images/photo1.jpg';
+import photo2 from '/images/photo3.jpg';
+import photo3 from '/images/photo2.jpg';
 
 // Team members data
 const teamMembers = [
   {
-    name: 'Team Member 1',
+    name: 'Charan Sala',
     image: photo1,
     github: 'https://github.com/username1',
     linkedin: 'https://www.linkedin.com/in/username1',
     instagram: 'https://www.instagram.com/username1',
   },
   {
-    name: 'Team Member 2',
+    name: 'Pravalika Darapureddy',
     image: photo2,
     github: 'https://github.com/username2',
     linkedin: 'https://www.linkedin.com/in/username2',
     instagram: 'https://www.instagram.com/username2',
   },
   {
-    name: 'Team Member 3',
+    name: 'sk kudhan',
     image: photo3,
     github: 'https://github.com/username3',
     linkedin: 'https://www.linkedin.com/in/username3',
@@ -54,7 +54,7 @@ const About = () => {
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-28 h-32 rounded-md object-cover mb-4"
+                className="w-32 h-32 rounded-md object-cover mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
               <div className="flex">
