@@ -801,7 +801,7 @@ Mystery_box3 (🔢) {
     );
 };
 
-// Round 2 Component (your new round)
+
 const Round2 = ({ setAllPassed2 }) => {
     const incompleteCode = `
             📌 fact(🔢) {
@@ -852,7 +852,7 @@ const Round2 = ({ setAllPassed2 }) => {
             Emojicode: `
 📌 fact (🔢) {
     🤔 (🔢 ==❓) 👉 ↩️ 1️⃣
-    ↩️ 🔢 ✖️ fact (🔢 – ❓)
+    ↩️ 🔢 * fact (🔢 -❓)
 }
 fact (🔢)
 
@@ -864,7 +864,7 @@ fact (🔢)
             Emojicode: `
 📌 sumDigits (🔢) {
     🤔 (🔢 ==❓) 👉 ↩️ 0️⃣
-    ↩️ ((🔢 %🔟) ➕ sumDigits (🔢 / ❓)
+    ↩️ ((🔢 % 🔟) ➕ sumDigits (🔢 / ❓)
 }
 sumDigits (🔢)
 
@@ -876,11 +876,11 @@ sumDigits (🔢)
             Emojicode: `
 📌 sumEven (🔢) {
     🤔 (🔢 ==❓) 👉 ↩️ 2️⃣
-    ↩️ sumEven (❓* 🔢) ➕ sumEven (🔢 – 1️⃣)
+    ↩️ (❓* 🔢) ➕ sumEven (🔢 – 1️⃣)
 }
 sumEven(🔢)
 
-            `,
+`,
             // output: 40,
             result: [1, 2],
         },
@@ -890,9 +890,9 @@ sumEven(🔢)
     🤔 (🔢 ==❓) 👉 ↩️ 🔡
     ↩️ reverse(n/🔟, 🔡*🔟+(🔢% ❓ ))
 }
-reverse (🔢)
+reverse (🔢,0)
 
-            `,
+`,
             // output: 147,
             result: [0, 10],
         },
@@ -904,8 +904,7 @@ reverse (🔢)
 }
 fibonacci (🔢)
 
-
-            `,
+`,
             // output: 9,
             result: [1, 2],
         }
@@ -1297,7 +1296,7 @@ Mystery_box(482351 )
 }
 Mystery_box(482351)
             `,
-            output: 32,
+            output: 64,
             hint1: `The program breaks down the number and processes each digit separately`,
             hint2: `Certain digits affect the result, while others do not`,
             hint3: `The program extracts digits and multiply only the even ones(4,8,2)`,
@@ -1316,7 +1315,7 @@ Mystery_box(482351)
     
     ↩️ 📍➕ Mystery_box (🔢 /🔟) 
 }
-Mystery_box(482351 )
+Mystery_box(482351)
 
 `,
             output: 14,
@@ -1342,7 +1341,7 @@ Mystery_box(482351 )
     
     ↩️🎁➕Mystery_box2 (🔢 /🔟) 
 }
-Mystery_box2(735289 )
+Mystery_box2(735289)
 
             `,
             output: 17,
