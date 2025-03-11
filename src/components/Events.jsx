@@ -566,7 +566,7 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(16, 0, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -574,7 +574,7 @@ Mystery_box3 (🔢) {
 
     // Round closing times based on fixed start time
     // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    const round2Close = fixedStartTimestamp + 30 * 60 * 1000; // Round 2 closes at 10:22 PM
+    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 2 closes at 10:22 PM
     // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
 
     useEffect(() => {
@@ -654,7 +654,7 @@ Mystery_box3 (🔢) {
                 </h3>
             ) : (
                 <h3 className="text-lg mb-5 font-bold text-center text-red-700 ">
-                    🔒 Round2 closes at {round2Close} pm
+                    🔒 Round2 closes at 4:40 pm
                 </h3>
             )}
 
@@ -1076,7 +1076,7 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(16, 0, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1168,7 +1168,7 @@ fibonacci (🔢)
                 </div>
             ) : (
                 <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
-                    🔒 Round1 closes at {round1Close} pm
+                    🔒 Round1 closes at 4:00 pm
                 </h3>
             )}
 
@@ -1670,7 +1670,7 @@ Mystery_box2(735289 )
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0);
+    fixedStartTime.setHours(16, 0, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1757,7 +1757,7 @@ Mystery_box2(735289 )
                     </div>
                 ) : (
                     <h3 className="text-lg  font-bold text-center text-red-700 ">
-                        🔒 Round3 closes at {round3Close} pm
+                        🔒 Round3 closes at 5:00 pm
                     </h3>
                 )}
 
