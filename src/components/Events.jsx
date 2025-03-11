@@ -666,7 +666,7 @@ Mystery_box3 (🔢) {
                         <p className="text-navy-700 mb-3 font-bold text-lg text-start">🎯 <strong>Task:</strong> Convert this emoji-based code into a valid program.</p>
                         <pre
                             className="bg-navy-50 p-4 rounded-md text-navy-800 text-md font-bold"
-                            // style={{ userSelect: "none" }}
+                            style={{ userSelect: "none" }}
                         >
                             {Emojicode}
                         </pre>
@@ -724,7 +724,7 @@ Mystery_box3 (🔢) {
                             theme="light"
                             value={code}
                             onChange={handleCodeChange}
-                            // onMount={handleEditorDidMount}
+                            onMount={handleEditorDidMount}
                         />
                     </div>
                     <div className="flex justify-start space-x-4 mt-4">
