@@ -17,14 +17,14 @@ const teamMembers = [
     instagram: 'https://www.instagram.com/username1',
   },
   {
-    name: 'Pravalika Darapureddy',
+    name: 'D Pravalika',
     image: photo2,
     github: 'https://github.com/username2',
     linkedin: 'https://www.linkedin.com/in/username2',
     instagram: 'https://www.instagram.com/username2',
   },
   {
-    name: 'sk kudhan',
+    name: 'Sk Kudhan',
     image: photo3,
     github: 'https://github.com/username3',
     linkedin: 'https://www.linkedin.com/in/username3',
@@ -45,16 +45,20 @@ const About = () => {
         </h2>
 
         {/* Team Members Container with small gap */}
+        <div className="bg-slate-200 pb-12 w-2/4 mx-auto rounded-2xl shadow shadow-slate-800 ">
+        <h2 className="text-2xl font-bold text-center text-gray-800  mb-5 pt-5">
+          Cordinators 
+        </h2>
         <div className="flex items-center justify-center flex-wrap gap-4">
           {teamMembers.map((member, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow p-6 flex flex-col items-center max-w-xs"
+              className="bg-white rounded-lg p-6 flex flex-col items-center max-w-xs shadow shadow-slate-800"
             >
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-32 h-32 rounded-md object-cover mb-4"
+                className="w-32 h-32 rounded-md object-cover mb-4 "
               />
               <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
               <div className="flex">
@@ -87,6 +91,7 @@ const About = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>
