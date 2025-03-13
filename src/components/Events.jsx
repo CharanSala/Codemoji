@@ -566,7 +566,7 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(14, 45, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(14, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -654,7 +654,7 @@ Mystery_box3 (🔢) {
                 </h3>
             ) : (
                 <h3 className="text-lg mb-5 font-bold text-center text-red-700 ">
-                    🔒 Round2 closes at 03:35 pm
+                    🔒 Round2 closes at 03:10 pm
                 </h3>
             )}
 
@@ -1075,7 +1075,7 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(14, 45, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(14, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1167,7 +1167,7 @@ fibonacci (🔢)
                 </div>
             ) : (
                 <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
-                    🔒 Round1 closes at 02:55 pm
+                    🔒 Round1 closes at 02:40 pm
                 </h3>
             )}
 
@@ -1669,7 +1669,7 @@ Mystery_box2(735289)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(14, 45, 0, 0);
+    fixedStartTime.setHours(14, 30, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
@@ -1755,7 +1755,7 @@ Mystery_box2(735289)
                     </div>
                 ) : (
                     <h3 className="text-lg  font-bold text-center text-red-700 ">
-                        🔒 Round3 closes at 03:55 pm
+                        🔒 Round3 closes at 03:30 pm
                     </h3>
                 )}
 
