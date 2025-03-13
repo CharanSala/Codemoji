@@ -566,16 +566,16 @@ Mystery_box3 (🔢) {
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(14, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
 
 
     // Round closing times based on fixed start time
-    // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; // Round 2 closes at 10:22 PM
-    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
+    // const round1Close = fixedStartTimestamp + 60 * 1000;
+    const round2Close = fixedStartTimestamp + 40 * 60 * 1000; 
+    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; 
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -654,7 +654,7 @@ Mystery_box3 (🔢) {
                 </h3>
             ) : (
                 <h3 className="text-lg mb-5 font-bold text-center text-red-700 ">
-                    🔒 Round2 closes at 4:40 pm
+                    🔒 Round2 closes at 03:10 pm
                 </h3>
             )}
 
@@ -1075,16 +1075,16 @@ fibonacci (🔢)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0); // 10:20 PM
+    fixedStartTime.setHours(14, 30, 0, 0); // 10:20 PM
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
 
 
     // Round closing times based on fixed start time
-    const round1Close = fixedStartTimestamp + 10 * 60 * 1000; // Round 1 closes at 10:21 PM
-    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
-    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; // Round 3 closes at 10:23 PM
+    const round1Close = fixedStartTimestamp + 10 * 60 * 1000; 
+    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; 
+    // const round3Close = fixedStartTimestamp + 3 * 60 * 1000; 
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -1167,7 +1167,7 @@ fibonacci (🔢)
                 </div>
             ) : (
                 <h3 className="mb-4 pb-6 text-lg font-bold text-center px-4 rounded-md text-red-700  shadow-lg ">
-                    🔒 Round1 closes at 4:10 pm
+                    🔒 Round1 closes at 02:40 pm
                 </h3>
             )}
 
@@ -1177,7 +1177,7 @@ fibonacci (🔢)
                 <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <p className="text-cyan-400 font-semibold mb-5">Task: Identify missing values in place of ❓and fill the values </p>
                     <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto" style={{ userSelect: "none" }} >{Emojicode1}</pre>
-                    <p className="mt-2 text-gray-400">Output: {output1}</p>
+                   
                     <div className="mt-4">
                         <h4 className="font-semibold text-lg text-blue-400">Input Values</h4>
                         {predefinedValues.map((_, index) => (
@@ -1215,7 +1215,7 @@ fibonacci (🔢)
                 <div className="w-1/2 bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700">
                     <p className="text-cyan-400 font-semibold mb-5">Task:  Identify missing values in place of ❓and fill the values</p>
                     <pre className="bg-gray-900 p-4 rounded-md text-green-400 overflow-auto" style={{ userSelect: "none" }} >{Emojicode2}</pre>
-                    <p className="mt-2 text-gray-400">Output: {output2}</p>
+                    
                     <div className="mt-4">
                         <h4 className="font-semibold text-lg text-blue-400">Input Values</h4>
                         {predefinedValues.map((_, index) => (
@@ -1669,17 +1669,16 @@ Mystery_box2(735289)
 
 
     const fixedStartTime = new Date();
-    fixedStartTime.setHours(23, 0, 0, 0);
+    fixedStartTime.setHours(14, 30, 0, 0);
     const fixedStartTimestamp = fixedStartTime.getTime(); // Convert to timestamp
 
     const [currentTime, setCurrentTime] = useState(Date.now());
 
 
     // Round closing times based on fixed start time
-    // const round1Close = fixedStartTimestamp + 60 * 1000; // Round 1 closes at 10:21 PM
-    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000; // Round 2 closes at 10:22 PM
-    const round3Close = fixedStartTimestamp + 60 * 60 * 1000; // Round 3 closes at 10:23 PM
-
+    // const round1Close = fixedStartTimestamp + 60 * 1000; 
+    // const round2Close = fixedStartTimestamp + 2 * 60 * 1000;
+    const round3Close = fixedStartTimestamp + 60 * 60 * 1000;
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentTime(Date.now());
@@ -1756,7 +1755,7 @@ Mystery_box2(735289)
                     </div>
                 ) : (
                     <h3 className="text-lg  font-bold text-center text-red-700 ">
-                        🔒 Round3 closes at 5:00 pm
+                        🔒 Round3 closes at 03:30 pm
                     </h3>
                 )}
 
