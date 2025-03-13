@@ -42,7 +42,7 @@ const Home = () => {
       const currentMinutes = now.getMinutes();
 
       // Enable button if time is 6:08 AM or later
-      if (currentHours > 14 || (currentHours === 14 && currentMinutes >= 45)) {
+      if (currentHours > 14 || (currentHours === 14 && currentMinutes >= 30)) {
         setIsButtonEnabled(true);
       }
     };
