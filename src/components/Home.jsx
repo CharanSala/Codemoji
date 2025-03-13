@@ -101,7 +101,7 @@ const Home = () => {
               icon: "🔍",
             },
           ].map((item, index) => (
-            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg text-center mt-16 text-gray-900">
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg text-center mt-24 text-gray-900">
               <div className="text-6xl mb-4">{item.icon}</div>
               <h3 className="text-xl font-semibold">{item.title}</h3>
               <p className="text-gray-600 mt-2">{item.description}</p>
