@@ -111,7 +111,7 @@ const Home = () => {
 
 
         <div className="mt-12 text-center text-xl font-semibold text-gray-900">
-          ⏳ Countdown to the Big Day:
+          ⏳ The Codemoji Countdown:
           <div className="text-4xl font-extrabold text-yellow-500 mt-4 drop-shadow-lg">
         {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
           </div>
