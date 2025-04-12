@@ -35,23 +35,23 @@ const Home = () => {
   };
 
 
-  useEffect(() => {
-    const checkTime = () => {
-      const now = new Date();
-      const currentHours = now.getHours();
-      const currentMinutes = now.getMinutes();
+  // useEffect(() => {
+  //   const checkTime = () => {
+  //     const now = new Date();
+  //     const currentHours = now.getHours();
+  //     const currentMinutes = now.getMinutes();
 
-      // Enable button if time is 6:08 AM or later
-      if (currentHours > 14 || (currentHours === 14 && currentMinutes >= 30)) {
-        setIsButtonEnabled(true);
-      }
-    };
+  //     // Enable button if time is 6:08 AM or later
+  //     if (currentHours > 14 || (currentHours === 14 && currentMinutes >= 30)) {
+  //       setIsButtonEnabled(true);
+  //     }
+  //   };
   
-    checkTime(); // Initial check
-    const interval = setInterval(checkTime, 1000); // Check every second
+  //   checkTime(); // Initial check
+  //   const interval = setInterval(checkTime, 1000); // Check every second
 
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, []);
+  //   return () => clearInterval(interval); // Cleanup on unmount
+  // }, []);
 
   return (
     <div>
@@ -71,11 +71,9 @@ const Home = () => {
            CodeMoji is where coding meets creativity and fun through emojis!
           </p>
            <button
-      className={`mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-lg font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 ${
-        !isButtonEnabled ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+      className={"mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-lg font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"}
       onClick={handleStartClick}
-      disabled={!isButtonEnabled}
+      // disabled={!isButtonEnabled}
     >
       Let's Start
     </button>
@@ -101,7 +99,7 @@ const Home = () => {
               icon: "🔍",
             },
           ].map((item, index) => (
-            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg text-center mt-24 text-gray-900">
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-lg text-center mt-4 text-gray-900">
               <div className="text-6xl mb-4">{item.icon}</div>
               <h3 className="text-xl font-semibold">{item.title}</h3>
               <p className="text-gray-600 mt-2">{item.description}</p>
@@ -110,12 +108,13 @@ const Home = () => {
         </div>
 
 
-        <div className="mt-12 text-center text-xl font-semibold text-gray-900">
+        {/* <div className="mt-12 text-center text-xl font-semibold text-gray-900">
           ⏳ The Codemoji Countdown:
           <div className="text-4xl font-extrabold text-yellow-500 mt-4 drop-shadow-lg">
         {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
           </div>
-        </div>
+        </div> */}
+        
       </div>
     </div>
   );
